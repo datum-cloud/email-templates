@@ -41,8 +41,8 @@ export const Footer = ({ className = '' }: FooterProps) => {
           datum.net
         </Link>
       </Text>
-      <Row className="my-6">
-        <Column className="flex items-center gap-2">
+      <Row className="my-6 table-cell h-[44px] w-[56px]">
+        <Column className="pr-2">
           <Link href={brandConfig.githubUrl} target="_blank">
             <Img
               src="https://www.datum.net/download/eng/social-gh.png"
@@ -51,15 +51,16 @@ export const Footer = ({ className = '' }: FooterProps) => {
               alt="GitHub"
             />
           </Link>
-          <Link href={brandConfig.linkedinUrl} target="_blank">
+        </Column>
+        <Column>
+        <Link href={brandConfig.linkedinUrl} target="_blank">
             <Img
               src="https://www.datum.net/download/eng/social-li.png"
               height="18"
               width="18"
               alt="LinkedIn"
             />
-          </Link>
-        </Column>
+          </Link></Column>
       </Row>
       <Text className="text-sm m-0 font-light">
         Datum Technology Inc. <br />

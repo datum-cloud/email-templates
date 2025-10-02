@@ -29,8 +29,7 @@ export const UserInvitation = ({
             Join your friends on Datum
           </Heading>
           <Text className="text-sm m-0 font-light">
-            {inviter} has just invited you to use Datum with them, in an
-            organization called {organizationName}, with the role of {role}.
+          {inviter} has invited you to join "{organizationName}" organization to collaborate with them. Use the button below to set up your account and get started:
           </Text>
           {actionUrl && (
             <CustomButton
