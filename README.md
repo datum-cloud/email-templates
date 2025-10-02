@@ -58,17 +58,16 @@ emails/
 ├── config/
 │   ├── tailwind.config.ts          # Centralized Tailwind configuration
 │   └── brand.config.ts             # Brand settings and constants
-├── components/                      # Reusable email components
-│   ├── EmailLayout.tsx             # Base layout wrapper
-│   ├── EmailContainer.tsx          # Content container
-│   ├── EmailButton.tsx             # Styled button component
-│   ├── EmailHeader.tsx             # Standard header
-│   ├── EmailFooter.tsx             # Standard footer
-│   ├── EmailSupport.tsx            # Support information section                  # Icon components
+├── components/                     # Reusable email components
+│   ├── CustomButton.tsx            # Styled button component
+│   ├── EmailSupport.tsx            # Support information section
 │   └── index.ts                    # Component exports
-├── static/                          # Static assets
-├── invite-user.tsx                  # User invitation template
-└── README.md                        # Component documentation
+├── layouts/                        # Email layout components
+│   ├── main.layout.tsx             # Base email layout wrapper
+│   ├── header.tsx                  # Standard header layout
+│   ├── footer.tsx                  # Standard footer layout
+│   └── index.ts                    # Layout exports
+└── user-invitation.tsx             # User invitation email template
 ```
 
 ## Creating Email Templates
@@ -78,14 +77,9 @@ To create a new email template, follow this structure:
 ```tsx
 import 'web-streams-polyfill/polyfill';
 
-import { Heading, Text } from '@react-email/components';
-import {
-  EmailLayout,
-  EmailContainer,
-  EmailHeader,
-  EmailFooter,
-  EmailButton,
-} from './components';
+import { Heading, Row, Section, Text } from '@react-email/components';
+import { CustomButton, EmailSupport } from './components';
+import { MainLayout } from './layouts';
 
 interface MyEmailProps {
   name: string;
@@ -93,20 +87,25 @@ interface MyEmailProps {
 }
 
 export const MyEmail = ({ name, actionUrl }: MyEmailProps) => {
+  const previewText = `Welcome to the platform, ${name}`;
+  
   return (
-    <EmailLayout preview="Welcome to the platform">
-      <EmailContainer>
-        <EmailHeader />
-        <Heading as="h1">Welcome, {name}</Heading>
-        <Text>
-          Thank you for joining our platform. We're excited to have you on board.
-        </Text>
-        <EmailButton href={actionUrl}>
-          Get Started
-        </EmailButton>
-        <EmailFooter />
-      </EmailContainer>
-    </EmailLayout>
+    <MainLayout preview={previewText}>
+      <Section className="my-8">
+        <Row className="mb-8">
+          <Heading as="h2" className="text-2xl mt-0 font-medium mb-4">
+            Welcome, {name}
+          </Heading>
+          <Text className="text-sm m-0 font-light">
+            Thank you for joining our platform. We're excited to have you on board.
+          </Text>
+          <CustomButton href={actionUrl} className="my-6 block font-semibold">
+            Get Started
+          </CustomButton>
+        </Row>
+        <EmailSupport />
+      </Section>
+    </MainLayout>
   );
 };
 

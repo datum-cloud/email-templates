@@ -58,7 +58,7 @@ UserInvitation.PreviewProps = {
   inviter: 'John Doe',
   organizationName: 'Braintree Corp',
   role: 'Admin',
-  actionUrl: 'https://datum.net/9ocnt2np',
+  actionUrl: 'https://cloud.datum.net',
 } as UserInvitationProps;
 
 export default UserInvitation;
