@@ -16,10 +16,9 @@ interface UserInvitationProps {
 export const UserInvitation = ({
   inviter,
   organizationName,
-  role,
   actionUrl,
 }: UserInvitationProps) => {
-  const previewText = `${inviter} invited you to join ${organizationName} as ${role}`;
+  const previewText = `${inviter} invited you to join ${organizationName}`;
 
   return (
     <MainLayout preview={previewText}>
@@ -56,7 +55,6 @@ export const UserInvitation = ({
 UserInvitation.PreviewProps = {
   inviter: 'John Doe',
   organizationName: 'Braintree Corp',
-  role: 'Admin',
   actionUrl: 'https://cloud.datum.net',
 } as UserInvitationProps;
 
