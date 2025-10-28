@@ -15,10 +15,14 @@
 export type {
   CustomButtonProps,
   CustomButtonSize,
-  CustomButtonVariant,
+  CustomButtonVariant
 } from './CustomButton';
+
 // Interactive Components
 export { CustomButton } from './CustomButton';
 
-export type { EmailSupportProps } from './EmailSupport';
 export { EmailSupport } from './EmailSupport';
+export type { EmailSupportProps } from './EmailSupport';
+
+export { EmailSignoff } from './EmailSignoff';
+export type { EmailSignoffProps } from './EmailSignoff';

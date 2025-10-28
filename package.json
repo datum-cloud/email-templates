@@ -5,6 +5,12 @@
     "build": "email build",
     "dev": "email dev",
     "export": "email export",
+    "export:text": "email export --pretty --plainText --outDir out-text",
+    "export:html": "email export --pretty --outDir out-html",
+    "export:all": "pnpm export:html && pnpm export:text",
+    "export:custom": "tsx scripts/export-emails.ts",
+    "generate:yaml": "node scripts/generate-yaml.js",
+    "generate:all": "pnpm export:custom && node scripts/generate-yaml.js",
     "lint": "biome lint ./emails",
     "lint:fix": "biome lint --write ./emails",
     "format": "biome format ./emails",
@@ -14,6 +20,7 @@
   },
   "dependencies": {
     "@react-email/components": "0.5.5",
+    "@react-email/render": "1.4.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "web-streams-polyfill": "^4.2.0"
@@ -23,6 +30,7 @@
     "@react-email/preview-server": "4.2.12",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
-    "react-email": "4.2.12"
+    "react-email": "4.2.12",
+    "tsx": "^4.19.0"
   }
 }

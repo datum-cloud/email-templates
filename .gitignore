@@ -12,6 +12,9 @@ yarn.lock
 # React Email
 .react-email/
 out/
+out-text/
+out-html/
+out-yaml/
 *.html
 
 # Build outputs
