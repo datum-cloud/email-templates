@@ -64,6 +64,13 @@ function extractPreviewProps(tsxContent) {
   return props;
 }
 
+function extractExplicitSubject(tsxContent) {
+  // Matches: Component.Subject = "...";
+  const re = /\.[Ss]ubject\s*=\s*(["'])([\s\S]*?)\1\s*;/m;
+  const m = tsxContent.match(re);
+  return m ? m[2].trim() : null;
+}
+
 function escapeForRegex(literal) {
   return literal.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
@@ -166,7 +173,8 @@ function main() {
     const previewProps = extractPreviewProps(tsx);
     const htmlRepl = replacePreviewValuesWithPlaceholders(html, previewProps);
     const textRepl = replacePreviewValuesWithPlaceholders(text, previewProps);
-    const subject = extractSubjectFromHtml(htmlRepl);
+    const explicitSubject = extractExplicitSubject(tsx);
+    const subject = explicitSubject || extractSubjectFromHtml(htmlRepl);
 
     // Convert PreviewProps to variables format
     const variables = Object.keys(previewProps).map(key => ({

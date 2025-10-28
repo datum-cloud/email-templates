@@ -5,11 +5,11 @@ import { CustomButton, EmailSignoff } from "./components";
 import { MainLayout } from "./layouts";
 
 interface UserApprovedProps {
-  Name: string;
+  UserName: string;
   ActionUrl: string;
 }
 
-export const UserApproved = ({ Name, ActionUrl }: UserApprovedProps) => {
+export const UserApproved = ({ UserName, ActionUrl }: UserApprovedProps) => {
   const previewText = `Your account has been approved`;
 
   return (
@@ -17,7 +17,7 @@ export const UserApproved = ({ Name, ActionUrl }: UserApprovedProps) => {
       <Section className="my-8">
         <Row>
           <Heading as="h4" className="mt-0 font-medium mb-4">
-            Hi {Name},
+            Hi {UserName},
           </Heading>
           <Text className="text-sm m-0 font-light">
             Good news, you&apos;re off the waitlist! I&apos;m excited to share
@@ -50,8 +50,10 @@ export const UserApproved = ({ Name, ActionUrl }: UserApprovedProps) => {
 };
 
 UserApproved.PreviewProps = {
-  Name: "John Doe",
+  UserName: "John Doe",
   ActionUrl: "https://cloud.datum.net",
 } as UserApprovedProps;
+
+UserApproved.Subject = "🚀 You're in! Your access to Datum is here 🚀";
 
 export default UserApproved;

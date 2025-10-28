@@ -5,10 +5,10 @@ import { EmailSignoff } from "./components";
 import { MainLayout } from "./layouts";
 
 interface UserWaitlistProps {
-  Name: string;
+  UserName: string;
 }
 
-export const UserWaitlist = ({ Name }: UserWaitlistProps) => {
+export const UserWaitlist = ({ UserName }: UserWaitlistProps) => {
   const previewText = `You're on the waitlist`;
 
   return (
@@ -16,7 +16,7 @@ export const UserWaitlist = ({ Name }: UserWaitlistProps) => {
       <Section className="my-8">
         <Row>
           <Heading as="h4" className="mt-0 font-medium mb-4">
-            Hi {Name},
+            Hi {UserName},
           </Heading>
           <Text className="text-sm mt-0 mb-4 font-light">
             Thanks for joining the waitlist for Datum Cloud. We&apos;re
@@ -40,7 +40,9 @@ export const UserWaitlist = ({ Name }: UserWaitlistProps) => {
 };
 
 UserWaitlist.PreviewProps = {
-  Name: "John Doe",
+  UserName: "John Doe",
 } as UserWaitlistProps;
+
+UserWaitlist.Subject = "⏳ You're on the waitlist — Your access to Datum is coming soon!";
 
 export default UserWaitlist;

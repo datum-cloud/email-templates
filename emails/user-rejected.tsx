@@ -6,10 +6,10 @@ import { MainLayout } from "./layouts";
 
 
 interface UserRejectedProps {
-  Name: string;
+  UserName: string;
 }
 
-export const UserRejected = ({ Name }: UserRejectedProps) => {
+export const UserRejected = ({ UserName }: UserRejectedProps) => {
   const previewText = `Your account has been rejected`;
 
   return (
@@ -17,7 +17,7 @@ export const UserRejected = ({ Name }: UserRejectedProps) => {
       <Section className="my-8">
         <Row>
           <Heading as="h4" className="mt-0 font-medium mb-4">
-            Hi {Name},
+            Hi {UserName},
           </Heading>
           <Text className="text-sm mt-0 mb-4 font-light">
             Thank you for your interest in Datum Cloud. Unfortunately, we&apos;re
@@ -35,7 +35,9 @@ export const UserRejected = ({ Name }: UserRejectedProps) => {
 };
 
 UserRejected.PreviewProps = {
-  Name: "John Doe",
+  UserName: "John Doe",
 } as UserRejectedProps;
+
+UserRejected.Subject = "We're Sorry — Your Application to Datum Was Not Approved";
 
 export default UserRejected;
