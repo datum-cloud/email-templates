@@ -2,7 +2,9 @@ name: Update Datum Email Templates
 
 on:
   pull_request:
-    types: [opened, synchronize]
+    types: [closed]
+    branches:
+      - main
     paths:
       - 'emails/**'
       - 'scripts/**'
@@ -16,12 +18,15 @@ jobs:
       contents: write
       pull-requests: write
     
+    # Only run if PR was merged (not just closed)
+    if: github.event.pull_request.merged == true
+    
     steps:
       - name: Checkout email-templates repo
         uses: actions/checkout@v4
         with:
           path: email-templates
-          ref: ${{ github.event.pull_request.head.sha }}
+          ref: ${{ github.event.pull_request.merge_commit_sha }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -121,8 +126,7 @@ jobs:
             chore: update email templates and kustomization.yaml from email-templates repo
 
             Auto-generated from email-templates PR: #${{ github.event.pull_request.number }}
-            Source commit: ${{ github.event.pull_request.head.sha }}
-            Generated at: $(date -u +'%Y-%m-%d %H:%M:%S UTC')
+            Merge commit: ${{ github.event.pull_request.merge_commit_sha }}
             
             - Updated all email template YAML files
             - Regenerated kustomization.yaml to include all template files
@@ -131,9 +135,8 @@ jobs:
             This PR automatically updates the email template YAML files from the email-templates repository.
 
             **Source PR:** [#${{ github.event.pull_request.number }}](https://github.com/${{ github.repository }}/pull/${{ github.event.pull_request.number }})
-            **Source commit:** [${{ github.event.pull_request.head.sha }}](https://github.com/${{ github.repository }}/commit/${{ github.event.pull_request.head.sha }})
+            **Merge commit:** [${{ github.event.pull_request.merge_commit_sha }}](https://github.com/${{ github.repository }}/commit/${{ github.event.pull_request.merge_commit_sha }})
             **Source repo:** ${{ github.repository }}
-            **Generated at:** $(date -u +'%Y-%m-%d %H:%M:%S UTC')
 
             The following files have been updated:
             - All email template YAML files in `config/email-templates/`
