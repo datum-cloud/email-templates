@@ -85,9 +85,8 @@ export const Footer = ({ className = "" }: FooterProps) => {
       </Row>
       <Text className="text-sm m-0 font-light">
         Datum Technology Inc. <br />
-        29 Broadway <br />
-        New York City <br />
-        NY, 10006
+        120 Broadway, 26th Floor <br />
+        New York, NY 10271
       </Text>
     </Section>
   );
