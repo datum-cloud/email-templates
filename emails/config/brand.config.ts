@@ -3,6 +3,8 @@ export const brandConfig = {
   url: 'https://www.datum.net',
   logoUrl: 'https://www.datum.net/download/eng/logo-datum-light.png',
   supportEmail: 'support@datum.net',
-  githubUrl: 'https://github.com/datum-cloud',
-  linkedinUrl: 'https://www.linkedin.com/company/datum-cloud',
+  discordUrl: 'https://link.datum.net/discord',
+  githubUrl: 'https://link.datum.net/github',
+  youtubeUrl: 'https://link.datum.net/youtube',
+  linkedinUrl: 'https://link.datum.net/linkedin',
 };
