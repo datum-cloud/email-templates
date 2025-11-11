@@ -35,7 +35,7 @@ jobs:
 
       - name: Install dependencies
         working-directory: email-templates
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --no-frozen-lockfile
 
       - name: Generate YAML files
         working-directory: email-templates
