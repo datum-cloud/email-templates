@@ -1,0 +1,153 @@
+name: Update Datum Email Templates
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+    paths:
+      - 'emails/**'
+      - 'scripts/**'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+
+jobs:
+  update-datum-templates:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    
+    # Only run if PR was merged (not just closed)
+    if: github.event.pull_request.merged == true
+    
+    steps:
+      - name: Checkout email-templates repo
+        uses: actions/checkout@v4
+        with:
+          path: email-templates
+          ref: ${{ github.event.pull_request.merge_commit_sha }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 8
+
+      - name: Install dependencies
+        working-directory: email-templates
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Generate YAML files
+        working-directory: email-templates
+        run: pnpm generate:all
+
+      - name: Determine datum repo
+        id: datum-repo
+        env:
+          DATUM_REPO_VAR: ${{ vars.DATUM_REPO }}
+        run: |
+          # Use repository variable if set, otherwise infer from current repo
+          if [ -n "$DATUM_REPO_VAR" ]; then
+            DATUM_REPO="$DATUM_REPO_VAR"
+          else
+            REPO_OWNER=$(echo "${{ github.repository }}" | cut -d'/' -f1)
+            DATUM_REPO="${REPO_OWNER}/datum"
+          fi
+          echo "DATUM_REPO=$DATUM_REPO" >> $GITHUB_ENV
+          echo "Using datum repo: $DATUM_REPO"
+
+      - name: Checkout datum repo
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ env.DATUM_REPO }}
+          token: ${{ secrets.DATUM_REPO_TOKEN || secrets.GITHUB_TOKEN }}
+          path: datum
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Copy generated YAML files
+        run: |
+          if [ ! -d "email-templates/out-yaml" ] || [ -z "$(ls -A email-templates/out-yaml/*.yaml 2>/dev/null)" ]; then
+            echo "Error: No YAML files found in out-yaml directory"
+            exit 1
+          fi
+          cp email-templates/out-yaml/*.yaml datum/config/email-templates/
+          echo "Copied YAML files:"
+          ls -la datum/config/email-templates/*.yaml
+
+      - name: Update kustomization.yaml
+        working-directory: datum/config/email-templates
+        run: |
+          # Generate kustomization.yaml with all YAML files
+          cat > kustomization.yaml << 'EOF'
+          apiVersion: kustomize.config.k8s.io/v1alpha1
+          kind: Component
+          
+          resources:
+          EOF
+          
+          # Add each YAML file to resources (sorted for consistency)
+          for yaml_file in $(ls -1 *.yaml | grep -v kustomization.yaml | sort); do
+            echo "  - $yaml_file" >> kustomization.yaml
+          done
+          
+          echo "Generated kustomization.yaml:"
+          cat kustomization.yaml
+
+      - name: Check for changes
+        working-directory: datum
+        id: check-changes
+        run: |
+          if git diff --quiet config/email-templates/; then
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+            echo "No changes detected, skipping PR creation"
+          else
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+            echo "Changes detected:"
+            git diff --stat config/email-templates/
+          fi
+
+      - name: Create or update PR
+        if: steps.check-changes.outputs.has_changes == 'true'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.DATUM_REPO_TOKEN || secrets.GITHUB_TOKEN }}
+          path: datum
+          commit-message: |
+            chore: update email templates and kustomization.yaml from email-templates repo
+
+            Auto-generated from email-templates PR: #${{ github.event.pull_request.number }}
+            Merge commit: ${{ github.event.pull_request.merge_commit_sha }}
+            
+            - Updated all email template YAML files
+            - Regenerated kustomization.yaml to include all template files
+          title: "chore: Update email templates (from email-templates PR #${{ github.event.pull_request.number }})"
+          body: |
+            This PR automatically updates the email template YAML files from the email-templates repository.
+
+            **Source PR:** [#${{ github.event.pull_request.number }}](https://github.com/${{ github.repository }}/pull/${{ github.event.pull_request.number }})
+            **Merge commit:** [${{ github.event.pull_request.merge_commit_sha }}](https://github.com/${{ github.repository }}/commit/${{ github.event.pull_request.merge_commit_sha }})
+            **Source repo:** ${{ github.repository }}
+
+            The following files have been updated:
+            - All email template YAML files in `config/email-templates/`
+            - `config/email-templates/kustomization.yaml` (auto-generated to include all template files)
+
+            Please review and merge if the changes look correct.
+          branch: update-email-templates-pr-${{ github.event.pull_request.number }}
+          base: main
+          labels: |
+            automated
+            email-templates
+          delete-branch: false
+          draft: false
+
