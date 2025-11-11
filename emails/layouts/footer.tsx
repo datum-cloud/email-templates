@@ -31,14 +31,6 @@ export const Footer = ({ className = "" }: FooterProps) => {
   return (
     <Section className={className}>
       <Hr className="mx-0 mb-8 mt-0 block border border-brand-light-gray border-solid" />
-      <Heading as="h3" className="mt-0 font-medium mb-4">
-        Why Datum?
-      </Heading>
-      <Text className="text-sm m-0 font-light mb-6">
-        Datum is a venture-backed startup based in New York City. Our mission is
-        to help 1k new clouds thrive in the age of AI by unlocking internet
-        superpowers for every builder.
-      </Text>
       <Row className="my-6 table-cell h-[44px] w-[56px]">
         <Column className="pr-2">
           <Link href={brandConfig.url} target="_blank">

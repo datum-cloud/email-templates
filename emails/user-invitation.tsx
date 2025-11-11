@@ -1,10 +1,8 @@
 import "web-streams-polyfill/polyfill";
 
-import { Heading, Link, Row, Section, Text } from "@react-email/components";
+import { Heading, Hr, Link, Row, Section, Text } from "@react-email/components";
 import { CustomButton } from "./components";
 import { MainLayout } from "./layouts";
-
-import { EmailSupport } from "./components/EmailSupport";
 import { brandConfig } from "./config/brand.config";
 
 interface UserInvitationProps {
@@ -58,7 +56,17 @@ export const UserInvitation = ({
           </Text>
         </Row>
 
-        {/* <EmailSupport /> */}
+        <Row>
+          <Hr className="mx-0 my-8 block border border-brand-light-gray border-solid" />
+          <Heading as="h3" className="mt-0 font-medium mb-4">
+            Why Datum?
+          </Heading>
+          <Text className="text-sm m-0 font-light">
+            Datum is a venture-backed startup based in New York City. Our
+            mission is to help 1k new clouds thrive in the age of AI by
+            unlocking internet superpowers for every builder.
+          </Text>
+        </Row>
       </Section>
     </MainLayout>
   );
