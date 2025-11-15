@@ -1,8 +1,9 @@
 import "web-streams-polyfill/polyfill";
 
-import { Heading, Row, Section, Text } from "@react-email/components";
+import { Heading, Link, Row, Section, Text } from "@react-email/components";
 import { CustomButton, EmailSignoff } from "./components";
 import { MainLayout } from "./layouts";
+import { brandConfig } from "./config/brand.config";
 
 interface UserApprovedProps {
   UserName: string;
@@ -34,7 +35,7 @@ export const UserApproved = ({ UserName, ActionUrl }: UserApprovedProps) => {
           )}
           <Text className="text-sm m-0 font-light">
             We&apos;re releasing new features each week and chatting about
-            issues and opportunities on Discord. Feel free to join me there with
+            issues and opportunities on <Link href={brandConfig.discordUrl} target="_blank">Discord</Link>. Feel free to join me there with
             any questions or feedback.
           </Text>
 

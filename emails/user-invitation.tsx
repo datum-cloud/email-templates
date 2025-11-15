@@ -23,7 +23,7 @@ export const UserInvitation = ({
       <Section className="my-8">
         <Row>
           <Heading as="h4" className="mt-0 font-medium mb-4">
-            Hey there!,
+            Hey there!
           </Heading>
           <Text className="text-sm mt-0 mb-4 font-light">
             {InviterDisplayName} has invited you to join the{" "}
