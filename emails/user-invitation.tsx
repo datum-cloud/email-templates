@@ -32,7 +32,7 @@ export const UserInvitation = ({
           <Text className="text-sm m-0 font-light">
             Please click the button to set up your account and get started. If
             you need help, just reply to this email or visit us on{" "}
-            <Link href={brandConfig.discordUrl} target="_blank">
+            <Link href={brandConfig.discordUrl} target="_blank" className="text-brand-canyon-clay underline">
               Discord
             </Link>
             .
@@ -40,13 +40,13 @@ export const UserInvitation = ({
           {UserInvitationName && (
             <CustomButton
               href={`https://cloud.datum.net/invitation/${UserInvitationName}/accept`}
-              className="my-6 block font-semibold"
+              className="my-6 block font-medium"
             >
               Accept invitation
             </CustomButton>
           )}
           <Text className="text-sm m-0 font-light">
-            Or paste the following URL into your browser:{" "}
+            Or you can copy and paste the following URL into your browser:{" "}
             <Link
               href={`https://cloud.datum.net/invitation/${UserInvitationName}/accept`}
               className="text-brand-canyon-clay"
@@ -58,14 +58,16 @@ export const UserInvitation = ({
 
         <Row>
           <Hr className="mx-0 my-8 block border border-brand-light-gray border-solid" />
-          <Heading as="h3" className="mt-0 font-medium mb-4">
-            Why Datum?
+          <Heading as="h3" className="mt-0 font-medium mb-2.5 text-lg">
+            We're here to help
           </Heading>
-          <Text className="text-sm m-0 font-light">
-            Datum is a venture-backed startup based in New York City. Our
-            mission is to help 1k new clouds thrive in the age of AI by
-            unlocking internet superpowers for every builder.
+          <Text className="text-base font-light m-0 mb-2.5">
+            If you have any questions reach out and we'll do our best to help
           </Text>
+
+          <Link href={`mailto:${brandConfig.supportEmail}`} className="text-base font-medium underline text-brand-canyon-clay">
+            {brandConfig.supportEmail}
+          </Link>
         </Row>
       </Section>
     </MainLayout>
