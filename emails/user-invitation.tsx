@@ -1,9 +1,9 @@
-import "web-streams-polyfill/polyfill";
+import 'web-streams-polyfill/polyfill';
 
-import { Heading, Hr, Link, Row, Section, Text } from "@react-email/components";
-import { CustomButton } from "./components";
-import { MainLayout } from "./layouts";
-import { brandConfig } from "./config/brand.config";
+import { Hr, Link, Row, Section, Text } from '@react-email/components';
+import { CustomButton } from './components';
+import { brandConfig } from './config/brand.config';
+import { MainLayout } from './layouts';
 
 interface UserInvitationProps {
   InviterDisplayName: string;
@@ -20,19 +20,23 @@ export const UserInvitation = ({
 
   return (
     <MainLayout preview={previewText}>
-      <Section className="my-8">
+      <Section className="my-10.5">
         <Row>
-          <Heading as="h4" className="mt-0 font-medium mb-4">
+          <Text className="mt-0 text-2xl mb-5.5 leading-10 font-medium">
             Hey there!
-          </Heading>
-          <Text className="text-sm mt-0 mb-4 font-light">
-            {InviterDisplayName} has invited you to join the{" "}
+          </Text>
+          <Text className="mt-0 mb-5.5 text-4.5 leading-4.5 font-normal">
+            {InviterDisplayName} has invited you to join the{' '}
             {OrganizationDisplayName} organization at Datum.
           </Text>
-          <Text className="text-sm m-0 font-light">
+          <Text className="m-0 text-sm leading-5 font-normal">
             Please click the button to set up your account and get started. If
-            you need help, just reply to this email or visit us on{" "}
-            <Link href={brandConfig.discordUrl} target="_blank">
+            you need help, just reply to this email or visit us on{' '}
+            <Link
+              href={brandConfig.discordUrl}
+              target="_blank"
+              className="text-brand-canyon-clay underline"
+            >
               Discord
             </Link>
             .
@@ -40,16 +44,16 @@ export const UserInvitation = ({
           {UserInvitationName && (
             <CustomButton
               href={`https://cloud.datum.net/invitation/${UserInvitationName}/accept`}
-              className="my-6 block font-semibold"
+              className="mt-9 mb-8 block text-[16px] font-semibold leading-5"
             >
               Accept invitation
             </CustomButton>
           )}
-          <Text className="text-sm m-0 font-light">
-            Or paste the following URL into your browser:{" "}
+          <Text className="text-sm leading-5 font-normal">
+            Or you can copy and paste the following URL into your browser:{' '}
             <Link
               href={`https://cloud.datum.net/invitation/${UserInvitationName}/accept`}
-              className="text-brand-canyon-clay"
+              className="text-brand-canyon-clay underline"
             >
               https://cloud.datum.net/invitation/{UserInvitationName}/accept
             </Link>
@@ -57,11 +61,11 @@ export const UserInvitation = ({
         </Row>
 
         <Row>
-          <Hr className="mx-0 my-8 block border border-brand-light-gray border-solid" />
-          <Heading as="h3" className="mt-0 font-medium mb-4">
+          <Hr className="mx-0 my-10.5 block border border-brand-light-gray border-solid" />
+          <Text className="mt-0 text-[21px] leading-7 font-semibold mb-[11px]">
             Why Datum?
-          </Heading>
-          <Text className="text-sm m-0 font-light">
+          </Text>
+          <Text className="m-0 text-4.5 leading-6 font-normal">
             Datum is a venture-backed startup based in New York City. Our
             mission is to help 1k new clouds thrive in the age of AI by
             unlocking internet superpowers for every builder.
@@ -73,11 +77,11 @@ export const UserInvitation = ({
 };
 
 UserInvitation.PreviewProps = {
-  InviterDisplayName: "John Doe",
-  OrganizationDisplayName: "Braintree Corp",
-  UserInvitationName: "invitation-name",
+  InviterDisplayName: 'John Doe',
+  OrganizationDisplayName: 'Braintree Corp',
+  UserInvitationName: 'invitation-name',
 } as UserInvitationProps;
 
-UserInvitation.Subject = "Invitation to collaborate at Datum";
+UserInvitation.Subject = 'Invitation to collaborate at Datum';
 
 export default UserInvitation;

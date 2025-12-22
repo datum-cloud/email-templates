@@ -2,7 +2,6 @@ import type { TailwindConfig } from '@react-email/components';
 import {
   Body,
   Container,
-  Font,
   Head,
   Html,
   Preview,
@@ -10,8 +9,8 @@ import {
 } from '@react-email/components';
 import type { ReactNode } from 'react';
 import { emailTailwindConfig } from '../config/tailwind.config';
-import { Header } from './header';
 import { Footer } from './footer';
+import { Header } from './header';
 
 export interface MainLayoutProps {
   /**
@@ -54,47 +53,15 @@ export const MainLayout = ({
   children,
   preview,
   tailwindConfig = emailTailwindConfig,
-  bodyClassName = 'mx-auto my-auto bg-white font-sans',
+  bodyClassName = 'mx-auto my-auto bg-white font-sans text-brand-navy',
 }: MainLayoutProps) => {
   return (
     <Html>
-      <Head>
-        <Font
-          fontFamily="Alliance No1"
-          fallbackFontFamily="sans-serif"
-          webFont={{
-            url: 'https://www.datum.net/fonts/datum/allianceno1-semibold-webfont.woff2',
-            format: 'woff2',
-          }}
-          fontWeight={600}
-          fontStyle="normal"
-        />
-
-        <Font
-          fontFamily="Alliance No1"
-          fallbackFontFamily="sans-serif"
-          webFont={{
-            url: 'https://www.datum.net/fonts/datum/allianceno1-medium-webfont.woff2',
-            format: 'woff2',
-          }}
-          fontWeight={500}
-          fontStyle="normal"
-        />
-        <Font
-          fontFamily="Alliance No1"
-          fallbackFontFamily="sans-serif"
-          webFont={{
-            url: 'https://www.datum.net/fonts/datum/allianceno1-regular-webfont.woff2',
-            format: 'woff2',
-          }}
-          fontWeight={400}
-          fontStyle="normal"
-        />
-      </Head>
+      <Head />
       {preview && <Preview>{preview}</Preview>}
       <Tailwind config={tailwindConfig}>
         <Body className={bodyClassName}>
-          <Container className="mx-auto my-20 rounded-lg border border-solid border-brand-light-gray py-9 px-10 bg-white">
+          <Container className="mx-auto my-20 rounded-lg border border-solid border-brand-light-gray pt-9 pb-[55px] px-[52px] bg-white">
             <Header />
             {children}
             <Footer />
