@@ -19,7 +19,7 @@ export const PlatformInvitation = ({
     <MainLayout preview={previewText}>
       <Section className="my-10.5">
         <Row>
-          <Text className="mt-0 text-2xl mb-5.5 leading-10 font-medium">
+          <Text className="mt-0 text-4.5 mb-5.5 leading-4.5 font-medium">
             Hi {UserName},
           </Text>
           <Text className="mt-0 mb-5.5 text-4.5 leading-4.5 font-normal">
@@ -28,7 +28,7 @@ export const PlatformInvitation = ({
             the internet. I&apos;m hoping you&apos;ll take some time to kick the
             tires during our private beta.
           </Text>
-          <Text className="text-sm leading-5 m-0 font-normal">
+          <Text className="text-4.5 leading-4.5 m-0 font-normal">
             We&apos;re intentionally keeping this group small so we can listen
             closely to feedback.
           </Text>
@@ -40,11 +40,11 @@ export const PlatformInvitation = ({
               Get started
             </CustomButton>
           )}
-          <Text className="text-sm leading-5 m-0 font-normal">
+          <Text className="text-4.5 leading-4.5 m-0 font-normal">
             Let me know your thoughts?
           </Text>
 
-          <Text className="text-sm leading-5 font-normal mt-5.5 mb-0">
+          <Text className="text-4.5 leading-4.5 font-normal mt-5.5 mb-0">
             Cheers,
             <br />
             <br />

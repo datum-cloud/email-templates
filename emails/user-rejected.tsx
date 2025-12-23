@@ -14,18 +14,18 @@ export const UserRejected = ({ UserName }: UserRejectedProps) => {
     <MainLayout preview={previewText}>
       <Section className="my-10.5">
         <Row>
-          <Text className="mt-0 text-2xl mb-5.5 leading-10 font-medium">
+          <Text className="mt-0 text-4.5 mb-5.5 leading-4.5 font-medium">
             Hi {UserName},
           </Text>
           <Text className="mt-0 mb-5.5 text-4.5 leading-4.5 font-normal">
             Thank you for your interest in Datum Cloud. Unfortunately,
             we&apos;re unable to approve your account at this time.
           </Text>
-          <Text className="text-sm leading-5 m-0 font-normal">
+          <Text className="text-4.5 leading-4.5 m-0 font-normal">
             If you have questions, or think this decision is in error, please
             respond to this email and we can investigate further.
           </Text>
-          <Text className="text-sm leading-5 font-normal mt-5.5 mb-0">
+          <Text className="text-4.5 leading-4.5 font-normal mt-5.5 mb-0">
             Many thanks,
             <br />
             <br />
