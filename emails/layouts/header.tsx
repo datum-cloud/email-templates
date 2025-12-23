@@ -27,7 +27,7 @@ export const Header = ({ className = '' }: HeaderProps) => {
         alt={brandConfig.name}
         className="mx-auto my-0"
       />
-      <Hr className="mx-0 mt-8 mb-0 block border border-brand-light-gray border-solid" />
+      <Hr className="mx-0 mt-[38px] mb-0 block border border-brand-light-gray border-solid" />
     </Section>
   );
 };

@@ -1,9 +1,7 @@
-import "web-streams-polyfill/polyfill";
+import 'web-streams-polyfill/polyfill';
 
-import { Heading, Row, Section, Text } from "@react-email/components";
-import { EmailSignoff } from './components';
-import { MainLayout } from "./layouts";
-
+import { Row, Section, Text } from '@react-email/components';
+import { MainLayout } from './layouts';
 
 interface UserRejectedProps {
   UserName: string;
@@ -14,20 +12,25 @@ export const UserRejected = ({ UserName }: UserRejectedProps) => {
 
   return (
     <MainLayout preview={previewText}>
-      <Section className="my-8">
+      <Section className="my-10.5">
         <Row>
-          <Heading as="h4" className="mt-0 font-medium mb-4">
+          <Text className="mt-0 text-4.5 mb-5.5 leading-4.5 font-medium">
             Hi {UserName},
-          </Heading>
-          <Text className="text-sm mt-0 mb-4 font-light">
-            Thank you for your interest in Datum Cloud. Unfortunately, we&apos;re
-            unable to approve your account at this time.
           </Text>
-          <Text className="text-sm m-0 font-light">
+          <Text className="mt-0 mb-5.5 text-4.5 leading-4.5 font-normal">
+            Thank you for your interest in Datum Cloud. Unfortunately,
+            we&apos;re unable to approve your account at this time.
+          </Text>
+          <Text className="text-4.5 leading-4.5 m-0 font-normal">
             If you have questions, or think this decision is in error, please
             respond to this email and we can investigate further.
           </Text>
-          <EmailSignoff />
+          <Text className="text-4.5 leading-4.5 font-normal mt-5.5 mb-0">
+            Many thanks,
+            <br />
+            <br />
+            The Team at Datum
+          </Text>
         </Row>
       </Section>
     </MainLayout>
@@ -35,9 +38,10 @@ export const UserRejected = ({ UserName }: UserRejectedProps) => {
 };
 
 UserRejected.PreviewProps = {
-  UserName: "John Doe",
+  UserName: 'John Doe',
 } as UserRejectedProps;
 
-UserRejected.Subject = "We're Sorry — Your Application to Datum Was Not Approved";
+UserRejected.Subject =
+  "We're Sorry — Your Application to Datum Was Not Approved";
 
 export default UserRejected;
