@@ -17,10 +17,10 @@ export const UserApproved = ({ UserName, ActionUrl }: UserApprovedProps) => {
     <MainLayout preview={previewText}>
       <Section className="my-10.5">
         <Row>
-          <Text className="mt-0 text-4.5 mb-5.5 leading-4.5 font-medium">
+          <Text className="mt-0 text-4.5 mb-5.5 leading-6 font-medium">
             Hi {UserName},
           </Text>
-          <Text className="mt-0 mb-5.5 text-4.5 leading-4.5 font-normal">
+          <Text className="mt-0 mb-5.5 text-4.5 leading-6 font-normal">
             Good news, you&apos;re off the waitlist! I&apos;m excited to share
             what we&apos;ve built (so far) with Datum Cloud and get your
             feedback. To get started, just login below:
@@ -33,7 +33,7 @@ export const UserApproved = ({ UserName, ActionUrl }: UserApprovedProps) => {
               Start building
             </CustomButton>
           )}
-          <Text className="text-4.5 leading-4.5 font-normal">
+          <Text className="text-4.5 leading-6 font-normal">
             We&apos;re releasing new features each week and chatting about
             issues and opportunities on{' '}
             <Link
@@ -46,7 +46,7 @@ export const UserApproved = ({ UserName, ActionUrl }: UserApprovedProps) => {
             . Feel free to join me there with any questions or feedback.
           </Text>
 
-          <Text className="text-4.5 leading-4.5 font-normal mt-5.5 mb-0">
+          <Text className="text-4.5 leading-6 font-normal mt-5.5 mb-0">
             Cheers,
             <br />
             <br />

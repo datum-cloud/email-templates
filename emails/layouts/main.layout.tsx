@@ -61,7 +61,7 @@ export const MainLayout = ({
       {preview && <Preview>{preview}</Preview>}
       <Tailwind config={tailwindConfig}>
         <Body className={bodyClassName}>
-          <Container className="mx-auto my-20 rounded-lg border border-solid border-brand-light-gray pt-9 pb-[55px] px-[52px] bg-white">
+          <Container className="mx-auto my-20 max-w-[600px] rounded-lg border border-solid border-brand-light-gray pt-9 pb-[55px] px-[52px] bg-white">
             <Header />
             {children}
             <Footer />

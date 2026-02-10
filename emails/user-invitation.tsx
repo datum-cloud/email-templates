@@ -25,11 +25,11 @@ export const UserInvitation = ({
           <Text className="mt-0 text-2xl mb-5.5 leading-10 font-medium">
             Hey there!
           </Text>
-          <Text className="mt-0 mb-5.5 text-4.5 leading-4.5 font-normal">
+          <Text className="mt-0 mb-5.5 text-4.5 leading-6 font-normal">
             {InviterDisplayName} has invited you to join the{' '}
             {OrganizationDisplayName} organization at Datum.
           </Text>
-          <Text className="m-0 text-4.5 leading-4.5 font-normal">
+          <Text className="m-0 text-4.5 leading-6 font-normal">
             Please click the button to set up your account and get started. If
             you need help, just reply to this email or visit us on{' '}
             <Link
