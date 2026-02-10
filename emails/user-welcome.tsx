@@ -32,8 +32,8 @@ export const UserWelcome = ({ UserName }: UserWelcomeProps) => {
             Here&apos;s how to stay in the loop, get help, or get involved:
           </Text>
           <Text className="mt-0 mb-2 text-4.5 leading-6 font-normal">
-            <span className="font-semibold">Email</span> – Respond to this note and we&apos;ll get
-            back to you
+            <span className="font-semibold">Email</span> – Respond to this note
+            and we&apos;ll get back to you
           </Text>
           <Text className="mt-0 mb-2 text-4.5 leading-6 font-normal">
             <Link
