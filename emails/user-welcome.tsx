@@ -16,10 +16,7 @@ export const UserWelcome = ({ UserName }: UserWelcomeProps) => {
       <Section className="my-10.5">
         <Row>
           <Text className="mt-0 text-4.5 mb-5.5 leading-6 font-medium">
-            Hey {UserName}, welcome to Datum!
-          </Text>
-          <Text className="mt-0 mb-5.5 text-4.5 leading-6 font-normal">
-            We&apos;re glad you&apos;re here.
+            Hey {UserName}, welcome to Datum! We&apos;re glad you&apos;re here.
           </Text>
           <Text className="mt-0 mb-5.5 text-4.5 leading-6 font-normal">
             Datum is building for a future that is evolving in front of our
