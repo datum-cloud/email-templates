@@ -14,20 +14,20 @@ export const UserWaitlist = ({ UserName }: UserWaitlistProps) => {
     <MainLayout preview={previewText}>
       <Section className="my-10.5">
         <Row>
-          <Text className="mt-0 text-4.5 mb-5.5 leading-4.5 font-medium">
+          <Text className="mt-0 text-4.5 mb-5.5 leading-6 font-medium">
             Hi {UserName},
           </Text>
-          <Text className="mt-0 mb-5.5 text-4.5 leading-4.5 font-normal">
+          <Text className="mt-0 mb-5.5 text-4.5 leading-6 font-normal">
             Thanks for joining the waitlist for Datum Cloud. We&apos;re
             currently in a private beta, but we're onboarding people in batches
             every week.
           </Text>
-          <Text className="text-4.5 leading-4.5 m-0 font-normal">
+          <Text className="text-4.5 leading-6 m-0 font-normal">
             I&apos;d love to hear about your use case, or what you feel is
             missing in your toolkit. Just reply to this email with any thoughts.
           </Text>
 
-          <Text className="text-4.5 leading-4.5 font-normal mt-5.5 mb-0">
+          <Text className="text-4.5 leading-6 font-normal mt-5.5 mb-0">
             Cheers,
             <br />
             <br />
