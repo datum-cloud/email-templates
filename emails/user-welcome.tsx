@@ -88,6 +88,6 @@ UserWelcome.PreviewProps = {
   UserName: 'John Doe',
 } as UserWelcomeProps;
 
-UserWelcome.Subject = '{{.UserName}} Welcome to Datum!';
+UserWelcome.Subject = 'Welcome to Datum';
 
 export default UserWelcome;
