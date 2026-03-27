@@ -66,4 +66,5 @@ Thumbs.db
 .tsc-watch/
 
 .claude/
+!.claude/settings.json
 
