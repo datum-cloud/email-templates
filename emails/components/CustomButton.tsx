@@ -1,5 +1,5 @@
-import { Button } from '@react-email/components';
 import type { ReactNode } from 'react';
+import { Button } from 'react-email';
 
 export type CustomButtonVariant = 'primary' | 'secondary' | 'outline' | 'text';
 export type CustomButtonSize = 'sm' | 'md' | 'lg';

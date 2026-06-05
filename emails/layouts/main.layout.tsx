@@ -1,15 +1,8 @@
-import type { TailwindConfig } from '@react-email/components';
-import {
-  Body,
-  Container,
-  Head,
-  Html,
-  Preview,
-  Tailwind,
-} from '@react-email/components';
 import type { ReactNode } from 'react';
+import type { TailwindConfig } from 'react-email';
+import { Body, Container, Head, Html, Preview, Tailwind } from 'react-email';
 import { emailTailwindConfig } from '../config/tailwind.config';
-import { Footer } from './footer';
+import { Newfooter } from './footer';
 import { Header } from './header';
 
 export interface MainLayoutProps {
@@ -61,10 +54,10 @@ export const MainLayout = ({
       {preview && <Preview>{preview}</Preview>}
       <Tailwind config={tailwindConfig}>
         <Body className={bodyClassName}>
-          <Container className="mx-auto my-20 max-w-[600px] rounded-lg border border-solid border-brand-light-gray pt-9 pb-[55px] px-[52px] bg-white">
+          <Container className="mx-auto my-20 max-w-[570px] rounded-lg border border-solid border-brand-light-gray py-[40px] px-[48px] bg-white">
             <Header />
             {children}
-            <Footer />
+            <Newfooter />
           </Container>
         </Body>
       </Tailwind>

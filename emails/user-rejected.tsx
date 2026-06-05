@@ -1,6 +1,6 @@
 import 'web-streams-polyfill/polyfill';
 
-import { Row, Section, Text } from '@react-email/components';
+import { Row, Section, Text } from 'react-email';
 import { MainLayout } from './layouts';
 
 interface UserRejectedProps {

@@ -1,4 +1,4 @@
-import { Hr, Img, Section } from '@react-email/components';
+import { Hr, Img, Section } from 'react-email';
 import { brandConfig } from '../config/brand.config';
 
 export interface HeaderProps {
