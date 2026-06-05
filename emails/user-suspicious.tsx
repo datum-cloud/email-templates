@@ -1,9 +1,9 @@
-import 'web-streams-polyfill/polyfill';
+import "web-streams-polyfill/polyfill";
 
-import { Column, Hr, Link, Row, Section, Text } from 'react-email';
-import { CustomButton, EmailSignoff, EmailSupport } from './components';
-import { brandConfig } from './config/brand.config';
-import { MainLayout } from './layouts';
+import { Column, Hr, Link, Row, Section, Text } from "react-email";
+import { CustomButton, EmailSignoff, EmailSupport } from "./components";
+import { brandConfig } from "./config/brand.config";
+import { MainLayout } from "./layouts";
 
 /**
  * Props for the suspicious sign-in notification.
@@ -55,48 +55,48 @@ const formatSignInTime = (value: string): string => {
   const date = new Date(trimmed);
   if (Number.isNaN(date.getTime())) return value;
 
-  return new Intl.DateTimeFormat('en-US', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: 'numeric',
-    minute: '2-digit',
+  return new Intl.DateTimeFormat("en-US", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
     hour12: true,
-    timeZone: 'UTC',
-    timeZoneName: 'short',
+    timeZone: "UTC",
+    timeZoneName: "short",
   }).format(date);
 };
 
 const detailRows = (
   props: UserSuspiciousProps,
 ): ReadonlyArray<{ label: string; value: string }> => [
-  { label: 'Location', value: props.Location },
-  { label: 'Time', value: formatSignInTime(props.SignInTime) },
-  { label: 'Browser', value: props.Browser },
-  { label: 'Device', value: props.Device },
-  { label: 'IP address', value: props.IpAddress },
+  { label: "Location", value: props.Location },
+  { label: "Time", value: formatSignInTime(props.SignInTime) },
+  { label: "Browser", value: props.Browser },
+  { label: "Device", value: props.Device },
+  { label: "IP address", value: props.IpAddress },
 ];
 
 export const UserSuspicious = (props: UserSuspiciousProps) => {
-  const previewText = 'New sign-in detected on your Datum account';
+  const previewText = "New sign-in detected on your Datum account";
   const detailRowsData = detailRows(props);
 
   return (
     <MainLayout preview={previewText}>
       <Section className="my-10.5">
-        <Text className="mt-0 text-[24px] font-medium">
+        <Text className="mt-0 text-4.5 mb-5.5 leading-6 font-medium">
           Hello {props.UserName},
         </Text>
         <Section className="my-6">
           <Text className="mt-0 text-4.5 mb-6 leading-6 font-normal">
-            Your Datum account{' '}
+            Your Datum account{" "}
             <Link
               href={`mailto:${props.Email}`}
               className="font-semibold text-brand-navy"
             >
               {props.Email}
-            </Link>{' '}
+            </Link>{" "}
             was recently signed-in from a new location, device or browser:
           </Text>
 
@@ -111,13 +111,13 @@ export const UserSuspicious = (props: UserSuspiciousProps) => {
           </Text>
 
           <Text className="mt-0 text-4.5 leading-6 font-normal">
-            If this wasn't you,{' '}
+            If this wasn't you,{" "}
             <Link
               href="https://cloud.datum.net/"
               className="text-brand-canyon-clay underline"
             >
               review your account
-            </Link>{' '}
+            </Link>{" "}
             and change your authentication methods now.
           </Text>
         </Section>
@@ -151,16 +151,16 @@ export const UserSuspicious = (props: UserSuspiciousProps) => {
 };
 
 UserSuspicious.PreviewProps = {
-  UserName: 'John Doe',
-  Email: 'john.doe@datum.net',
-  Location: 'Jacksonville, Vermont, United States',
+  UserName: "John Doe",
+  Email: "john.doe@datum.net",
+  Location: "Jacksonville, Vermont, United States",
   // Raw ISO (e.g. a K8s creationTimestamp) — converted by formatSignInTime.
-  SignInTime: '2026-05-22T16:56:00.000Z',
-  Browser: 'Chrome 147.0.0.0 on macOS 10.15.7',
-  Device: 'Apple Mac',
-  IpAddress: '23.138.82.66',
+  SignInTime: "2026-05-22T16:56:00.000Z",
+  Browser: "Chrome 147.0.0.0 on macOS 10.15.7",
+  Device: "Apple Mac",
+  IpAddress: "23.138.82.66",
 } as UserSuspiciousProps;
 
-UserSuspicious.Subject = 'New sign-in detected on your Datum account';
+UserSuspicious.Subject = "New sign-in detected on your Datum account";
 
 export default UserSuspicious;
