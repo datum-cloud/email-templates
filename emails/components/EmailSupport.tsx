@@ -1,4 +1,4 @@
-import { Heading, Hr, Link, Row, Section, Text } from '@react-email/components';
+import { Heading, Hr, Link, Row, Section, Text } from 'react-email';
 import { brandConfig } from '../config/brand.config';
 
 export interface EmailSupportProps {

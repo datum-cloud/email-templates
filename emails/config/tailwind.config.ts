@@ -1,4 +1,4 @@
-import { pixelBasedPreset, type TailwindConfig } from '@react-email/components';
+import { pixelBasedPreset, type TailwindConfig } from 'react-email';
 
 /**
  * Centralized Tailwind configuration for all email templates
@@ -37,7 +37,7 @@ export const emailTailwindConfig: TailwindConfig = {
       spacing: {
         '4.5': '17px',
         '5.5': '22px',
-        '10.5': '42px',
+        '10.5': '40px',
       },
       fontFamily: {
         sans: [

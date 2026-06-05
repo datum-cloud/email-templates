@@ -1,6 +1,6 @@
 import 'web-streams-polyfill/polyfill';
 
-import { Link, Row, Section, Text } from '@react-email/components';
+import { Link, Row, Section, Text } from 'react-email';
 import { CustomButton } from './components';
 import { brandConfig } from './config/brand.config';
 import { MainLayout } from './layouts';

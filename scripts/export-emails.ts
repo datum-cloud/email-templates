@@ -1,8 +1,7 @@
 #!/usr/bin/env tsx
 import fs from 'node:fs';
 import path from 'node:path';
-import { render, pretty } from '@react-email/render';
-import { toPlainText } from '@react-email/render';
+import { pretty, render, toPlainText } from 'react-email';
 
 const ROOT = path.resolve(__dirname, '..');
 const EMAILS_DIR = path.join(ROOT, 'emails');
@@ -13,7 +12,10 @@ function ensureDir(p: string) {
   if (!fs.existsSync(p)) fs.mkdirSync(p, { recursive: true });
 }
 
-async function exportOne(filePath: string, propsOverride?: Record<string, unknown>) {
+async function exportOne(
+  filePath: string,
+  propsOverride?: Record<string, unknown>,
+) {
   const mod = await import(filePath);
   const component = (mod.default ?? Object.values(mod)[0]) as any;
   if (!component) {
@@ -23,7 +25,8 @@ async function exportOne(filePath: string, propsOverride?: Record<string, unknow
 
   // Prefer explicit override, else PreviewProps on the component, else {}.
   // Always replace values with deterministic placeholders for unique matching
-  const originalProps: Record<string, unknown> = propsOverride ?? (component.PreviewProps ?? {});
+  const originalProps: Record<string, unknown> =
+    propsOverride ?? component.PreviewProps ?? {};
   const previewProps: Record<string, string> = {};
   for (const key of Object.keys(originalProps)) {
     const tokenKey = key
@@ -59,7 +62,7 @@ async function main() {
   if (propsArgIndex !== -1 && process.argv[propsArgIndex + 1]) {
     try {
       propsOverride = JSON.parse(process.argv[propsArgIndex + 1]);
-    } catch (e) {
+    } catch {
       console.warn('Invalid JSON for --props; ignoring.');
     }
   }
@@ -72,5 +75,3 @@ async function main() {
 }
 
 main();
-
-

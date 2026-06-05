@@ -1,12 +1,4 @@
-import {
-  Column,
-  Hr,
-  Img,
-  Link,
-  Row,
-  Section,
-  Text,
-} from '@react-email/components';
+import { Column, Hr, Img, Link, Row, Section, Text } from 'react-email';
 import { brandConfig } from '../config/brand.config';
 
 export interface FooterProps {
@@ -83,6 +75,50 @@ export const Footer = ({ className = '' }: FooterProps) => {
         </Column>
       </Row>
       <Text className="text-sm m-0 leading-5 font-normal mt-[29px]">
+        Datum Technology Inc. <br />
+        120 Broadway, 26th Floor <br />
+        New York, NY 10271
+      </Text>
+    </Section>
+  );
+};
+
+export const Newfooter = ({ className = '' }: FooterProps) => {
+  return (
+    <Section className={className}>
+      <Hr className="mx-0 mb-10.5 mt-0 block border border-brand-light-gray border-solid" />
+      <Text className="text-[14px] leading-5 font-normal m-0">
+        Learn more about how Datum is connecting infrastructure for AI at{' '}
+        <Link
+          href={`https://datum.net`}
+          className="text-brand-canyon-clay underline"
+        >
+          datum.net
+        </Link>
+      </Text>
+      <Text className="m-0 mt-[24px] mb-[24px] text-[14px] leading-5 ">
+        <Link
+          href="https://www.datum.net/legal/terms"
+          className="text-brand-canyon-clay underline"
+        >
+          Terms of Service
+        </Link>
+        &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+        <Link
+          href="https://www.datum.net/legal/privacy"
+          className="text-brand-canyon-clay underline"
+        >
+          Privacy Policy
+        </Link>
+        &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+        <Link
+          href="https://www.datum.net/legal/aup"
+          className="text-brand-canyon-clay underline"
+        >
+          Acceptable Use Policy
+        </Link>
+      </Text>
+      <Text className="text-[14px] m-0 leading-5 font-normal">
         Datum Technology Inc. <br />
         120 Broadway, 26th Floor <br />
         New York, NY 10271

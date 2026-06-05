@@ -83,7 +83,7 @@ To create a new email template, follow this structure:
 ```tsx
 import 'web-streams-polyfill/polyfill';
 
-import { Heading, Row, Section, Text } from '@react-email/components';
+import { Heading, Row, Section, Text } from 'react-email';
 import { CustomButton, EmailSupport } from './components';
 import { MainLayout } from './layouts';
 
