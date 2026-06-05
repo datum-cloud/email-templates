@@ -1,6 +1,7 @@
 {
   "name": "email-templates",
   "version": "1.0.0",
+  "packageManager": "pnpm@10.33.0",
   "scripts": {
     "build": "email build",
     "dev": "email dev",
