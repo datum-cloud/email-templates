@@ -1,0 +1,51 @@
+name: Publish New Version
+
+on:
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: 'How big is this update?'
+        required: true
+        type: choice
+        default: patch
+        options:
+          - patch # small fixes, content tweaks
+          - minor # new templates, notable changes
+          - major # breaking changes to template variables/structure
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Compute next version
+        id: version
+        run: |
+          LATEST=$(git tag --list 'v*' --sort=-v:refname | head -n1)
+          if [ -z "${LATEST}" ]; then
+            NEXT="v0.1.0"
+          else
+            IFS='.' read -r MAJOR MINOR PATCH <<< "${LATEST#v}"
+            case "${{ inputs.bump }}" in
+              major) MAJOR=$((MAJOR + 1)); MINOR=0; PATCH=0 ;;
+              minor) MINOR=$((MINOR + 1)); PATCH=0 ;;
+              patch) PATCH=$((PATCH + 1)) ;;
+            esac
+            NEXT="v${MAJOR}.${MINOR}.${PATCH}"
+          fi
+          echo "Previous version: ${LATEST:-none}"
+          echo "Next version: ${NEXT}"
+          echo "tag=${NEXT}" >> "$GITHUB_OUTPUT"
+
+      - name: Create release
+        uses: softprops/action-gh-release@v3
+        with:
+          tag_name: ${{ steps.version.outputs.tag }}
+          target_commitish: main
+          generate_release_notes: true
