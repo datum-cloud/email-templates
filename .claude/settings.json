@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Read",
+      "Edit",
+      "Bash(pnpm install:*)",
+      "Bash(pnpm dev:*)",
+      "Bash(pnpm generate:all:*)",
+      "Bash(pnpm generate:yaml:*)",
+      "Bash(pnpm export:custom:*)",
+      "Bash(pnpm check:*)",
+      "Bash(pnpm check:fix:*)",
+      "Bash(pnpm lint:*)",
+      "Bash(pnpm format:*)",
+      "Bash(git:*)",
+      "Bash(gh pr create:*)"
+    ]
+  }
+}
