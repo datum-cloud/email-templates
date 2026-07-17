@@ -12,9 +12,14 @@ on:
 jobs:
   verify-bundle-up-to-date:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
-      - name: Checkout
+      - name: Checkout PR branch
         uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v7
@@ -30,12 +35,13 @@ jobs:
       - name: Regenerate bundle
         run: pnpm generate:all
 
-      - name: Fail if config/email-templates is out of date
-        uses: tj-actions/verify-changed-files@v20
+      - name: Commit regenerated bundle to the PR branch
+        uses: stefanzweifel/git-auto-commit-action@v7.2.0
         with:
-          path: config/email-templates
-          fail-if-changed: true
-          fail-message: "config/email-templates is out of date. Run 'pnpm generate:all' and commit the result."
+          commit_message: "chore: regenerate email template bundle"
+          file_pattern: 'config/email-templates/**'
+          commit_user_name: github-actions[bot]
+          commit_user_email: github-actions[bot]@users.noreply.github.com
 
   validate-kustomize:
     permissions:
