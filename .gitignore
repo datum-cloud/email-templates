@@ -14,6 +14,7 @@ out/
 out-text/
 out-html/
 out-yaml/
+config/email-templates/
 *.html
 
 # Build outputs

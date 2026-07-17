@@ -19,6 +19,7 @@ const EMAILS_DIR = path.join(ROOT, 'emails');
 const OUT_HTML_DIR = path.join(ROOT, 'out-html');
 const OUT_TEXT_DIR = path.join(ROOT, 'out-text');
 const OUT_YAML_DIR = path.join(ROOT, 'out-yaml');
+const BUNDLE_DIR = path.join(ROOT, 'config', 'email-templates');
 
 function readFileSafe(p) {
   try {
@@ -149,13 +150,30 @@ function generateYaml({ baseName, subject, html, text, variables = [] }) {
   return parts.join('\n');
 }
 
+function writeKustomization(fileNames) {
+  // Plain Kustomization (not a Component) so Flux can build this bundle
+  // standalone as the root of its own OCIRepository/Kustomization, without
+  // needing to be composed in via another repo's `components:` list.
+  const lines = [
+    'apiVersion: kustomize.config.k8s.io/v1beta1',
+    'kind: Kustomization',
+    '',
+    'resources:',
+    ...fileNames.sort().map((name) => `  - ${name}`),
+    '',
+  ];
+  fs.writeFileSync(path.join(BUNDLE_DIR, 'kustomization.yaml'), lines.join('\n'), 'utf8');
+}
+
 function main() {
   ensureDir(OUT_YAML_DIR);
+  ensureDir(BUNDLE_DIR);
   const files = listTopLevelEmailTsx();
   if (files.length === 0) {
     console.warn('No email templates found in emails/*.tsx');
   }
 
+  const bundleFileNames = [];
   let generated = 0;
   for (const tsxPath of files) {
     const baseName = path.basename(tsxPath, '.tsx');
@@ -184,14 +202,20 @@ function main() {
     }));
 
     const yaml = generateYaml({ baseName, subject, html: htmlRepl, text: textRepl, variables });
-    const outPath = path.join(OUT_YAML_DIR, `${baseName.replace(/-/g, '')}-emailtemplate.yaml`);
+    const fileName = `${baseName.replace(/-/g, '')}-emailtemplate.yaml`;
+    const outPath = path.join(OUT_YAML_DIR, fileName);
     fs.writeFileSync(outPath, yaml, 'utf8');
+    fs.writeFileSync(path.join(BUNDLE_DIR, fileName), yaml, 'utf8');
     console.log(`Generated ${path.relative(ROOT, outPath)}`);
+    bundleFileNames.push(fileName);
     generated++;
   }
 
   if (generated === 0) {
     console.warn('No YAML files generated. Ensure you have run `pnpm export:all`.');
+  } else {
+    writeKustomization(bundleFileNames);
+    console.log(`Generated ${path.relative(ROOT, path.join(BUNDLE_DIR, 'kustomization.yaml'))}`);
   }
 }
 
