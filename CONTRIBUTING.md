@@ -151,4 +151,8 @@ pnpm check:fix        # Automatically fix all quality issues
 
 ## Submitting changes
 
-Open a PR against `main`. CI regenerates the deployable bundle and fails if it doesn't match what you committed (see `.github/workflows/verify-bundle.yml`) — run `pnpm generate:all` before committing if you changed a template. See [RELEASING.md](./RELEASING.md) for how a merged change reaches production.
+Open a PR against `main`. CI regenerates the deployable bundle and fails if it doesn't match what you committed (see `.github/workflows/verify-bundle.yml`) — run `pnpm generate:all` before committing if you changed a template.
+
+If your change affects what a template renders, CI also commits updated screenshots straight onto your PR branch (see `.github/workflows/screenshot-templates.yml`) — pull before pushing again, and check the "Files changed" tab for a visual diff. Run it locally with `pnpm screenshot`.
+
+See [RELEASING.md](./RELEASING.md) for how a merged change reaches production.
