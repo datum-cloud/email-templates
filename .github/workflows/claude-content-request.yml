@@ -9,9 +9,13 @@
 # https://platform.claude.com/docs/en/manage-claude/wif-providers/github-actions
 name: Draft PR for content request
 
+# Fires automatically when a "Content / Wording Change Request" issue is opened
+# (the issue form applies the `content` label at creation). If that run fails
+# or gets a mediocre result, re-trigger it by adding (or re-adding) the
+# `ai-draft` label on the issue — that's the manual retry path.
 on:
   issues:
-    types: [labeled]
+    types: [opened, labeled]
 
 permissions:
   contents: write
@@ -21,7 +25,9 @@ permissions:
 
 jobs:
   draft-pr:
-    if: github.event.label.name == 'ai-draft' && contains(github.event.issue.labels.*.name, 'content')
+    if: >
+      contains(github.event.issue.labels.*.name, 'content') &&
+      (github.event.action == 'opened' || github.event.label.name == 'ai-draft')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7

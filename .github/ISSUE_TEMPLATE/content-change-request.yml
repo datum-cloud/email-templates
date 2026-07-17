@@ -8,7 +8,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Use this form to request a wording or content change to one of the transactional emails in this repo. You don't need to write any code — just tell us what should change and why, and someone from the team will pick it up. For clear-cut wording swaps, a maintainer may add the `ai-draft` label to have Claude open a draft PR automatically — you'll still get a chance to review it before it merges.
+        Use this form to request a wording or content change to one of the transactional emails in this repo. You don't need to write any code — just tell us what should change and why. Claude will automatically attempt a draft PR as soon as you submit this issue; someone from the team still reviews it before it merges. If the automated attempt doesn't work out, a maintainer can add the `ai-draft` label to retry it.
   - type: dropdown
     id: template
     attributes:
