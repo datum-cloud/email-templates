@@ -1,0 +1,43 @@
+name: Verify Kustomize Bundle
+
+on:
+  pull_request:
+    paths:
+      - 'emails/**'
+      - 'scripts/**'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - 'config/email-templates/**'
+
+jobs:
+  verify-bundle-up-to-date:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '20'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Regenerate bundle
+        run: pnpm generate:all
+
+      - name: Fail if config/email-templates is out of date
+        uses: tj-actions/verify-changed-files@v20
+        with:
+          path: config/email-templates
+          fail-if-changed: true
+          fail-message: "config/email-templates is out of date. Run 'pnpm generate:all' and commit the result."
+
+  validate-kustomize:
+    permissions:
+      contents: read
+    uses: datum-cloud/actions/.github/workflows/validate-kustomize.yaml@v1.20.0

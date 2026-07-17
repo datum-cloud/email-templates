@@ -1,0 +1,24 @@
+name: Publish Kustomize Bundle
+
+on:
+  push:
+    branches:
+      - main
+      - '**'
+    paths:
+      - 'config/email-templates/**'
+  release:
+    types:
+      - published
+
+jobs:
+  publish-kustomize-bundle:
+    permissions:
+      id-token: write
+      contents: read
+      packages: write
+    uses: datum-cloud/actions/.github/workflows/publish-kustomize-bundle.yaml@v1.20.0
+    with:
+      bundle-name: ghcr.io/datum-cloud/email-templates-kustomize
+      bundle-path: config/email-templates
+    secrets: inherit
