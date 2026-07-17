@@ -4,76 +4,21 @@ on:
   push:
     branches:
       - main
+      - '**'
     paths:
-      - 'emails/**'
-      - 'scripts/**'
-      - 'package.json'
-      - 'pnpm-lock.yaml'
+      - 'config/email-templates/**'
   release:
     types:
       - published
 
 jobs:
   publish-kustomize-bundle:
-    runs-on: ubuntu-latest
     permissions:
+      id-token: write
       contents: read
       packages: write
-      id-token: write
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 10
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Generate kustomize bundle
-        run: pnpm generate:all
-
-      - name: Log in to GitHub Container Registry
-        uses: docker/login-action@v4.2.0
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Setup Flux CLI
-        uses: fluxcd/flux2/action@v2.7.5
-
-      - name: Extract metadata
-        id: meta
-        uses: docker/metadata-action@v6
-        with:
-          images: ghcr.io/datum-cloud/email-templates-kustomize
-          tags: |
-            type=ref,event=branch,suffix=-{{commit_date 'YYYYMMDD-HHmmss'}},prefix=v0.0.0-
-            type=ref,event=branch,prefix=v0.0.0-
-            type=semver,pattern=v{{version}}
-            type=semver,pattern=v{{major}}.{{minor}}
-            type=semver,pattern=v{{major}}
-            type=sha,prefix=v0.0.0-
-
-      - name: Publish bundle
-        run: |
-          BUNDLE_PATH="${GITHUB_WORKSPACE}/config/email-templates"
-
-          while IFS= read -r tag; do
-            tag_version="${tag#*:}"
-            echo "Pushing oci://${tag}"
-            flux push artifact \
-              "oci://${tag}" \
-              --path="${BUNDLE_PATH}" \
-              --source="https://github.com/${GITHUB_REPOSITORY}" \
-              --revision="${tag_version}@sha1:$(git rev-parse HEAD)"
-          done <<< "${{ steps.meta.outputs.tags }}"
+    uses: datum-cloud/actions/.github/workflows/publish-kustomize-bundle.yaml@v1.14.0
+    with:
+      bundle-name: ghcr.io/datum-cloud/email-templates-kustomize
+      bundle-path: config/email-templates
+    secrets: inherit
