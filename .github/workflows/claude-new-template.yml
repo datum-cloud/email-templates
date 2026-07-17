@@ -1,3 +1,6 @@
+# Authenticates via Workload Identity Federation (GitHub OIDC -> short-lived
+# Anthropic token) instead of a static ANTHROPIC_API_KEY secret — see the setup
+# steps and repo variables documented at the top of claude-content-request.yml.
 name: Draft PR for new template request
 
 on:
@@ -8,6 +11,7 @@ permissions:
   contents: write
   pull-requests: write
   issues: write
+  id-token: write
 
 jobs:
   draft-pr:
@@ -18,7 +22,10 @@ jobs:
 
       - uses: anthropics/claude-code-action@v1
         with:
-          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          anthropic_federation_rule_id: ${{ vars.ANTHROPIC_FEDERATION_RULE_ID }}
+          anthropic_organization_id: ${{ vars.ANTHROPIC_ORGANIZATION_ID }}
+          anthropic_service_account_id: ${{ vars.ANTHROPIC_SERVICE_ACCOUNT_ID }}
+          anthropic_workspace_id: ${{ vars.ANTHROPIC_WORKSPACE_ID }}
           label_trigger: 'ai-draft'
           base_branch: main
           branch_prefix: 'new-template/'
