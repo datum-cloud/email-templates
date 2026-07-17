@@ -1,0 +1,69 @@
+name: Draft PR for new template request
+
+on:
+  issues:
+    types: [labeled]
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  draft-pr:
+    if: github.event.label.name == 'ai-draft' && contains(github.event.issue.labels.*.name, 'new-template')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          label_trigger: 'ai-draft'
+          base_branch: main
+          branch_prefix: 'new-template/'
+          claude_args: |
+            --allowedTools "Read,Write,Edit,Bash(pnpm generate:all:*),Bash(pnpm check:*)"
+          prompt: |
+            You're handling GitHub issue #${{ github.event.issue.number }} in this repo, a
+            "New Email Template Request" filed via
+            .github/ISSUE_TEMPLATE/new-template-request.yml. Read CLAUDE.md at the repo
+            root and CONTRIBUTING.md's "Creating Email Templates" section first — they
+            document the exact shape every template must follow and why (the export/YAML
+            generation pipeline depends on it).
+
+            The issue gives: a template name, what triggers the email, which existing
+            template it's most similar to, an optional subject line, the greeting/body/
+            button copy, and what variables (props) it needs.
+
+            1. Derive a kebab-case file name from the template name (e.g. "Password Reset"
+               -> emails/password-reset.tsx). Confirm no file with that name already exists.
+            2. Open the existing template the issue named as closest in look and feel, and
+               follow its exact structure: the same imports (`import
+               'web-streams-polyfill/polyfill';` first, then from 'react-email', shared
+               components from './components', `MainLayout` from './layouts'), a
+               `const copy = { ... }` object near the top holding every literal string
+               (referenced from JSX below it, per the pattern already used across
+               emails/*.tsx), a typed props interface, and `.PreviewProps` with realistic
+               values for every prop.
+            3. If the issue gives a subject line, set it as `.Subject` — as a literal
+               string assigned directly (e.g. `MyEmail.Subject = "...";`), NOT a reference
+               to a `copy` key. CONTRIBUTING.md's "YAML Generation Details" section explains
+               why: the generator extracts `.Subject` via a regex expecting a literal
+               quoted string right there, and a variable reference makes it silently fall
+               back to a generic subject.
+            4. Only add this one new file. Do not modify emails/components/, emails/layouts/,
+               emails/config/, any existing template, or any file outside emails/.
+            5. Run `pnpm generate:all` to regenerate config/email-templates/ and confirm it
+               picks up the new template, and `pnpm check` to confirm Biome is clean. Include
+               the regenerated config/email-templates/ output in your commit.
+            6. Open a PR against main with a clear title and a body that says
+               "Closes #${{ github.event.issue.number }}", summarizes what you scaffolded,
+               and explicitly flags that this is a first draft — exact copy, brand colors,
+               and any legal/compliance boilerplate still need human review before merge.
+
+            This is a more open-ended task than a wording tweak: you're making layout and
+            structure choices, not just swapping a string. If the request is too vague to
+            draft confidently (unclear trigger, no reference template, missing key copy),
+            don't guess — comment on the issue asking for what's missing instead of opening
+            a PR.
