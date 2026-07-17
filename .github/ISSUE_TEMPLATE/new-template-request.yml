@@ -8,7 +8,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Use this form to request a brand-new transactional email. You don't need to write any code — describe what the email should say and when it's sent. Claude will automatically attempt a first-draft PR as soon as you submit this issue — it'll still need engineer and brand review before it merges, since a new template involves layout and structure decisions, not just wording. If the automated attempt doesn't work out, a maintainer can add the `ai-draft` label to retry it.
+        Use this form to request a brand-new transactional email. You don't need to write any code — describe what the email should say and when it's sent. If you're a member of the team, Claude automatically attempts a first-draft PR as soon as you submit this issue — it'll still need engineer and brand review before it merges, since a new template involves layout and structure decisions, not just wording. Anyone else's request gets triaged by a maintainer first, who can add the `ai-draft` label to have Claude take a pass at it (also the retry path if an automated attempt doesn't work out).
   - type: input
     id: name
     attributes:
