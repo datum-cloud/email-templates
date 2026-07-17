@@ -35,8 +35,9 @@ jobs:
           label_trigger: 'ai-draft'
           base_branch: main
           branch_prefix: 'content-request/'
+          show_full_output: true
           claude_args: |
-            --allowedTools "Read,Edit,Bash(pnpm generate:all:*),Bash(pnpm check:*)"
+            --allowedTools "Read,Edit,Bash(pnpm generate:all:*),Bash(pnpm check:*),Bash(git:*),Bash(gh pr create:*)"
           prompt: |
             You're handling GitHub issue #${{ github.event.issue.number }} in this repo, a
             "Content / Wording Change Request" filed via
