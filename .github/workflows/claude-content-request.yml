@@ -1,3 +1,12 @@
+# Authenticates to the Claude API via Workload Identity Federation instead of a
+# static ANTHROPIC_API_KEY secret: GitHub mints a short-lived OIDC token for this
+# job (hence `id-token: write` below), and claude-code-action exchanges it for a
+# short-lived Anthropic access token. No long-lived key is stored in this repo.
+#
+# The four ANTHROPIC_* values below are repo variables (Settings -> Secrets and
+# variables -> Actions -> Variables), not secrets — they identify resources, not
+# credentials. Setup (Console federation issuer/rule/service account) is documented at
+# https://platform.claude.com/docs/en/manage-claude/wif-providers/github-actions
 name: Draft PR for content request
 
 on:
@@ -8,6 +17,7 @@ permissions:
   contents: write
   pull-requests: write
   issues: write
+  id-token: write
 
 jobs:
   draft-pr:
@@ -18,7 +28,10 @@ jobs:
 
       - uses: anthropics/claude-code-action@v1
         with:
-          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          anthropic_federation_rule_id: ${{ vars.ANTHROPIC_FEDERATION_RULE_ID }}
+          anthropic_organization_id: ${{ vars.ANTHROPIC_ORGANIZATION_ID }}
+          anthropic_service_account_id: ${{ vars.ANTHROPIC_SERVICE_ACCOUNT_ID }}
+          anthropic_workspace_id: ${{ vars.ANTHROPIC_WORKSPACE_ID }}
           label_trigger: 'ai-draft'
           base_branch: main
           branch_prefix: 'content-request/'
