@@ -1,0 +1,45 @@
+name: Publish Latest Screenshots
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+    paths:
+      - 'emails/**'
+
+permissions:
+  contents: write
+
+jobs:
+  screenshot:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true
+    steps:
+      - name: Checkout merge commit
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.merge_commit_sha }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '20'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright browser
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Render and screenshot every template
+        run: pnpm screenshot
+
+      - name: Publish to email-template-screenshots branch
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          ./scripts/publish-screenshots.sh latest "Latest screenshots for ${GITHUB_SHA}"
