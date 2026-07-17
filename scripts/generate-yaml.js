@@ -147,7 +147,7 @@ function generateYaml({ baseName, subject, html, text, variables = [] }) {
     }
   }
   
-  return parts.join('\n');
+  return `${parts.join('\n')}\n`;
 }
 
 function writeKustomization(fileNames) {
