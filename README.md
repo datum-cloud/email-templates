@@ -12,13 +12,42 @@ For a lot of people, an email is the first — and sometimes only — impression
 
 ## Emails in this repo
 
-- **Platform Invitation** — the very first hello, inviting someone to join Datum's private beta
-- **User Invitation** — welcoming a new teammate into an organization on Datum
-- **User Approved** — the good news that someone's access request has been approved
-- **User Rejected** — a considerate no, when an application to Datum wasn't approved
-- **User Waitlist** — letting someone know they're in line and we haven't forgotten them
-- **User Welcome** — the front-door greeting for a brand-new Datum user
-- **Suspicious Sign-in** — a quiet tap on the shoulder when we spot a sign-in from somewhere unfamiliar
+Screenshots below are regenerated automatically whenever a template changes, so what you see is always what's actually live.
+
+<details>
+<summary><strong>Platform Invitation</strong> — the very first hello, inviting someone to join Datum's private beta</summary>
+<img src="https://github.com/datum-cloud/email-templates/blob/email-template-screenshots/latest/platform-invitation.png?raw=true" width="480" />
+</details>
+
+<details>
+<summary><strong>User Invitation</strong> — welcoming a new teammate into an organization on Datum</summary>
+<img src="https://github.com/datum-cloud/email-templates/blob/email-template-screenshots/latest/user-invitation.png?raw=true" width="480" />
+</details>
+
+<details>
+<summary><strong>User Approved</strong> — the good news that someone's access request has been approved</summary>
+<img src="https://github.com/datum-cloud/email-templates/blob/email-template-screenshots/latest/user-approved.png?raw=true" width="480" />
+</details>
+
+<details>
+<summary><strong>User Rejected</strong> — a considerate no, when an application to Datum wasn't approved</summary>
+<img src="https://github.com/datum-cloud/email-templates/blob/email-template-screenshots/latest/user-rejected.png?raw=true" width="480" />
+</details>
+
+<details>
+<summary><strong>User Waitlist</strong> — letting someone know they're in line and we haven't forgotten them</summary>
+<img src="https://github.com/datum-cloud/email-templates/blob/email-template-screenshots/latest/user-waitlist.png?raw=true" width="480" />
+</details>
+
+<details>
+<summary><strong>User Welcome</strong> — the front-door greeting for a brand-new Datum user</summary>
+<img src="https://github.com/datum-cloud/email-templates/blob/email-template-screenshots/latest/user-welcome.png?raw=true" width="480" />
+</details>
+
+<details>
+<summary><strong>Suspicious Sign-in</strong> — a quiet tap on the shoulder when we spot a sign-in from somewhere unfamiliar</summary>
+<img src="https://github.com/datum-cloud/email-templates/blob/email-template-screenshots/latest/user-suspicious.png?raw=true" width="480" />
+</details>
 
 ## Contributing
 
