@@ -85,7 +85,7 @@ export const UserSuspicious = (props: UserSuspiciousProps) => {
   return (
     <MainLayout preview={previewText}>
       <Section className="my-10.5">
-        <Text className="mt-0 text-4.5 mb-5.5 leading-6 font-medium">
+        <Text className="mt-0 text-4.5 mb-6 leading-6 font-medium">
           Hello {props.UserName},
         </Text>
         <Section className="my-6">
