@@ -13,7 +13,9 @@ yarn.lock
 out/
 out-text/
 out-html/
+out-html-preview/
 out-yaml/
+screenshots/
 *.html
 
 # Build outputs

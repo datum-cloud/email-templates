@@ -1,0 +1,133 @@
+name: Screenshot Changed Templates
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'emails/**'
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  screenshot:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '20'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright browser
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Render preview HTML at PR head
+        run: pnpm exec tsx scripts/render-preview-html.ts
+
+      - name: Render preview HTML at merge-base
+        run: |
+          BASE_SHA=$(git merge-base HEAD "origin/${{ github.event.pull_request.base.ref }}")
+          git worktree add /tmp/base-checkout "${BASE_SHA}"
+          cd /tmp/base-checkout
+          pnpm install --frozen-lockfile
+          pnpm exec tsx scripts/render-preview-html.ts
+
+      - name: Determine changed templates
+        id: changed
+        run: |
+          CHANGED=()
+          for f in out-html-preview/*.html; do
+            name=$(basename "$f" .html)
+            base_f="/tmp/base-checkout/out-html-preview/${name}.html"
+            if [ ! -f "$base_f" ] || ! diff -q "$f" "$base_f" >/dev/null 2>&1; then
+              CHANGED+=("$name")
+            fi
+          done
+
+          if [ ${#CHANGED[@]} -eq 0 ]; then
+            echo "any=false" >> "$GITHUB_OUTPUT"
+            echo "No template output changed."
+          else
+            echo "any=true" >> "$GITHUB_OUTPUT"
+            printf '%s\n' "${CHANGED[@]}" > /tmp/changed-templates.txt
+            echo "Changed templates:"
+            cat /tmp/changed-templates.txt
+          fi
+
+      - name: Screenshot changed templates
+        if: steps.changed.outputs.any == 'true'
+        run: node scripts/screenshot-templates.js /tmp/changed-templates.txt
+
+      - name: Publish screenshots to email-template-screenshots branch
+        if: steps.changed.outputs.any == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          REMOTE="https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+
+          rm -rf /tmp/shots-repo
+          if git clone --depth 1 --branch email-template-screenshots "${REMOTE}" /tmp/shots-repo 2>/dev/null; then
+            :
+          else
+            mkdir -p /tmp/shots-repo
+            git -C /tmp/shots-repo init -q
+            git -C /tmp/shots-repo checkout -q --orphan email-template-screenshots
+            git -C /tmp/shots-repo commit -q --allow-empty -m "init"
+            git -C /tmp/shots-repo remote add origin "${REMOTE}"
+          fi
+
+          rm -rf "/tmp/shots-repo/pr-${PR_NUMBER}"
+          mkdir -p "/tmp/shots-repo/pr-${PR_NUMBER}"
+          cp screenshots/*.png "/tmp/shots-repo/pr-${PR_NUMBER}/"
+
+          cd /tmp/shots-repo
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add "pr-${PR_NUMBER}"
+          git commit -q -m "Screenshots for PR #${PR_NUMBER} (${GITHUB_SHA})" --allow-empty
+          git push -q origin email-template-screenshots
+
+      - name: Build comment body
+        if: steps.changed.outputs.any == 'true'
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          {
+            echo "## 📧 Template screenshots"
+            echo
+            echo "Rendered with each template's preview data. Updates automatically as you push."
+            echo
+            while IFS= read -r name; do
+              echo "**${name}**"
+              echo
+              echo "![${name}](https://github.com/${GITHUB_REPOSITORY}/blob/email-template-screenshots/pr-${PR_NUMBER}/${name}.png?raw=true)"
+              echo
+            done < /tmp/changed-templates.txt
+          } > /tmp/comment-body.md
+
+      - name: Post or update comment
+        if: steps.changed.outputs.any == 'true'
+        uses: marocchino/sticky-pull-request-comment@v3.0.5
+        with:
+          header: email-template-screenshots
+          path: /tmp/comment-body.md
+
+      - name: Remove stale comment when no templates changed
+        if: steps.changed.outputs.any == 'false'
+        uses: marocchino/sticky-pull-request-comment@v3.0.5
+        with:
+          header: email-template-screenshots
+          delete: true
