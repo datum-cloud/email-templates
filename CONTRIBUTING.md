@@ -2,11 +2,19 @@
 
 A React Email + Tailwind CSS system for building Datum's transactional emails. See the [README](./README.md) for what emails live here; this page covers how to work on them.
 
+If you just need wording or content changed on an existing email and aren't comfortable opening a PR, open a "Content / Wording Change Request" issue instead (Issues → New issue). Need a brand-new email entirely? Use the "New Email Template Request" issue form instead — same idea, no coding required.
+
+For either kind of request, a maintainer may add the `ai-draft` label to have Claude open a draft PR automatically (see `.github/workflows/claude-content-request.yml` and `.github/workflows/claude-new-template.yml`). It's still a draft: someone reviews and merges it like any other PR.
+
 ## Installation
 
 ```bash
 pnpm install
 ```
+
+### Zero-setup: GitHub Codespaces
+
+If you don't want to install Node or pnpm locally, click "Code" → "Codespaces" → "Create codespace on main" on GitHub. This opens a browser-based VS Code with dependencies already installed and the dev server ready to run — just run `pnpm dev` once it loads. The same devcontainer config also works with VS Code's "Reopen in Container" if you have Docker locally but don't want to install Node/pnpm directly.
 
 ## Development
 
@@ -17,6 +25,8 @@ pnpm dev
 ```
 
 The development server will be available at [http://localhost:3000](http://localhost:3000).
+
+> **Note:** The very first template you open in a freshly started `pnpm dev` session may show a `ReadableStream.prototype.pipeTo` error page (the same underlying Next.js/Turbopack polyfill conflict noted below for `pnpm build`). Just refresh the page — it only happens once per `pnpm dev` session, on whichever route is compiled first, and works normally afterward.
 
 ## Build and Export
 
@@ -151,8 +161,20 @@ pnpm check:fix        # Automatically fix all quality issues
 
 ## Submitting changes
 
-Open a PR against `main`. CI regenerates the deployable bundle and fails if it doesn't match what you committed (see `.github/workflows/verify-bundle.yml`) — run `pnpm generate:all` before committing if you changed a template.
+Open a PR against `main`. CI regenerates the deployable bundle and, if anything changed, commits it straight onto your PR branch automatically (see `.github/workflows/verify-bundle.yml`) — pull before pushing again. You don't have to run `pnpm generate:all` locally before committing a template change, though you still can, e.g. to preview the diff.
 
 If your change affects what a template renders, CI also commits updated screenshots straight onto your PR branch (see `.github/workflows/screenshot-templates.yml`) — pull before pushing again, and check the "Files changed" tab for a visual diff. Run it locally with `pnpm screenshot`.
+
+### If a CI check goes red
+
+Most PR checks here are self-healing — CI regenerates files and pushes the result to your branch rather than just failing. Here's what each one actually does and what, if anything, you need to do:
+
+| Check | What it does | Red usually means | What to do |
+|---|---|---|---|
+| `verify-bundle-up-to-date` | Regenerates `config/email-templates/` from your template changes and auto-commits the result to your PR branch | The auto-commit itself hasn't landed yet, or `pnpm generate:all` genuinely errored (e.g. broken template code) | Pull the latest commit on your branch and re-check. Still red after pulling? Open the log — it'll show the real error from the generation step. |
+| `validate-kustomize` | Structurally validates the generated kustomize/CRD output | The generated YAML itself is malformed | Open the log; it names the specific file/field that's invalid. This points at a real bug, not staleness. |
+| `screenshot` (Screenshot Changed Templates) | Renders your changed templates and commits updated PNGs to your PR branch | Rendering the template itself failed | Open the log for the render error. If it succeeded, there's nothing to do — pull the auto-commit and check the "Files changed" tab for the visual diff. |
+
+Nothing in CI currently runs Biome (`pnpm check`) — lint/format issues won't show up as a PR check today. Run `pnpm check` locally if you want to catch them before you push; if you do see a Biome error locally, it names the offending file and line directly.
 
 See [RELEASING.md](./RELEASING.md) for how a merged change reaches production.
