@@ -9,7 +9,7 @@ const copy = {
   greetingPrefix: 'Hey ',
   greetingSuffix: ", welcome to Datum! We're glad you're here.",
   paragraph1:
-    "Datum is building for a future that is evolving in front of our eyes, so we're shipping updates all the time. We're also serious about making improvements based on feedback, so if you've got some for us (good, bad, ugly) we'd love to have it.",
+    "Datum is building for a future that's evolving fast, so we're shipping updates constantly. We're also serious about making improvements based on feedback, so if you've got some for us (good, bad, ugly) we'd love to have it.",
   paragraph2: "Here's how to stay in the loop, get help, or get involved:",
   emailLabel: 'Email',
   emailDescription: " – Respond to this note and we'll get back to you",
