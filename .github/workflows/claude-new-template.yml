@@ -1,6 +1,9 @@
 # Authenticates via Workload Identity Federation (GitHub OIDC -> short-lived
 # Anthropic token) instead of a static ANTHROPIC_API_KEY secret — see the setup
 # steps and repo variables documented at the top of claude-content-request.yml.
+# Git/PR operations authenticate as a dedicated GitHub App instead of the
+# default job GITHUB_TOKEN — see the same file's comment for the required
+# CLAUDE_GH_APP_ID / CLAUDE_GH_APP_PRIVATE_KEY secrets and App permissions.
 # Fires automatically when a "New Email Template Request" issue is opened by
 # an org member/collaborator (the issue form applies the `new-template` label
 # at creation). This repo is public, so an issue opened by anyone else does
@@ -31,8 +34,16 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
+      - name: Mint GitHub App installation token for git/PR operations
+        id: app-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ secrets.CLAUDE_GH_APP_ID }}
+          private-key: ${{ secrets.CLAUDE_GH_APP_PRIVATE_KEY }}
+
       - uses: anthropics/claude-code-action@v1
         with:
+          github_token: ${{ steps.app-token.outputs.token }}
           anthropic_federation_rule_id: ${{ vars.ANTHROPIC_FEDERATION_RULE_ID }}
           anthropic_organization_id: ${{ vars.ANTHROPIC_ORGANIZATION_ID }}
           anthropic_service_account_id: ${{ vars.ANTHROPIC_SERVICE_ACCOUNT_ID }}

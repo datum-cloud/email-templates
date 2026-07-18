@@ -13,6 +13,15 @@
 # headless run doesn't honor the project settings file's permissions.allow (every
 # Edit/Bash call stayed gated behind an approval prompt that never comes in CI).
 # .claude/settings.json still matters for local/devcontainer use of `claude`.
+#
+# Git/PR operations authenticate as a dedicated GitHub App (via
+# actions/create-github-app-token), not the default job GITHUB_TOKEN. The
+# WIF setup above only authenticates calls to the Anthropic API — it has
+# nothing to do with GitHub permissions. Requires two repo secrets:
+#   CLAUDE_GH_APP_ID           - the App's ID
+#   CLAUDE_GH_APP_PRIVATE_KEY  - the App's private key (PEM)
+# The App needs to be installed on this repo with Contents: write,
+# Pull requests: write, and Issues: write permissions.
 name: Draft PR for content request
 
 # Fires automatically when a "Content / Wording Change Request" issue is opened
@@ -43,8 +52,16 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
+      - name: Mint GitHub App installation token for git/PR operations
+        id: app-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ secrets.CLAUDE_GH_APP_ID }}
+          private-key: ${{ secrets.CLAUDE_GH_APP_PRIVATE_KEY }}
+
       - uses: anthropics/claude-code-action@v1
         with:
+          github_token: ${{ steps.app-token.outputs.token }}
           anthropic_federation_rule_id: ${{ vars.ANTHROPIC_FEDERATION_RULE_ID }}
           anthropic_organization_id: ${{ vars.ANTHROPIC_ORGANIZATION_ID }}
           anthropic_service_account_id: ${{ vars.ANTHROPIC_SERVICE_ACCOUNT_ID }}
