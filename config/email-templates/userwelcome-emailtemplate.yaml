@@ -106,13 +106,12 @@ spec:
                                       </p>
                                       <p
                                         style="font-size:17px;line-height:24px;margin-top:0;margin-bottom:22px;font-weight:400">
-                                        Datum is building for a future that is
-                                        evolving in front of our eyes, so we&#x27;re
-                                        shipping updates all the time. We&#x27;re
-                                        also serious about making improvements based
-                                        on feedback, so if you&#x27;ve got some for
-                                        us (good, bad, ugly) we&#x27;d love to have
-                                        it.
+                                        Datum is building for a future that&#x27;s
+                                        evolving fast, so we&#x27;re shipping
+                                        updates constantly. We&#x27;re also serious
+                                        about making improvements based on feedback,
+                                        so if you&#x27;ve got some for us (good,
+                                        bad, ugly) we&#x27;d love to have it.
                                       </p>
                                       <p
                                         style="font-size:17px;line-height:24px;margin-top:0;margin-bottom:22px;font-weight:400">
@@ -250,7 +249,7 @@ spec:
     
     Hey {{.UserName}}, welcome to Datum! We're glad you're here.
     
-    Datum is building for a future that is evolving in front of our eyes, so we're shipping updates all the time. We're also serious about making improvements based on feedback, so if you've got some for us (good, bad, ugly) we'd love to have it.
+    Datum is building for a future that's evolving fast, so we're shipping updates constantly. We're also serious about making improvements based on feedback, so if you've got some for us (good, bad, ugly) we'd love to have it.
     
     Here's how to stay in the loop, get help, or get involved:
     
