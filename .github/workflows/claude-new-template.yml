@@ -1,6 +1,9 @@
 # Authenticates via Workload Identity Federation (GitHub OIDC -> short-lived
 # Anthropic token) instead of a static ANTHROPIC_API_KEY secret — see the setup
 # steps and repo variables documented at the top of claude-content-request.yml.
+# Git/PR operations authenticate as a dedicated GitHub App instead of the
+# default job GITHUB_TOKEN — see the same file's comment for the required
+# CLAUDE_GH_APP_ID / CLAUDE_GH_APP_PRIVATE_KEY secrets and App permissions.
 # Fires automatically when a "New Email Template Request" issue is opened by
 # an org member/collaborator (the issue form applies the `new-template` label
 # at creation). This repo is public, so an issue opened by anyone else does
@@ -31,8 +34,16 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
+      - name: Mint GitHub App installation token for git/PR operations
+        id: app-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ secrets.CLAUDE_GH_APP_ID }}
+          private-key: ${{ secrets.CLAUDE_GH_APP_PRIVATE_KEY }}
+
       - uses: anthropics/claude-code-action@v1
         with:
+          github_token: ${{ steps.app-token.outputs.token }}
           anthropic_federation_rule_id: ${{ vars.ANTHROPIC_FEDERATION_RULE_ID }}
           anthropic_organization_id: ${{ vars.ANTHROPIC_ORGANIZATION_ID }}
           anthropic_service_account_id: ${{ vars.ANTHROPIC_SERVICE_ACCOUNT_ID }}
@@ -42,7 +53,7 @@ jobs:
           branch_prefix: 'new-template/'
           show_full_output: true
           claude_args: |
-            --allowedTools "Read,Write,Edit,Bash(pnpm generate:all:*),Bash(pnpm check:*),Bash(git:*),Bash(gh pr create:*)"
+            --allowedTools "Read,Write,Edit,Bash(pnpm generate:all:*),Bash(pnpm check:*),Bash(git:*),Bash(gh pr create:*),Bash(gh issue comment:*)"
           prompt: |
             You're handling GitHub issue #${{ github.event.issue.number }} in this repo, a
             "New Email Template Request" filed via
@@ -80,18 +91,38 @@ jobs:
                why: the generator extracts `.Subject` via a regex expecting a literal
                quoted string right there, and a variable reference makes it silently fall
                back to a generic subject.
-            4. Only add this one new file. Do not modify emails/components/, emails/layouts/,
-               emails/config/, any existing template, or any file outside emails/.
-            5. Run `pnpm generate:all` to regenerate config/email-templates/ and confirm it
+            4. Add a `<details>` entry for the new template to README.md's "Emails in this
+               repo" section, in the same position/style as the existing entries (a
+               `<summary>` with a bold name and a short one-line description in the same
+               voice as the others, then `<img src="./screenshots/<name>.png" width="480" />`
+               using the kebab-case file name from step 1). The screenshot itself doesn't
+               exist yet — a separate workflow (screenshot-templates.yml) generates and
+               commits it onto this same PR branch once opened, so the `<img>` tag will
+               start resolving once that runs; don't try to generate the PNG yourself.
+            5. Add the new template's human-readable name as an option in
+               .github/ISSUE_TEMPLATE/new-template-request.yml's `closest_existing` dropdown
+               (insert alphabetically-ish alongside the existing options, before "Not sure"),
+               so future new-template requests can reference it.
+            6. Prefer not touching anything else, but you may add to or adjust
+               emails/components/ or emails/layouts/ if the template genuinely can't be
+               built from what already exists there (e.g. it needs a new shared block, or an
+               existing component needs a new variant) — don't duplicate a whole component
+               just to avoid editing the shared one. Do not touch emails/config/ (Tailwind/
+               brand config), any existing template's content, or any file outside the ones
+               named in steps 1, 4, 5, and this one.
+            7. Run `pnpm generate:all` to regenerate config/email-templates/ and confirm it
                picks up the new template, and `pnpm check` to confirm Biome is clean. Include
                the regenerated config/email-templates/ output in your commit.
-            6. Open a PR against main (not a draft) with a clear title and a body that says
+            8. Open a PR against main (not a draft) with a clear title and a body that says
                "Closes #${{ github.event.issue.number }}", summarizes what you scaffolded,
                and explicitly flags that this is a first draft — exact copy, brand colors,
                and any legal/compliance boilerplate still need human review before merge.
                Request review from the `datum-cloud/gtm` team (e.g. `gh pr create --reviewer
                datum-cloud/gtm ...`) — they own email content and can merge this without
                needing an engineering approval.
+            9. Comment on issue #${{ github.event.issue.number }} (via `gh issue comment`)
+               linking the PR you just opened and @-mentioning
+               ${{ github.event.issue.user.login }} to let them know it's ready for review.
 
             This is a more open-ended task than a wording tweak: you're making layout and
             structure choices, not just swapping a string. If the request is too vague to

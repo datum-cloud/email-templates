@@ -49,6 +49,17 @@ Screenshots below are committed alongside each template change, so what you see 
 <img src="./screenshots/user-suspicious.png" width="480" />
 </details>
 
+## Requesting a change
+
+Need wording changed on an existing email, or a brand-new template entirely? You don't need to write any code — open an issue:
+
+- **[Content / Wording Change Request](../../issues/new?template=content-change-request.yml)** — tweak the copy on an existing template.
+- **[New Email Template Request](../../issues/new?template=new-template-request.yml)** — describe a new email and when it's sent.
+
+If you're a member of the team, Claude automatically drafts a PR as soon as you submit the issue. Anyone else's request is triaged by a maintainer first, who adds the `ai-draft` label to have Claude take a pass at it — that same label re-triggers a run that failed or fell short. Either way, a draft PR still needs human review (copy, brand, and — for new templates — layout) before it merges.
+
+Once that PR is merged, it's not live for real users yet — see [**"How do I actually release this?"**](./RELEASING.md) for the (no-code) steps to publish it.
+
 ## Contributing
 
 Setup instructions and how to create or update a template live in [`CONTRIBUTING.md`](./CONTRIBUTING.md). The release process is documented in [`RELEASING.md`](./RELEASING.md).
