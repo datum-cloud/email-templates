@@ -54,7 +54,7 @@ jobs:
           branch_prefix: 'content-request/'
           show_full_output: true
           claude_args: |
-            --allowedTools "Read,Edit,Bash(pnpm generate:all:*),Bash(pnpm check:*),Bash(git:*),Bash(gh pr create:*)"
+            --allowedTools "Read,Edit,Bash(pnpm generate:all:*),Bash(pnpm check:*),Bash(git:*),Bash(gh pr create:*),Bash(gh issue comment:*)"
           prompt: |
             You're handling GitHub issue #${{ github.event.issue.number }} in this repo, a
             "Content / Wording Change Request" filed via
@@ -91,6 +91,9 @@ jobs:
             5. Open a PR against main with a clear title and a body that says
                "Closes #${{ github.event.issue.number }}", quoting the before/after
                wording.
+            6. Comment on issue #${{ github.event.issue.number }} (via `gh issue comment`)
+               linking the PR you just opened and @-mentioning
+               ${{ github.event.issue.user.login }} to let them know it's ready for review.
 
             If the request is ambiguous, spans multiple unrelated strings, or isn't a
             simple wording swap (e.g. asks for new sections, new templates, or layout
