@@ -30,6 +30,11 @@ Screenshots below are committed alongside each template change, so what you see 
 </details>
 
 <details>
+<summary><strong>Email Verification</strong> — a quick nudge to confirm an email address and finish setting up a Datum account <em>(click to preview)</em></summary>
+<img src="./screenshots/email-verification.png" width="480" />
+</details>
+
+<details>
 <summary><strong>User Rejected</strong> — a considerate no, when an application to Datum wasn't approved <em>(click to preview)</em></summary>
 <img src="./screenshots/user-rejected.png" width="480" />
 </details>
