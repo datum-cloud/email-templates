@@ -3,6 +3,7 @@
     "allow": [
       "Read",
       "Edit",
+      "Write",
       "Bash(pnpm install:*)",
       "Bash(pnpm dev:*)",
       "Bash(pnpm generate:all:*)",

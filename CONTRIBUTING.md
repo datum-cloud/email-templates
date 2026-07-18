@@ -4,7 +4,7 @@ A React Email + Tailwind CSS system for building Datum's transactional emails. S
 
 If you just need wording or content changed on an existing email and aren't comfortable opening a PR, open a "Content / Wording Change Request" issue instead (Issues → New issue). Need a brand-new email entirely? Use the "New Email Template Request" issue form instead — same idea, no coding required.
 
-For either kind of request, Claude automatically attempts a draft PR as soon as the issue is opened (see `.github/workflows/claude-content-request.yml` and `.github/workflows/claude-new-template.yml`) — it's still a draft: someone reviews and merges it like any other PR. If that automated attempt fails or falls short, a maintainer can add the `ai-draft` label to the issue to retry it.
+For either kind of request opened by a team member, Claude automatically attempts a draft PR as soon as the issue is opened (see `.github/workflows/claude-content-request.yml` and `.github/workflows/claude-new-template.yml`) — it's still a draft: someone reviews and merges it like any other PR. This repo is public, so requests from anyone outside the team don't auto-trigger; a maintainer reviews them and adds the `ai-draft` label to run Claude on them. That same label re-triggers a run that failed or fell short, regardless of who opened the issue.
 
 ## Installation
 

@@ -10,9 +10,11 @@
 name: Draft PR for content request
 
 # Fires automatically when a "Content / Wording Change Request" issue is opened
-# (the issue form applies the `content` label at creation). If that run fails
-# or gets a mediocre result, re-trigger it by adding (or re-adding) the
-# `ai-draft` label on the issue — that's the manual retry path.
+# by an org member/collaborator (the issue form applies the `content` label at
+# creation). This repo is public, so an issue opened by anyone else does NOT
+# auto-trigger — a maintainer reviews it and adds the `ai-draft` label to run
+# it manually. That same label also re-triggers a run that failed or fell
+# short, regardless of who opened the issue.
 on:
   issues:
     types: [opened, labeled]
@@ -27,7 +29,10 @@ jobs:
   draft-pr:
     if: >
       contains(github.event.issue.labels.*.name, 'content') &&
-      (github.event.action == 'opened' || github.event.label.name == 'ai-draft')
+      (
+        (github.event.action == 'opened' && contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.issue.author_association)) ||
+        (github.event.action == 'labeled' && github.event.label.name == 'ai-draft')
+      )
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -42,8 +47,6 @@ jobs:
           base_branch: main
           branch_prefix: 'content-request/'
           show_full_output: true
-          claude_args: |
-            --allowedTools "Read,Edit,Bash(pnpm generate:all:*),Bash(pnpm check:*),Bash(git:*),Bash(gh pr create:*)"
           prompt: |
             You're handling GitHub issue #${{ github.event.issue.number }} in this repo, a
             "Content / Wording Change Request" filed via
