@@ -113,11 +113,14 @@ jobs:
             7. Run `pnpm generate:all` to regenerate config/email-templates/ and confirm it
                picks up the new template, and `pnpm check` to confirm Biome is clean. Include
                the regenerated config/email-templates/ output in your commit.
-            8. Open a PR against main with a clear title and a body that says
+            8. Open a PR against main (not a draft) with a clear title and a body that says
                "Closes #${{ github.event.issue.number }}", summarizes what you scaffolded,
                and explicitly flags that this is a first draft — exact copy, brand colors,
                and any legal/compliance boilerplate still need human review before merge.
-            7. Comment on issue #${{ github.event.issue.number }} (via `gh issue comment`)
+               Request review from the `datum-cloud/gtm` team (e.g. `gh pr create --reviewer
+               datum-cloud/gtm ...`) — they own email content and can merge this without
+               needing an engineering approval.
+            9. Comment on issue #${{ github.event.issue.number }} (via `gh issue comment`)
                linking the PR you just opened and @-mentioning
                ${{ github.event.issue.user.login }} to let them know it's ready for review.
 
