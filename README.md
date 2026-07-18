@@ -49,6 +49,11 @@ Screenshots below are committed alongside each template change, so what you see 
 <img src="./screenshots/user-suspicious.png" width="480" />
 </details>
 
+<details>
+<summary><strong>Email Verification</strong> — a quick nudge to confirm a new user's email address and finish setting up their account <em>(click to preview)</em></summary>
+<img src="./screenshots/email-verification.png" width="480" />
+</details>
+
 ## Requesting a change
 
 Need wording changed on an existing email, or a brand-new template entirely? You don't need to write any code — open an issue:

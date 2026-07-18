@@ -38,6 +38,7 @@ body:
         - User Waitlist
         - User Welcome
         - Suspicious Sign-in
+        - Email Verification
         - Not sure
     validations:
       required: true
