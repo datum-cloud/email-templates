@@ -4,6 +4,8 @@
 # Git/PR operations authenticate as a dedicated GitHub App instead of the
 # default job GITHUB_TOKEN — see the same file's comment for the required
 # CLAUDE_GH_APP_ID / CLAUDE_GH_APP_PRIVATE_KEY secrets and App permissions.
+# Node/pnpm are set up and `pnpm install` runs before Claude starts — see
+# claude-content-request.yml's comment for why this is required, not optional.
 # Fires automatically when a "New Email Template Request" issue is opened by
 # an org member/collaborator (the issue form applies the `new-template` label
 # at creation). This repo is public, so an issue opened by anyone else does
@@ -40,6 +42,17 @@ jobs:
         with:
           app-id: ${{ secrets.CLAUDE_GH_APP_ID }}
           private-key: ${{ secrets.CLAUDE_GH_APP_PRIVATE_KEY }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '20'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
       - uses: anthropics/claude-code-action@v1
         with:
