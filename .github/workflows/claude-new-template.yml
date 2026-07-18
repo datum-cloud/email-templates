@@ -92,8 +92,13 @@ jobs:
                .github/ISSUE_TEMPLATE/new-template-request.yml's `closest_existing` dropdown
                (insert alphabetically-ish alongside the existing options, before "Not sure"),
                so future new-template requests can reference it.
-            6. Don't modify emails/components/, emails/layouts/, emails/config/, any existing
-               template, or any file outside the ones named in steps 1, 4, and 5.
+            6. Prefer not touching anything else, but you may add to or adjust
+               emails/components/ or emails/layouts/ if the template genuinely can't be
+               built from what already exists there (e.g. it needs a new shared block, or an
+               existing component needs a new variant) — don't duplicate a whole component
+               just to avoid editing the shared one. Do not touch emails/config/ (Tailwind/
+               brand config), any existing template's content, or any file outside the ones
+               named in steps 1, 4, 5, and this one.
             7. Run `pnpm generate:all` to regenerate config/email-templates/ and confirm it
                picks up the new template, and `pnpm check` to confirm Biome is clean. Include
                the regenerated config/email-templates/ output in your commit.
