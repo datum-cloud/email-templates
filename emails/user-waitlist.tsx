@@ -11,7 +11,7 @@ const copy = {
     "Thanks for joining the waitlist for Datum Cloud. We're currently in a private beta, but we're onboarding people in batches every week.",
   paragraph2:
     "I'd love to hear about your use case, or what you feel is missing in your toolkit. Just reply to this email with any thoughts.",
-  signoffClosing: 'Cheers,',
+  signoffClosing: 'Best,',
   signoffName: 'Zac Smith',
   signoffTitle: 'Co-founder & CEO at Datum',
 };
