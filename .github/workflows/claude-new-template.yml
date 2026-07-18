@@ -42,7 +42,7 @@ jobs:
           branch_prefix: 'new-template/'
           show_full_output: true
           claude_args: |
-            --allowedTools "Read,Write,Edit,Bash(pnpm generate:all:*),Bash(pnpm check:*),Bash(git:*),Bash(gh pr create:*)"
+            --allowedTools "Read,Write,Edit,Bash(pnpm generate:all:*),Bash(pnpm check:*),Bash(git:*),Bash(gh pr create:*),Bash(gh issue comment:*)"
           prompt: |
             You're handling GitHub issue #${{ github.event.issue.number }} in this repo, a
             "New Email Template Request" filed via
@@ -89,6 +89,9 @@ jobs:
                "Closes #${{ github.event.issue.number }}", summarizes what you scaffolded,
                and explicitly flags that this is a first draft — exact copy, brand colors,
                and any legal/compliance boilerplate still need human review before merge.
+            7. Comment on issue #${{ github.event.issue.number }} (via `gh issue comment`)
+               linking the PR you just opened and @-mentioning
+               ${{ github.event.issue.user.login }} to let them know it's ready for review.
 
             This is a more open-ended task than a wording tweak: you're making layout and
             structure choices, not just swapping a string. If the request is too vague to
