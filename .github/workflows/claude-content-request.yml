@@ -22,6 +22,11 @@
 #   CLAUDE_GH_APP_PRIVATE_KEY  - the App's private key (PEM)
 # The App needs to be installed on this repo with Contents: write,
 # Pull requests: write, and Issues: write permissions.
+#
+# Node/pnpm are set up and `pnpm install` runs before Claude starts — without
+# this, `pnpm generate:all`/`pnpm check` have no node_modules to work with, and
+# Claude has no way to install them itself (npm/corepack/network access aren't
+# in --allowedTools, and shouldn't be added just to work around this).
 name: Draft PR for content request
 
 # Fires automatically when a "Content / Wording Change Request" issue is opened
@@ -58,6 +63,17 @@ jobs:
         with:
           app-id: ${{ secrets.CLAUDE_GH_APP_ID }}
           private-key: ${{ secrets.CLAUDE_GH_APP_PRIVATE_KEY }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '20'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
       - uses: anthropics/claude-code-action@v1
         with:
