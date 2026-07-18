@@ -22,6 +22,8 @@ That's it for this repo. One step remains, and it belongs to engineering:
 
 6. **An engineer** updates which version is pinned for Preview or Production over in the [`datum-cloud/infra`](https://github.com/datum-cloud/infra) repo (the files under `apps/datum-control-plane-system/core-control-plane/{preview,production}/email-templates-oci-repository-patch.yaml`). This is the step that actually makes the new version show up for real users — flag your release to an engineer so they can do this part.
 
+Once that pin is updated, it can take a few minutes for the change to actually roll out — don't panic if the old version is still showing up right away.
+
 ## What's deployed where, at a glance
 
 | Environment | Updates when... |
