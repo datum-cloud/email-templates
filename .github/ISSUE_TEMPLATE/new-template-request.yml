@@ -31,6 +31,7 @@ body:
       label: Which existing email is this most similar to in look and feel?
       description: Used as a structural reference — layout, tone, and components will follow this one.
       options:
+        - Email Verification
         - Platform Invitation
         - User Invitation
         - User Approved
