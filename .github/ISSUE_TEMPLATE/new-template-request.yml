@@ -1,0 +1,77 @@
+name: New Email Template Request
+description: Request a brand-new transactional email template (no coding required).
+title: "[New template]: "
+labels:
+  - new-template
+  - needs-triage
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this form to request a brand-new transactional email. You don't need to write any code — describe what the email should say and when it's sent. If you're a member of the team, Claude automatically attempts a first-draft PR as soon as you submit this issue — it'll still need engineer and brand review before it merges, since a new template involves layout and structure decisions, not just wording. Anyone else's request gets triaged by a maintainer first, who can add the `ai-draft` label to have Claude take a pass at it (also the retry path if an automated attempt doesn't work out).
+  - type: input
+    id: name
+    attributes:
+      label: Template name
+      description: A short name for this email, e.g. "Password Reset" or "Payment Failed"
+      placeholder: e.g. Password Reset
+    validations:
+      required: true
+  - type: textarea
+    id: trigger
+    attributes:
+      label: When is this email sent?
+      description: What event or user action triggers this email?
+      placeholder: e.g. Sent when a user requests a password reset link
+    validations:
+      required: true
+  - type: dropdown
+    id: closest_existing
+    attributes:
+      label: Which existing email is this most similar to in look and feel?
+      description: Used as a structural reference — layout, tone, and components will follow this one.
+      options:
+        - Platform Invitation
+        - User Invitation
+        - User Approved
+        - User Rejected
+        - User Waitlist
+        - User Welcome
+        - Suspicious Sign-in
+        - Not sure
+    validations:
+      required: true
+  - type: input
+    id: subject
+    attributes:
+      label: Subject line
+      description: Optional — if left blank, one will be derived from the heading.
+      placeholder: e.g. Reset your Datum password
+    validations:
+      required: false
+  - type: textarea
+    id: body_copy
+    attributes:
+      label: What should the email say?
+      description: Greeting, body paragraph(s), and any call-to-action button label. Plain text is fine — exact wording will be refined during review.
+      placeholder: |
+        Greeting: Hi {name},
+        Body: We received a request to reset your password. Click below to choose a new one.
+        Button label: Reset Password
+    validations:
+      required: true
+  - type: input
+    id: variables
+    attributes:
+      label: What information does this email need to fill in?
+      description: e.g. the user's name, a reset link, an expiration time — these become the template's variables.
+      placeholder: e.g. name, resetUrl, expiresInHours
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Anything else? (legal copy, urgency, related tickets)
+      description: Optional context.
+    validations:
+      required: false

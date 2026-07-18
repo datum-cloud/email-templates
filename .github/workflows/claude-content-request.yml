@@ -1,0 +1,98 @@
+# Authenticates to the Claude API via Workload Identity Federation instead of a
+# static ANTHROPIC_API_KEY secret: GitHub mints a short-lived OIDC token for this
+# job (hence `id-token: write` below), and claude-code-action exchanges it for a
+# short-lived Anthropic access token. No long-lived key is stored in this repo.
+#
+# The four ANTHROPIC_* values below are repo variables (Settings -> Secrets and
+# variables -> Actions -> Variables), not secrets — they identify resources, not
+# credentials. Setup (Console federation issuer/rule/service account) is documented at
+# https://platform.claude.com/docs/en/manage-claude/wif-providers/github-actions
+#
+# Tool permissions are granted explicitly here via claude_args --allowedTools,
+# not via .claude/settings.json — confirmed empirically that this action's
+# headless run doesn't honor the project settings file's permissions.allow (every
+# Edit/Bash call stayed gated behind an approval prompt that never comes in CI).
+# .claude/settings.json still matters for local/devcontainer use of `claude`.
+name: Draft PR for content request
+
+# Fires automatically when a "Content / Wording Change Request" issue is opened
+# by an org member/collaborator (the issue form applies the `content` label at
+# creation). This repo is public, so an issue opened by anyone else does NOT
+# auto-trigger — a maintainer reviews it and adds the `ai-draft` label to run
+# it manually. That same label also re-triggers a run that failed or fell
+# short, regardless of who opened the issue.
+on:
+  issues:
+    types: [opened, labeled]
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+  id-token: write
+
+jobs:
+  draft-pr:
+    if: >
+      contains(github.event.issue.labels.*.name, 'content') &&
+      (
+        (github.event.action == 'opened' && contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.issue.author_association)) ||
+        (github.event.action == 'labeled' && github.event.label.name == 'ai-draft')
+      )
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_federation_rule_id: ${{ vars.ANTHROPIC_FEDERATION_RULE_ID }}
+          anthropic_organization_id: ${{ vars.ANTHROPIC_ORGANIZATION_ID }}
+          anthropic_service_account_id: ${{ vars.ANTHROPIC_SERVICE_ACCOUNT_ID }}
+          anthropic_workspace_id: ${{ vars.ANTHROPIC_WORKSPACE_ID }}
+          label_trigger: 'ai-draft'
+          base_branch: main
+          branch_prefix: 'content-request/'
+          show_full_output: true
+          claude_args: |
+            --allowedTools "Read,Edit,Bash(pnpm generate:all:*),Bash(pnpm check:*),Bash(git:*),Bash(gh pr create:*)"
+          prompt: |
+            You're handling GitHub issue #${{ github.event.issue.number }} in this repo, a
+            "Content / Wording Change Request" filed via
+            .github/ISSUE_TEMPLATE/content-change-request.yml. Read CLAUDE.md at the repo
+            root first for how this repo's template/bundle pipeline works.
+
+            Here is the issue verbatim — you do not have a way to fetch it yourself, so
+            this is the only copy of it you'll get:
+
+            ---
+            Title: ${{ github.event.issue.title }}
+
+            ${{ github.event.issue.body }}
+            ---
+
+            The issue body has a "Which email template?" dropdown (a human-readable name
+            like "User Welcome") and a "What should change?" field describing current vs.
+            desired wording.
+
+            1. Map the dropdown's template name to its file in emails/*.tsx (e.g.
+               "User Welcome" -> emails/user-welcome.tsx, "Suspicious Sign-in" ->
+               emails/user-suspicious.tsx). If it says "Not sure / other" or you can't
+               confidently identify the file, stop and comment on the issue asking for
+               clarification instead of guessing.
+            2. Each template declares a `const copy = { ... }` object near the top holding
+               its literal strings, referenced from the JSX below it. Find the specific
+               `copy` key(s) whose current value matches the issue's described current
+               wording, and update only those values to the desired wording.
+            3. Don't touch anything else — no JSX structure, no Tailwind classNames, no
+               other templates, no other files (workflows, scripts, config).
+            4. Run `pnpm generate:all` to regenerate config/email-templates/ from your
+               change, and `pnpm check` to confirm Biome is still clean. Include the
+               regenerated config/email-templates/ output in your commit.
+            5. Open a PR against main with a clear title and a body that says
+               "Closes #${{ github.event.issue.number }}", quoting the before/after
+               wording.
+
+            If the request is ambiguous, spans multiple unrelated strings, or isn't a
+            simple wording swap (e.g. asks for new sections, new templates, or layout
+            changes), don't guess — comment on the issue explaining what you need
+            clarified instead of opening a PR.
