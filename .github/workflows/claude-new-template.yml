@@ -126,16 +126,28 @@ jobs:
             7. Run `pnpm generate:all` to regenerate config/email-templates/ and confirm it
                picks up the new template, and `pnpm check` to confirm Biome is clean. Include
                the regenerated config/email-templates/ output in your commit.
-            8. Open a PR against main (not a draft) with a clear title and a body that says
-               "Closes #${{ github.event.issue.number }}", summarizes what you scaffolded,
-               and explicitly flags that this is a first draft — exact copy, brand colors,
-               and any legal/compliance boilerplate still need human review before merge.
+            8. Open a PR against main (not a draft) with a clear title. The reviewer is
+               GTM, not an engineer, so write the body in plain language, not repo/tooling
+               jargon:
+                 - Lead with "Closes #${{ github.event.issue.number }}", then a short,
+                   plain description of the new email — what it says, when it's sent —
+                   not a file-by-file list of what you touched.
+                 - Mention that a screenshot of the rendered email will show up as a
+                   separate PR comment shortly.
+                 - Explicitly flag it as a first draft: exact copy, brand colors, and any
+                   legal/compliance wording still need human review before merge.
+                 - Do NOT mention file paths, `pnpm`, "regenerated YAML", Biome, dropdown
+                   options, or other implementation detail in the main body. If you want
+                   to record that for engineers, put it inside a collapsed
+                   `<details><summary>Technical details</summary>...</details>` block at
+                   the end, not in the main text.
                Request review from the `datum-cloud/gtm` team (e.g. `gh pr create --reviewer
                datum-cloud/gtm ...`) — they own email content and can merge this without
                needing an engineering approval.
             9. Comment on issue #${{ github.event.issue.number }} (via `gh issue comment`)
                linking the PR you just opened and @-mentioning
-               ${{ github.event.issue.user.login }} to let them know it's ready for review.
+               ${{ github.event.issue.user.login }}. Keep it short and non-technical: it's
+               ready for the GTM team to review, here's the link, that's it.
 
             This is a more open-ended task than a wording tweak: you're making layout and
             structure choices, not just swapping a string. If the request is too vague to

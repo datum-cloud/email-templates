@@ -121,14 +121,26 @@ jobs:
             4. Run `pnpm generate:all` to regenerate config/email-templates/ from your
                change, and `pnpm check` to confirm Biome is still clean. Include the
                regenerated config/email-templates/ output in your commit.
-            5. Open a PR against main (not a draft) with a clear title and a body that says
-               "Closes #${{ github.event.issue.number }}", quoting the before/after
-               wording. Request review from the `datum-cloud/gtm` team (e.g. `gh pr create
+            5. Open a PR against main (not a draft) with a clear title. The reviewer is
+               GTM, not an engineer, so write the body in plain language, not repo/tooling
+               jargon:
+                 - Lead with "Closes #${{ github.event.issue.number }}", then a
+                   before/after quote of the wording — that's the part they actually need
+                   to check.
+                 - Mention that a screenshot of the rendered email will show up as a
+                   separate PR comment shortly.
+                 - Do NOT mention file paths, `pnpm`, "regenerated YAML", Biome, or any
+                   other implementation detail in the main body. If you want to record
+                   that for engineers, put it inside a collapsed
+                   `<details><summary>Technical details</summary>...</details>` block at
+                   the end, not in the main text.
+               Request review from the `datum-cloud/gtm` team (e.g. `gh pr create
                --reviewer datum-cloud/gtm ...`) — they own email content and can merge this
                without needing an engineering approval.
             6. Comment on issue #${{ github.event.issue.number }} (via `gh issue comment`)
                linking the PR you just opened and @-mentioning
-               ${{ github.event.issue.user.login }} to let them know it's ready for review.
+               ${{ github.event.issue.user.login }}. Keep it short and non-technical: it's
+               ready for the GTM team to review, here's the link, that's it.
 
             If the request is ambiguous, spans multiple unrelated strings, or isn't a
             simple wording swap (e.g. asks for new sections, new templates, or layout
