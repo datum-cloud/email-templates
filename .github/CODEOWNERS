@@ -14,3 +14,10 @@
 # same owner as the source they're derived from, not hand-edited by anyone.
 /config/email-templates/ @datum-cloud/gtm
 /screenshots/ @datum-cloud/gtm
+
+# The new-template-request AI draft flow updates both of these alongside the
+# template itself (the README's template list, the issue form's "closest
+# existing" dropdown) — GTM-owned so those draft PRs don't need an engineering
+# approval just for touching them.
+/README.md @datum-cloud/gtm
+/.github/ISSUE_TEMPLATE/new-template-request.yml @datum-cloud/gtm
