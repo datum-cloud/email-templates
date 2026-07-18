@@ -49,6 +49,15 @@ jobs:
             document the exact shape every template must follow and why (the export/YAML
             generation pipeline depends on it).
 
+            Here is the issue verbatim — you do not have a way to fetch it yourself, so
+            this is the only copy of it you'll get:
+
+            ---
+            Title: ${{ github.event.issue.title }}
+
+            ${{ github.event.issue.body }}
+            ---
+
             The issue gives: a template name, what triggers the email, which existing
             template it's most similar to, an optional subject line, the greeting/body/
             button copy, and what variables (props) it needs.
