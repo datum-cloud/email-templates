@@ -53,6 +53,15 @@ jobs:
             .github/ISSUE_TEMPLATE/content-change-request.yml. Read CLAUDE.md at the repo
             root first for how this repo's template/bundle pipeline works.
 
+            Here is the issue verbatim — you do not have a way to fetch it yourself, so
+            this is the only copy of it you'll get:
+
+            ---
+            Title: ${{ github.event.issue.title }}
+
+            ${{ github.event.issue.body }}
+            ---
+
             The issue body has a "Which email template?" dropdown (a human-readable name
             like "User Welcome") and a "What should change?" field describing current vs.
             desired wording.
