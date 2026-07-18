@@ -1,3 +1,10 @@
+# Auto-commits here authenticate as the datum-email-designer GitHub App instead
+# of the default GITHUB_TOKEN. Confirmed empirically: a synchronize event whose
+# push comes from the default GITHUB_TOKEN (committer github-actions[bot]) gets
+# gated behind a manual "action_required" approval on every subsequent
+# workflow run on that PR, while the same push authenticated as our App does
+# not. Requires the same CLAUDE_GH_APP_ID / CLAUDE_GH_APP_PRIVATE_KEY secrets
+# used by claude-content-request.yml / claude-new-template.yml.
 name: Verify Kustomize Bundle
 
 on:
@@ -15,11 +22,19 @@ jobs:
     permissions:
       contents: write
     steps:
+      - name: Mint GitHub App installation token for git operations
+        id: app-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ secrets.CLAUDE_GH_APP_ID }}
+          private-key: ${{ secrets.CLAUDE_GH_APP_PRIVATE_KEY }}
+
       - name: Checkout PR branch
         uses: actions/checkout@v7
         with:
           ref: ${{ github.event.pull_request.head.ref }}
           fetch-depth: 0
+          token: ${{ steps.app-token.outputs.token }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v7
@@ -40,8 +55,8 @@ jobs:
         with:
           commit_message: "chore: regenerate email template bundle"
           file_pattern: 'config/email-templates/**'
-          commit_user_name: github-actions[bot]
-          commit_user_email: github-actions[bot]@users.noreply.github.com
+          commit_user_name: datum-email-designer[bot]
+          commit_user_email: 306493438+datum-email-designer[bot]@users.noreply.github.com
 
   validate-kustomize:
     permissions:
