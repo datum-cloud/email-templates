@@ -7,6 +7,12 @@
 # variables -> Actions -> Variables), not secrets — they identify resources, not
 # credentials. Setup (Console federation issuer/rule/service account) is documented at
 # https://platform.claude.com/docs/en/manage-claude/wif-providers/github-actions
+#
+# Tool permissions are granted explicitly here via claude_args --allowedTools,
+# not via .claude/settings.json — confirmed empirically that this action's
+# headless run doesn't honor the project settings file's permissions.allow (every
+# Edit/Bash call stayed gated behind an approval prompt that never comes in CI).
+# .claude/settings.json still matters for local/devcontainer use of `claude`.
 name: Draft PR for content request
 
 # Fires automatically when a "Content / Wording Change Request" issue is opened
@@ -47,6 +53,8 @@ jobs:
           base_branch: main
           branch_prefix: 'content-request/'
           show_full_output: true
+          claude_args: |
+            --allowedTools "Read,Edit,Bash(pnpm generate:all:*),Bash(pnpm check:*),Bash(git:*),Bash(gh pr create:*)"
           prompt: |
             You're handling GitHub issue #${{ github.event.issue.number }} in this repo, a
             "Content / Wording Change Request" filed via
