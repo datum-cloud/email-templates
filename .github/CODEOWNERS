@@ -8,3 +8,9 @@
 # their AI-assisted draft PRs) edit. Doesn't cover emails/components/,
 # emails/layouts/, or emails/config/, which stay engineering's above.
 /emails/*.tsx @datum-cloud/gtm
+
+# Auto-generated from the templates above (config/email-templates/ by
+# verify-bundle.yml's auto-commit, screenshots/ by screenshot-templates.yml) —
+# same owner as the source they're derived from, not hand-edited by anyone.
+/config/email-templates/ @datum-cloud/gtm
+/screenshots/ @datum-cloud/gtm
