@@ -8,6 +8,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 concurrency:
   group: screenshot-templates-${{ github.event.pull_request.number }}
@@ -82,3 +83,35 @@ jobs:
           file_pattern: 'screenshots/*.png'
           commit_user_name: github-actions[bot]
           commit_user_email: github-actions[bot]@users.noreply.github.com
+
+      - name: Build comment body
+        if: steps.changed.outputs.any == 'true'
+        env:
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+        run: |
+          {
+            echo "## 📧 Template screenshots"
+            echo
+            echo "Rendered with each template's preview data. Updates automatically as you push."
+            echo
+            while IFS= read -r name; do
+              echo "**${name}**"
+              echo
+              echo "![${name}](https://github.com/${GITHUB_REPOSITORY}/blob/${HEAD_REF}/screenshots/${name}.png?raw=true)"
+              echo
+            done < /tmp/changed-templates.txt
+          } > /tmp/comment-body.md
+
+      - name: Post or update comment
+        if: steps.changed.outputs.any == 'true'
+        uses: marocchino/sticky-pull-request-comment@v3.0.5
+        with:
+          header: email-template-screenshots
+          path: /tmp/comment-body.md
+
+      - name: Remove stale comment when no templates changed
+        if: steps.changed.outputs.any == 'false'
+        uses: marocchino/sticky-pull-request-comment@v3.0.5
+        with:
+          header: email-template-screenshots
+          delete: true
