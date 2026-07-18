@@ -1,29 +1,31 @@
 # Releasing
 
-## How a change reaches production
+This is the step-by-step for getting a merged change live. No coding involved — just a few clicks in GitHub.
 
-1. Merge a PR to `main`. This automatically publishes a kustomize bundle to
-   `ghcr.io/datum-cloud/email-templates-kustomize`.
-2. **Staging** picks up new `main` builds automatically — nothing else to do.
-3. When you're ready to promote to **preview** or **production**, run the
-   [Publish New Version](.github/workflows/release.yml) workflow
-   (`Actions → Publish New Version → Run workflow`). Pick how big the update
-   is — `patch` (small fixes/content tweaks), `minor` (new templates,
-   notable changes), or `major` (breaking changes to template variables) —
-   `patch` is the default and covers most changes. The workflow figures out
-   the actual version number for you.
-4. Update the pinned tag for the environment you're promoting in
-   [`datum-cloud/infra`](https://github.com/datum-cloud/infra) — see
-   `apps/datum-control-plane-system/core-control-plane/{preview,production}/email-templates-oci-repository-patch.yaml`.
+## Where changes go, and when
 
-## Versioning
+- **Staging** updates itself automatically every time a PR merges to `main`. There's nothing to do for this — if you just want to see your change on staging, you're already done.
+- **Preview** and **Production** only update when someone runs the release steps below. Merging to `main` does *not* put anything in front of real users by itself.
 
-You don't need to know or pick a version number — just pick patch/minor/major
-and the release workflow computes it from the latest tag. When in doubt,
-`patch` is almost always the right choice for template content changes.
+## How to release to Preview or Production
 
-## What's deployed where
+1. Go to the **Actions** tab of this repo on GitHub.
+2. In the left sidebar, click **Publish New Version**.
+3. Click the **Run workflow** button (top right of the list).
+4. Pick how big the change is:
+   - **patch** — wording tweaks, a fixed typo, small visual fixes. Use this if you're not sure — it's the default and covers most changes.
+   - **minor** — a brand-new email template, or a change noticeable enough to call out.
+   - **major** — only if a template's variables changed in a way that would break something already using it (an engineer should confirm this one).
+5. Click the green **Run workflow** button to confirm. This creates a new version tag (like `v1.4.0`) — you don't need to figure out the number yourself, the workflow does that from whatever the last version was.
 
-- **Staging**: always the latest `main` build.
-- **Preview** / **Production**: pinned to a specific release tag, updated
-  manually in `infra` when you're ready to promote.
+That's it for this repo. One step remains, and it belongs to engineering:
+
+6. **An engineer** updates which version is pinned for Preview or Production over in the [`datum-cloud/infra`](https://github.com/datum-cloud/infra) repo (the files under `apps/datum-control-plane-system/core-control-plane/{preview,production}/email-templates-oci-repository-patch.yaml`). This is the step that actually makes the new version show up for real users — flag your release to an engineer so they can do this part.
+
+## What's deployed where, at a glance
+
+| Environment | Updates when... |
+|---|---|
+| Staging | Automatically, on every merge to `main` |
+| Preview | An engineer updates the pinned version in `infra` after a release |
+| Production | Same, but for the production pin in `infra` |
