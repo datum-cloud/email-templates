@@ -1,13 +1,18 @@
 # Engineering owns everything by default: CI/workflows, scripts, shared
-# components/layouts/config, and anything else outside the top-level email
-# templates.
+# config, and anything else outside the top-level email templates.
 * @datum-cloud/engineering
 
 # The top-level email templates (content/copy) are GTM's domain — this is
 # what the content-change-request and new-template-request issue flows (and
-# their AI-assisted draft PRs) edit. Doesn't cover emails/components/,
-# emails/layouts/, or emails/config/, which stay engineering's above.
+# their AI-assisted draft PRs) edit.
 /emails/*.tsx @datum-cloud/gtm
+
+# Shared components/layouts are also GTM's — the new-template-request AI draft
+# flow is allowed to touch these when a new template genuinely needs a new or
+# adjusted shared piece, not just its own file. emails/config/ (Tailwind/brand
+# config) stays engineering's above, since it isn't part of that flow.
+/emails/components/ @datum-cloud/gtm
+/emails/layouts/ @datum-cloud/gtm
 
 # Auto-generated from the templates above (config/email-templates/ by
 # verify-bundle.yml's auto-commit, screenshots/ by screenshot-templates.yml) —
