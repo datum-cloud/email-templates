@@ -19,6 +19,20 @@ jobs:
     permissions:
       contents: write
     steps:
+      # softprops/action-gh-release needs to authenticate as our GitHub App,
+      # not the default GITHUB_TOKEN: GitHub deliberately blocks the default
+      # token from triggering other workflow runs (loop prevention), which
+      # means a release created with it never fires publish-kustomize-bundle.yml's
+      # `on: release: types: [published]` — the release exists but no
+      # versioned OCI bundle ever gets published for it. Same class of issue
+      # already fixed for the auto-commit workflows (see verify-bundle.yml).
+      - name: Mint GitHub App installation token
+        id: app-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ secrets.CLAUDE_GH_APP_ID }}
+          private-key: ${{ secrets.CLAUDE_GH_APP_PRIVATE_KEY }}
+
       - name: Checkout
         uses: actions/checkout@v7
         with:
@@ -28,17 +42,16 @@ jobs:
         id: version
         run: |
           LATEST=$(git tag --list 'v*' --sort=-v:refname | head -n1)
-          if [ -z "${LATEST}" ]; then
-            NEXT="v0.1.0"
-          else
-            IFS='.' read -r MAJOR MINOR PATCH <<< "${LATEST#v}"
-            case "${{ inputs.bump }}" in
-              major) MAJOR=$((MAJOR + 1)); MINOR=0; PATCH=0 ;;
-              minor) MINOR=$((MINOR + 1)); PATCH=0 ;;
-              patch) PATCH=$((PATCH + 1)) ;;
-            esac
-            NEXT="v${MAJOR}.${MINOR}.${PATCH}"
-          fi
+          IFS='.' read -r MAJOR MINOR PATCH <<< "${LATEST#v}"
+          MAJOR="${MAJOR:-0}"
+          MINOR="${MINOR:-0}"
+          PATCH="${PATCH:-0}"
+          case "${{ inputs.bump }}" in
+            major) MAJOR=$((MAJOR + 1)); MINOR=0; PATCH=0 ;;
+            minor) MINOR=$((MINOR + 1)); PATCH=0 ;;
+            patch) PATCH=$((PATCH + 1)) ;;
+          esac
+          NEXT="v${MAJOR}.${MINOR}.${PATCH}"
           echo "Previous version: ${LATEST:-none}"
           echo "Next version: ${NEXT}"
           echo "tag=${NEXT}" >> "$GITHUB_OUTPUT"
@@ -46,6 +59,7 @@ jobs:
       - name: Create release
         uses: softprops/action-gh-release@v3
         with:
+          token: ${{ steps.app-token.outputs.token }}
           tag_name: ${{ steps.version.outputs.tag }}
           target_commitish: main
           generate_release_notes: true
