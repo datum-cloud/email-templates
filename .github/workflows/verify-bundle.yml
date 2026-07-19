@@ -1,3 +1,10 @@
+# Auto-commits here authenticate as the datum-email-designer GitHub App instead
+# of the default GITHUB_TOKEN. Confirmed empirically: a synchronize event whose
+# push comes from the default GITHUB_TOKEN (committer github-actions[bot]) gets
+# gated behind a manual "action_required" approval on every subsequent
+# workflow run on that PR, while the same push authenticated as our App does
+# not. Requires the same CLAUDE_GH_APP_ID / CLAUDE_GH_APP_PRIVATE_KEY secrets
+# used by claude-content-request.yml / claude-new-template.yml.
 name: Verify Kustomize Bundle
 
 on:
@@ -12,9 +19,22 @@ on:
 jobs:
   verify-bundle-up-to-date:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
-      - name: Checkout
+      - name: Mint GitHub App installation token for git operations
+        id: app-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ secrets.CLAUDE_GH_APP_ID }}
+          private-key: ${{ secrets.CLAUDE_GH_APP_PRIVATE_KEY }}
+
+      - name: Checkout PR branch
         uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+          token: ${{ steps.app-token.outputs.token }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v7
@@ -30,12 +50,13 @@ jobs:
       - name: Regenerate bundle
         run: pnpm generate:all
 
-      - name: Fail if config/email-templates is out of date
-        uses: tj-actions/verify-changed-files@v20
+      - name: Commit regenerated bundle to the PR branch
+        uses: stefanzweifel/git-auto-commit-action@v7.2.0
         with:
-          path: config/email-templates
-          fail-if-changed: true
-          fail-message: "config/email-templates is out of date. Run 'pnpm generate:all' and commit the result."
+          commit_message: "chore: regenerate email template bundle"
+          file_pattern: 'config/email-templates/**'
+          commit_user_name: datum-email-designer[bot]
+          commit_user_email: 306493438+datum-email-designer[bot]@users.noreply.github.com
 
   validate-kustomize:
     permissions:

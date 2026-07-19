@@ -3,6 +3,26 @@ import 'web-streams-polyfill/polyfill';
 import { Hr, Link, Row, Section, Text } from 'react-email';
 import { MainLayout } from './layouts';
 
+const copy = {
+  preview: 'New sign-in detected on your Datum account',
+  greetingPrefix: 'Hello ',
+  greetingSuffix: ',',
+  accountIntroBefore: 'Your Datum account',
+  accountIntroAfter:
+    'was recently signed-in from a new location, device or browser:',
+  recognizeActivity:
+    "If you recognize this activity, you don't need to do anything.",
+  notYouBefore: "If this wasn't you,",
+  reviewAccountLabel: 'review your account',
+  notYouAfter: 'and change your authentication methods now.',
+  alertExplanation:
+    'This alert triggers when we detect a sign-in from an unrecognized location, device, or browser. Common causes: traveling, VPN or Private Relay, or a new browser.',
+  supportHeading: 'We’re here to help',
+  supportParagraph:
+    'Please do not reply to this message. If you need help, send us a note at',
+  supportEmail: 'support@datum.net',
+};
+
 /**
  * Props for the suspicious sign-in notification.
  *
@@ -77,25 +97,27 @@ const detailRows = (
 ];
 
 export const UserSuspicious = (props: UserSuspiciousProps) => {
-  const previewText = 'New sign-in detected on your Datum account';
+  const previewText = copy.preview;
   const detailRowsData = detailRows(props);
 
   return (
     <MainLayout preview={previewText}>
       <Section className="my-10.5">
         <Text className="mt-0 text-4.5 mb-6 leading-6 font-medium">
-          Hello {props.UserName},
+          {copy.greetingPrefix}
+          {props.UserName}
+          {copy.greetingSuffix}
         </Text>
         <Section className="my-6">
           <Text className="mt-0 text-4.5 mb-6 leading-6 font-normal">
-            Your Datum account{' '}
+            {copy.accountIntroBefore}{' '}
             <Link
               href={`mailto:${props.Email}`}
               className="font-semibold text-brand-navy"
             >
               {props.Email}
             </Link>{' '}
-            was recently signed-in from a new location, device or browser:
+            {copy.accountIntroAfter}
           </Text>
 
           {detailRowsData.map((row) => (
@@ -105,42 +127,39 @@ export const UserSuspicious = (props: UserSuspiciousProps) => {
           ))}
 
           <Text className="mt-6 mb-6 text-4.5 leading-6 font-normal">
-            If you recognize this activity, you don't need to do anything.
+            {copy.recognizeActivity}
           </Text>
 
           <Text className="mt-0 text-4.5 leading-6 font-normal">
-            If this wasn't you,{' '}
+            {copy.notYouBefore}{' '}
             <Link
               href="https://cloud.datum.net/"
               className="text-brand-canyon-clay underline"
             >
-              review your account
+              {copy.reviewAccountLabel}
             </Link>{' '}
-            and change your authentication methods now.
+            {copy.notYouAfter}
           </Text>
         </Section>
 
         <Text className="text-[14px] leading-5 font-normal m-0">
-          This alert triggers when we detect a sign-in from an unrecognized
-          location, device, or browser. Common causes: traveling, VPN or Private
-          Relay, or a new browser.
+          {copy.alertExplanation}
         </Text>
 
         <Row>
           <Hr className="mx-0 my-10.5 block border border-brand-light-gray border-solid" />
           <Text className="m-0 text-[21px] leading-7 font-semibold">
-            We’re here to help
+            {copy.supportHeading}
           </Text>
           <Text className="m-0 my-[12px] text-4.5 leading-6 font-normal">
-            Please do not reply to this message. If you need help, send us a
-            note at
+            {copy.supportParagraph}
           </Text>
 
           <Link
             href="mailto:support@datum.net"
             className="text-brand-canyon-clay underline m-0 text-4.5 font-semibold"
           >
-            support@datum.net
+            {copy.supportEmail}
           </Link>
         </Row>
       </Section>
