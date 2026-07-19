@@ -121,7 +121,7 @@ spec:
                                         style="line-height:20px;text-decoration:none;display:block;max-width:100%;mso-padding-alt:0px;border-radius:0.25rem;font-weight:600;text-align:center;text-decoration-line:none;border-style:solid;border-width:1px;background-color:rgb(191,149,149);color:rgb(255,255,255);border-color:rgb(191,149,149);padding-right:24px;padding-left:24px;padding-bottom:14px;padding-top:14px;font-size:16px;margin-top:36px;margin-bottom:32px"
                                         target="_blank"
                                         ><span
-                                          ><!--[if mso]><i style="mso-font-width:400%;mso-text-raise:21" hidden>&#8202;&#8202;&#8202;</i><![endif]--></span
+                                          ><!--[if mso]><i style="mso-font-width:400%;mso-text-raise:21px" hidden>&#8202;&#8202;&#8202;</i><![endif]--></span
                                         ><span
                                           style="max-width:100%;display:inline-block;line-height:120%;mso-padding-alt:0px;mso-text-raise:10.5px"
                                           >Get started</span
