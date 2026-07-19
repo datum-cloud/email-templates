@@ -53,8 +53,8 @@ Screenshots below are committed alongside each template change, so what you see 
 
 Need wording changed on an existing email, or a brand-new template entirely? You don't need to write any code — open an issue:
 
-- **[Content / Wording Change Request](../../issues/new?template=content-change-request.yml)** — tweak the copy on an existing template.
-- **[New Email Template Request](../../issues/new?template=new-template-request.yml)** — describe a new email and when it's sent.
+- **[Content / Wording Change Request](../../issues/new?template=content-change-request.yml)** — tweak the copy on an existing template ([example issue](../../issues/63), [example PR](../../pull/71)).
+- **[New Email Template Request](../../issues/new?template=new-template-request.yml)** — describe a new email and when it's sent ([example issue](../../issues/64), [example PR](../../pull/72)).
 
 If you're a member of the team, Claude automatically drafts a PR as soon as you submit the issue. Anyone else's request is triaged by a maintainer first, who adds the `ai-draft` label to have Claude take a pass at it — that same label re-triggers a run that failed or fell short. Either way, a draft PR still needs human review (copy, brand, and — for new templates — layout) before it merges.
 
