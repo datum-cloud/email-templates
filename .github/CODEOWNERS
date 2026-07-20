@@ -20,9 +20,12 @@
 /config/email-templates/ @datum-cloud/gtm
 /screenshots/ @datum-cloud/gtm
 
-# The new-template-request AI draft flow updates both of these alongside the
-# template itself (the README's template list, the issue form's "closest
-# existing" dropdown) — GTM-owned so those draft PRs don't need an engineering
-# approval just for touching them.
-/README.md @datum-cloud/gtm
+# The new-template-request AI draft flow updates the README's template list
+# alongside the template itself, so GTM stays an owner here (an approval from
+# either team satisfies review — this doesn't force an engineering approval
+# onto those draft PRs). README.md and CONTRIBUTING.md are the shared
+# contributor-facing docs for the whole repo (setup, pipeline, release
+# process), not just template content, so engineering co-owns both.
+/README.md @datum-cloud/gtm @datum-cloud/engineering
+/CONTRIBUTING.md @datum-cloud/gtm @datum-cloud/engineering
 /.github/ISSUE_TEMPLATE/new-template-request.yml @datum-cloud/gtm
