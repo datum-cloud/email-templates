@@ -1,0 +1,116 @@
+# Lets a maintainer hand Claude direct feedback by mentioning @claude in a
+# comment on either the original request issue or its draft PR, instead of
+# only ever getting one automated first-pass draft. This uses
+# claude-code-action's comment-trigger mode (`trigger_phrase`) rather than the
+# `label_trigger` mode claude-content-request.yml/claude-new-template.yml use:
+# it reads the comment thread for context and checks out the right branch
+# itself (the PR's head branch when triggered from a PR, or by resolving the
+# linked PR when triggered from the original issue), then pushes a follow-up
+# commit onto that same branch and replies inline, rather than opening a new
+# PR.
+#
+# Shared setup mirrors claude-content-request.yml — see that file's comments
+# for why each piece is needed: WIF auth to the Anthropic API (no static
+# ANTHROPIC_API_KEY secret), git/PR operations authenticated as our GitHub App
+# instead of GITHUB_TOKEN (so commits attribute correctly and aren't blocked
+# by GitHub's same-token loop prevention), and pnpm install before Claude
+# starts since it has no network/install access of its own.
+#
+# Restricted to org members/collaborators (not just anyone who can comment on
+# a public repo) via author_association, same as the label-triggered flows'
+# restriction on who can apply `ai-draft`.
+name: Claude feedback on request
+
+on:
+  issue_comment:
+    types: [created]
+  pull_request_review_comment:
+    types: [created]
+  pull_request_review:
+    types: [submitted]
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+  id-token: write
+
+jobs:
+  respond:
+    if: >
+      contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.sender.author_association) &&
+      (
+        (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@claude')) ||
+        (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@claude')) ||
+        (github.event_name == 'pull_request_review' && contains(github.event.review.body, '@claude'))
+      )
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Mint GitHub App installation token for git/PR operations
+        id: app-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ secrets.CLAUDE_GH_APP_ID }}
+          private-key: ${{ secrets.CLAUDE_GH_APP_PRIVATE_KEY }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '20'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - uses: anthropics/claude-code-action@v1
+        with:
+          github_token: ${{ steps.app-token.outputs.token }}
+          bot_id: '306493438'
+          bot_name: 'datum-email-designer[bot]'
+          anthropic_federation_rule_id: ${{ vars.ANTHROPIC_FEDERATION_RULE_ID }}
+          anthropic_organization_id: ${{ vars.ANTHROPIC_ORGANIZATION_ID }}
+          anthropic_service_account_id: ${{ vars.ANTHROPIC_SERVICE_ACCOUNT_ID }}
+          anthropic_workspace_id: ${{ vars.ANTHROPIC_WORKSPACE_ID }}
+          trigger_phrase: '@claude'
+          show_full_output: true
+          claude_args: |
+            --allowedTools "Read,Edit,Bash(pnpm generate:all:*),Bash(pnpm check:*),Bash(git:*),Bash(gh pr view:*),Bash(gh pr list:*),Bash(gh pr comment:*),Bash(gh issue comment:*)"
+          prompt: |
+            A maintainer left feedback mentioning @claude in a comment thread on this
+            repo. Read CLAUDE.md at the repo root first for how the template/bundle
+            pipeline works.
+
+            Figure out which branch to work on:
+            - If you're already checked out on a PR branch (this run was triggered from a
+              comment on a PR, or a PR review), make the change directly on it.
+            - If this was triggered from a comment on the *original request issue* (not a
+              PR), find the draft PR it produced: run `gh pr list --search "Closes #<issue
+              number> in:body" --state open` and check out that PR's head branch before
+              making any change. If no open PR references this issue, reply explaining
+              that you can't find a draft PR to update and stop.
+
+            Once on the right branch:
+            1. Interpret the feedback as a request to adjust the email template(s) this
+               request already touched — wording, spacing, a copy tweak, a variant change,
+               etc. Only make the change the feedback actually asks for; don't take the
+               opportunity to tweak anything else.
+            2. Edit the relevant emails/*.tsx. Only touch emails/components/ or
+               emails/layouts/ if the feedback explicitly calls for a shared-component
+               change, not just this one template.
+            3. Run `pnpm generate:all` to regenerate config/email-templates/ and `pnpm
+               check` to confirm Biome is clean. Include the regenerated output in your
+               commit.
+            4. Commit and push the change onto the existing PR branch — do not open a new
+               PR, do not force-push, do not amend or rewrite any commit already on the
+               branch.
+            5. Reply in the comment thread confirming what changed, in plain language: no
+               file paths, `pnpm`, "regenerated YAML", Biome, or other implementation
+               detail.
+
+            If the feedback is ambiguous, asks for something outside an email template
+            (workflow/script/CI changes, unrelated files), or you can't confidently map it
+            to a specific change, reply asking for clarification instead of guessing.
