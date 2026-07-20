@@ -6,6 +6,8 @@ If you just need wording or content changed on an existing email and aren't comf
 
 For either kind of request opened by a team member, Claude automatically opens a first-pass PR as soon as the issue is opened (see `.github/workflows/claude-content-request.yml` and `.github/workflows/claude-new-template.yml`), with the `datum-cloud/gtm` team requested as reviewer and a screenshot of the rendered template posted as a comment — someone still reviews and merges it like any other PR. This repo is public, so requests from anyone outside the team don't auto-trigger; a maintainer reviews them and adds the `ai-draft` label to run Claude on them. That same label re-triggers a run that failed or fell short, regardless of who opened the issue.
 
+Have feedback on a draft once it's open? A maintainer can reply with `@claude` and what should change — on the request issue or directly on the PR — and Claude pushes a follow-up commit onto that same PR branch (see `.github/workflows/claude-feedback.yml`). This is restricted to maintainers, not open to every commenter on this public repo.
+
 ## Installation
 
 ```bash

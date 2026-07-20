@@ -58,6 +58,8 @@ Need wording changed on an existing email, or a brand-new template entirely? You
 
 If you're a member of the team, Claude automatically drafts a PR as soon as you submit the issue. Anyone else's request is triaged by a maintainer first, who adds the `ai-draft` label to have Claude take a pass at it — that same label re-triggers a run that failed or fell short. Either way, a draft PR still needs human review (copy, brand, and — for new templates — layout) before it merges.
 
+Want something changed on a draft? A maintainer can reply `@claude` with the feedback — on the issue or the PR itself — and Claude pushes a follow-up commit to the same PR.
+
 Once that PR is merged, it's not live for real users yet — see [**"How do I actually release this?"**](./RELEASING.md) for the (no-code) steps to publish it.
 
 ## Contributing
