@@ -14,7 +14,7 @@ import { MainLayout } from './layouts';
 interface UserPasskeyAddedProps {
   /** User Name */
   UserName: string;
-  /** Passkey display name, set during enrollment (Phase A spec §3.3) */
+  /** Passkey display name, set by the user during enrollment */
   PasskeyName: string;
   /**
    * Passkey-added timestamp. The backend sends a string; this template
