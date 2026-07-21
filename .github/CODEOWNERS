@@ -1,0 +1,40 @@
+# Engineering owns everything by default: CI/workflows, scripts, shared
+# config, and anything else outside the top-level email templates.
+* @datum-cloud/engineering
+
+# The top-level email templates (content/copy) are GTM's domain — this is
+# what the content-change-request and new-template-request issue flows (and
+# their AI-assisted draft PRs) edit.
+/emails/*.tsx @datum-cloud/gtm
+
+# Shared components/layouts are real shared TypeScript, not copy — a mistake
+# here (a broken export, a bad prop type) affects every template, not just
+# one, so engineering co-owns alongside GTM. The new-template-request AI draft
+# flow is still allowed to touch these when a new template genuinely needs a
+# new or adjusted shared piece, not just its own file. emails/config/
+# (Tailwind/brand config) stays engineering-only above, since it isn't part
+# of that flow.
+/emails/components/ @datum-cloud/gtm @datum-cloud/engineering
+/emails/layouts/ @datum-cloud/gtm @datum-cloud/engineering
+
+# Auto-generated from the templates above (config/email-templates/ by
+# verify-bundle.yml's auto-commit, screenshots/ by screenshot-templates.yml) —
+# same owner as the source they're derived from, not hand-edited by anyone.
+/config/email-templates/ @datum-cloud/gtm
+/screenshots/ @datum-cloud/gtm
+
+# The new-template-request AI draft flow updates the README's template list
+# alongside the template itself, so GTM stays an owner here (an approval from
+# either team satisfies review — this doesn't force an engineering approval
+# onto those draft PRs). README.md and CONTRIBUTING.md are the shared
+# contributor-facing docs for the whole repo (setup, pipeline, release
+# process), not just template content, so engineering co-owns both.
+/README.md @datum-cloud/gtm @datum-cloud/engineering
+/CONTRIBUTING.md @datum-cloud/gtm @datum-cloud/engineering
+
+# GitHub Issue Form YAML, not prose — the new-template-request AI draft flow
+# reads this form's dropdown id/options directly, so malformed YAML here
+# breaks issue submission for everyone. Engineering co-owns alongside GTM,
+# who still needs to keep the "closest existing" dropdown in sync with the
+# template list.
+/.github/ISSUE_TEMPLATE/new-template-request.yml @datum-cloud/gtm @datum-cloud/engineering

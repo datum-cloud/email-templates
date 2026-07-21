@@ -1,0 +1,52 @@
+name: Content / Wording Change Request
+description: Request a wording or content change to one of Datum's transactional emails (no coding required).
+title: "[Content]: "
+labels:
+  - content
+  - needs-triage
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this form to request a wording or content change to one of the transactional emails in this repo. You don't need to write any code — just tell us what should change and why. If you're a member of the team, Claude automatically attempts a draft PR as soon as you submit this issue; someone still reviews it before it merges. Anyone else's request gets triaged by a maintainer first, who can add the `ai-draft` label to have Claude take a pass at it (also the retry path if an automated attempt doesn't work out).
+  - type: dropdown
+    id: template
+    attributes:
+      label: Which email template?
+      description: Which email does this request apply to?
+      options:
+        - Platform Invitation
+        - User Invitation
+        - User Approved
+        - User Rejected
+        - User Waitlist
+        - User Welcome
+        - Suspicious Sign-in
+        - Not sure / other
+    validations:
+      required: true
+  - type: textarea
+    id: change
+    attributes:
+      label: What should change?
+      description: Describe the current wording and what you'd like it changed to. Quote exact text where you can.
+      placeholder: |
+        Current wording: "..."
+        Desired wording: "..."
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why is this change needed?
+      description: Optional context or motivation — e.g. a legal requirement, a rebrand, confusing feedback from users, etc.
+    validations:
+      required: false
+  - type: input
+    id: urgency
+    attributes:
+      label: Deadline or urgency
+      description: Optional — is there a date this needs to land by, or how urgent is it?
+      placeholder: e.g. Needs to ship before the July 30 launch
+    validations:
+      required: false

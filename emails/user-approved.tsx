@@ -5,54 +5,70 @@ import { CustomButton } from './components';
 import { brandConfig } from './config/brand.config';
 import { MainLayout } from './layouts';
 
+const copy = {
+  preview: 'Your account has been approved',
+  greetingPrefix: 'Hi ',
+  greetingSuffix: ',',
+  paragraph1:
+    "Good news, you're off the waitlist! I'm excited to share what we've built (so far) with Datum Cloud and get your feedback. To get started, just login below:",
+  buttonLabel: 'Start building',
+  paragraph2Before:
+    "We're releasing new features each week and chatting about issues and opportunities on",
+  discordLabel: 'Discord',
+  paragraph2After:
+    '. Feel free to join me there with any questions or feedback.',
+  signoffClosing: 'Cheers,',
+  signoffName: 'Zac Smith',
+  signoffTitle: 'Co-founder & CEO at Datum',
+};
+
 interface UserApprovedProps {
   UserName: string;
   ActionUrl: string;
 }
 
 export const UserApproved = ({ UserName, ActionUrl }: UserApprovedProps) => {
-  const previewText = `Your account has been approved`;
+  const previewText = copy.preview;
 
   return (
     <MainLayout preview={previewText}>
       <Section className="my-10.5">
         <Row>
           <Text className="mt-0 text-4.5 mb-5.5 leading-6 font-medium">
-            Hi {UserName},
+            {copy.greetingPrefix}
+            {UserName}
+            {copy.greetingSuffix}
           </Text>
           <Text className="mt-0 mb-5.5 text-4.5 leading-6 font-normal">
-            Good news, you&apos;re off the waitlist! I&apos;m excited to share
-            what we&apos;ve built (so far) with Datum Cloud and get your
-            feedback. To get started, just login below:
+            {copy.paragraph1}
           </Text>
           {ActionUrl && (
             <CustomButton
               href={ActionUrl || ''}
               className="mt-9 mb-8 block text-[16px] font-semibold leading-5"
             >
-              Start building
+              {copy.buttonLabel}
             </CustomButton>
           )}
           <Text className="text-4.5 leading-6 font-normal">
-            We&apos;re releasing new features each week and chatting about
-            issues and opportunities on{' '}
+            {copy.paragraph2Before}{' '}
             <Link
               href={brandConfig.discordUrl}
               target="_blank"
               className="!text-brand-canyon-clay !underline"
             >
-              Discord
+              {copy.discordLabel}
             </Link>
-            . Feel free to join me there with any questions or feedback.
+            {copy.paragraph2After}
           </Text>
 
           <Text className="text-4.5 leading-6 font-normal mt-5.5 mb-0">
-            Cheers,
+            {copy.signoffClosing}
             <br />
             <br />
-            Zac Smith
+            {copy.signoffName}
             <br />
-            Co-founder & CEO at Datum
+            {copy.signoffTitle}
           </Text>
         </Row>
       </Section>

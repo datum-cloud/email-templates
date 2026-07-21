@@ -1,0 +1,129 @@
+# Auto-commits here authenticate as the datum-email-designer GitHub App instead
+# of the default GITHUB_TOKEN — see verify-bundle.yml's comment for why (a
+# push from the default GITHUB_TOKEN gets subsequent workflow runs on the same
+# PR gated behind a manual "action_required" approval).
+name: Screenshot Changed Templates
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'emails/**'
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: screenshot-templates-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  screenshot:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Mint GitHub App installation token for git operations
+        id: app-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ secrets.CLAUDE_GH_APP_ID }}
+          private-key: ${{ secrets.CLAUDE_GH_APP_PRIVATE_KEY }}
+
+      - name: Checkout PR branch
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+          token: ${{ steps.app-token.outputs.token }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '20'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright browser
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Render preview HTML at PR head
+        run: pnpm exec tsx scripts/render-preview-html.ts
+
+      - name: Render preview HTML at merge-base
+        run: |
+          BASE_SHA=$(git merge-base HEAD "origin/${{ github.event.pull_request.base.ref }}")
+          git worktree add /tmp/base-checkout "${BASE_SHA}"
+          cd /tmp/base-checkout
+          pnpm install --frozen-lockfile
+          pnpm exec tsx scripts/render-preview-html.ts
+
+      - name: Determine changed templates
+        id: changed
+        run: |
+          CHANGED=()
+          for f in out-html-preview/*.html; do
+            name=$(basename "$f" .html)
+            base_f="/tmp/base-checkout/out-html-preview/${name}.html"
+            if [ ! -f "$base_f" ] || ! diff -q "$f" "$base_f" >/dev/null 2>&1; then
+              CHANGED+=("$name")
+            fi
+          done
+
+          if [ ${#CHANGED[@]} -eq 0 ]; then
+            echo "any=false" >> "$GITHUB_OUTPUT"
+            echo "No template output changed."
+          else
+            echo "any=true" >> "$GITHUB_OUTPUT"
+            printf '%s\n' "${CHANGED[@]}" > /tmp/changed-templates.txt
+            echo "Changed templates:"
+            cat /tmp/changed-templates.txt
+          fi
+
+      - name: Screenshot changed templates
+        if: steps.changed.outputs.any == 'true'
+        run: node scripts/screenshot-templates.js /tmp/changed-templates.txt
+
+      - name: Commit screenshots to the PR branch
+        if: steps.changed.outputs.any == 'true'
+        uses: stefanzweifel/git-auto-commit-action@v7.2.0
+        with:
+          commit_message: "chore: update template screenshots"
+          file_pattern: 'screenshots/*.png'
+          commit_user_name: datum-email-designer[bot]
+          commit_user_email: 306493438+datum-email-designer[bot]@users.noreply.github.com
+
+      - name: Build comment body
+        if: steps.changed.outputs.any == 'true'
+        env:
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+        run: |
+          {
+            echo "## 📧 Template screenshots"
+            echo
+            echo "Rendered with each template's preview data. Updates automatically as you push."
+            echo
+            while IFS= read -r name; do
+              echo "**${name}**"
+              echo
+              echo "![${name}](https://github.com/${GITHUB_REPOSITORY}/blob/${HEAD_REF}/screenshots/${name}.png?raw=true)"
+              echo
+            done < /tmp/changed-templates.txt
+          } > /tmp/comment-body.md
+
+      - name: Post or update comment
+        if: steps.changed.outputs.any == 'true'
+        uses: marocchino/sticky-pull-request-comment@v3.0.5
+        with:
+          header: email-template-screenshots
+          path: /tmp/comment-body.md
+
+      - name: Remove stale comment when no templates changed
+        if: steps.changed.outputs.any == 'false'
+        uses: marocchino/sticky-pull-request-comment@v3.0.5
+        with:
+          header: email-template-screenshots
+          delete: true
