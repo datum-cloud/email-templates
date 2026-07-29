@@ -116,16 +116,6 @@ spec:
                                           <!-- -->{{.AddedTime}}
                                         </p>
                                         <p
-                                          style="font-size:17px;line-height:24px;margin:0;margin-bottom:2px;font-weight:400;margin-top:0;margin-left:0;margin-right:0">
-                                          <strong>Browser<!-- -->:</strong>
-                                          <!-- -->{{.Browser}}
-                                        </p>
-                                        <p
-                                          style="font-size:17px;line-height:24px;margin:0;margin-bottom:2px;font-weight:400;margin-top:0;margin-left:0;margin-right:0">
-                                          <strong>Device<!-- -->:</strong>
-                                          <!-- -->{{.Device}}
-                                        </p>
-                                        <p
                                           style="font-size:17px;line-height:24px;margin-top:24px;margin-bottom:24px;font-weight:400">
                                           If you added this passkey, you don’t need
                                           to do anything.
@@ -258,10 +248,6 @@ spec:
     Passkey name: {{.PasskeyName}}
     
     Time: {{.AddedTime}}
-    
-    Browser: {{.Browser}}
-    
-    Device: {{.Device}}
     
     If you added this passkey, you don’t need to do anything.
     
