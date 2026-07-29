@@ -24,9 +24,13 @@ interface UserPasskeyAddedProps {
    * converted to the display format; any other string is used as-is.
    */
   AddedTime: string;
-  /** Browser and operating system, e.g. "Chrome 147.0.0.0 on macOS 10.15.7" */
+  /**
+   * Accepted but not rendered: the passkey-verified event carries no
+   * user-agent data, so these always arrive empty. Kept declared because
+   * producers still send them and undeclared variables are rejected.
+   */
   Browser: string;
-  /** Device description, e.g. "Apple Mac" */
+  /** See Browser. */
   Device: string;
 }
 
@@ -67,8 +71,6 @@ const detailRows = (
 ): ReadonlyArray<{ label: string; value: string }> => [
   { label: 'Passkey name', value: props.PasskeyName },
   { label: 'Time', value: formatAddedTime(props.AddedTime) },
-  { label: 'Browser', value: props.Browser },
-  { label: 'Device', value: props.Device },
 ];
 
 export const UserPasskeyAdded = (props: UserPasskeyAddedProps) => {
@@ -140,8 +142,8 @@ UserPasskeyAdded.PreviewProps = {
   PasskeyName: 'MacBook Pro (Touch ID)',
   // Raw ISO (e.g. a K8s creationTimestamp) — converted by formatAddedTime.
   AddedTime: '2026-05-22T16:56:00.000Z',
-  Browser: 'Chrome 147.0.0.0 on macOS 10.15.7',
-  Device: 'Apple Mac',
+  Browser: '',
+  Device: '',
 } as UserPasskeyAddedProps;
 
 UserPasskeyAdded.Subject = 'New passkey added to your Datum account';
