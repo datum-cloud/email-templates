@@ -284,8 +284,8 @@ spec:
     required: true
     type: "string"
   - name: "Browser"
-    required: true
+    required: false
     type: "string"
   - name: "Device"
-    required: true
+    required: false
     type: "string"
