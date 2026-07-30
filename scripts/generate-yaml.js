@@ -194,12 +194,21 @@ function main() {
     const explicitSubject = extractExplicitSubject(tsx);
     const subject = explicitSubject || extractSubjectFromHtml(htmlRepl);
 
-    // Convert PreviewProps to variables format
-    const variables = Object.keys(previewProps).map(key => ({
-      name: key,
-      required: true,
-      type: 'string'
-    }));
+    // Convert PreviewProps to variables format. milo's EmailTemplate
+    // admission webhook rejects any template whose required variable is not
+    // referenced in BOTH htmlBody and textBody (see milo
+    // pkg/email/templating/{html,text}validator.go), and a rejected template
+    // strands Flux on the previous bundle. Variables a template declares but
+    // never renders (declared so producers may still send them) must
+    // therefore be emitted as optional.
+    const variables = Object.keys(previewProps).map((key) => {
+      const ref = `{{.${key}}}`;
+      return {
+        name: key,
+        required: htmlRepl.includes(ref) && textRepl.includes(ref),
+        type: 'string'
+      };
+    });
 
     const yaml = generateYaml({ baseName, subject, html: htmlRepl, text: textRepl, variables });
     const fileName = `${baseName.replace(/-/g, '')}-emailtemplate.yaml`;
