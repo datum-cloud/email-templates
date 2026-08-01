@@ -1,6 +1,6 @@
 {
   "name": "email-templates",
-  "image": "mcr.microsoft.com/devcontainers/javascript-node:1-20-bookworm",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:4-20-bookworm",
   "postCreateCommand": "sudo corepack enable && corepack prepare --activate && CI=true pnpm install",
   "forwardPorts": [3000],
   "portsAttributes": {
