@@ -28,13 +28,13 @@ jobs:
       # already fixed for the auto-commit workflows (see verify-bundle.yml).
       - name: Mint GitHub App installation token
         id: app-token
-        uses: actions/create-github-app-token@v2
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3
         with:
           app-id: ${{ secrets.CLAUDE_GH_APP_ID }}
           private-key: ${{ secrets.CLAUDE_GH_APP_PRIVATE_KEY }}
 
       - name: Checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           fetch-depth: 0
 
@@ -57,7 +57,7 @@ jobs:
           echo "tag=${NEXT}" >> "$GITHUB_OUTPUT"
 
       - name: Create release
-        uses: softprops/action-gh-release@v3
+        uses: softprops/action-gh-release@3d0d9888cb7fd7b750713d6e236d1fcb99157228 # v3
         with:
           token: ${{ steps.app-token.outputs.token }}
           tag_name: ${{ steps.version.outputs.tag }}
