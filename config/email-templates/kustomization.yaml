@@ -4,8 +4,11 @@ kind: Kustomization
 resources:
   - platforminvitation-emailtemplate.yaml
   - userapproved-emailtemplate.yaml
+  - useremailverification-emailtemplate.yaml
   - userinvitation-emailtemplate.yaml
   - userpasskeyadded-emailtemplate.yaml
+  - userpasskeyremoved-emailtemplate.yaml
+  - userpasswordreset-emailtemplate.yaml
   - userrejected-emailtemplate.yaml
   - usersuspicious-emailtemplate.yaml
   - userwaitlist-emailtemplate.yaml
