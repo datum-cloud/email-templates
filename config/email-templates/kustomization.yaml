@@ -3,6 +3,7 @@ kind: Kustomization
 
 resources:
   - platforminvitation-emailtemplate.yaml
+  - projectsuspensiondeletionwarning-emailtemplate.yaml
   - userapproved-emailtemplate.yaml
   - userinvitation-emailtemplate.yaml
   - userpasskeyadded-emailtemplate.yaml

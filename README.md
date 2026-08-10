@@ -49,6 +49,11 @@ Screenshots below are committed alongside each template change, so what you see 
 <img src="./screenshots/user-suspicious.png" width="480" />
 </details>
 
+<details>
+<summary><strong>Project Suspension Deletion Warning</strong> — a clear warning that a suspended project is on the clock and will be deleted for good if nothing changes <em>(click to preview)</em></summary>
+<img src="./screenshots/project-suspension-deletion-warning.png" width="480" />
+</details>
+
 ## Requesting a change
 
 Need wording changed on an existing email, or a brand-new template entirely? You don't need to write any code — open an issue:
