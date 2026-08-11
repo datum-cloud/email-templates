@@ -38,6 +38,7 @@ body:
         - User Waitlist
         - User Welcome
         - Suspicious Sign-in
+        - Project Suspension Deletion Warning
         - Not sure
     validations:
       required: true

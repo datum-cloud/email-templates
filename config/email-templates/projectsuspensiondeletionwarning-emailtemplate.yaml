@@ -1,0 +1,235 @@
+apiVersion: notification.miloapis.com/v1alpha1
+kind: EmailTemplate
+metadata:
+  name: emailtemplates.notification.miloapis.com-projectsuspensiondeletionwarningemailtemplate
+spec:
+  subject: "Action required: project {{.ProjectName}} will be deleted in {{.DaysUntilDeletion}} day(s)"
+  htmlBody: |
+    <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+    <html dir="ltr" lang="en">
+      <head>
+        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+        <meta name="x-apple-disable-message-reformatting" />
+        <title>Your suspended project is scheduled for deletion</title>
+      </head>
+      <body
+        dir="ltr"
+        lang="en"
+        style="background-color:rgb(255,255,255);margin-top:0;margin-bottom:0;margin-right:0;margin-left:0">
+        <!--$--><!--html--><!--head-->
+        <div
+          style="display:none;overflow:hidden;line-height:1px;opacity:0;max-height:0;max-width:0"
+          data-skip-in-text="true">
+          Your suspended project is scheduled for deletion
+          <div>
+             ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿
+          </div>
+        </div>
+        <!--body-->
+        <table
+          border="0"
+          width="100%"
+          cellpadding="0"
+          cellspacing="0"
+          role="presentation"
+          align="center">
+          <tbody>
+            <tr>
+              <td
+                dir="ltr"
+                lang="en"
+                style='margin-right:auto;margin-left:auto;margin-bottom:auto;margin-top:auto;background-color:rgb(255,255,255);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;color:rgb(12,29,49)'>
+                <table
+                  align="center"
+                  width="100%"
+                  border="0"
+                  cellpadding="0"
+                  cellspacing="0"
+                  role="presentation"
+                  style="max-width:570px;margin-right:auto;margin-left:auto;margin-bottom:80px;margin-top:80px;border-radius:0.5rem;border-style:solid;border-width:1px;border-color:rgb(232,231,228);background-color:rgb(255,255,255)">
+                  <tbody>
+                    <tr style="width:100%">
+                      <td
+                        style="padding-bottom:40px;padding-top:40px;padding-right:48px;padding-left:48px">
+                        <table
+                          align="center"
+                          width="100%"
+                          border="0"
+                          cellpadding="0"
+                          cellspacing="0"
+                          role="presentation"
+                          class="">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <img
+                                  alt="Datum"
+                                  height="70"
+                                  src="https://www.datum.net/download/eng/logo-datum-light.png"
+                                  style="display:block;outline:none;border:none;text-decoration:none;margin-right:auto;margin-left:auto;margin-bottom:0;margin-top:0" />
+                                <hr
+                                  style="width:100%;border:none;border-color:rgb(232,231,228);border-top:1px solid #eaeaea;margin-right:0;margin-left:0;margin-top:38px;margin-bottom:0;display:block;border-style:solid;border-width:1px" />
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                        <table
+                          align="center"
+                          width="100%"
+                          border="0"
+                          cellpadding="0"
+                          cellspacing="0"
+                          role="presentation"
+                          style="margin-bottom:40px;margin-top:40px">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <table
+                                  align="center"
+                                  width="100%"
+                                  border="0"
+                                  cellpadding="0"
+                                  cellspacing="0"
+                                  role="presentation">
+                                  <tbody style="width:100%">
+                                    <tr style="width:100%">
+                                      <p
+                                        style="font-size:17px;line-height:24px;margin-top:0;margin-bottom:22px;font-weight:500">
+                                        Hello
+                                        <!-- -->{{.OrganizationName}}<!-- -->,
+                                      </p>
+                                      <p
+                                        style="font-size:17px;line-height:24px;margin-top:0;margin-bottom:22px;font-weight:400">
+                                        Your project
+                                        <strong
+                                          >{{.ProjectName}}</strong
+                                        >
+                                        is currently suspended. Unless the
+                                        suspension is lifted, this project will be
+                                        permanently deleted in
+                                        <strong
+                                          >{{.DaysUntilDeletion}}</strong
+                                        >
+                                        day(s), on
+                                        <strong
+                                          >{{.DeletionDate}}</strong
+                                        >.
+                                      </p>
+                                      <p
+                                        style="font-size:17px;line-height:24px;margin:0;font-weight:400;margin-top:0;margin-bottom:0;margin-left:0;margin-right:0">
+                                        To keep your project, resolve the reason for
+                                        the suspension and contact support if you
+                                        believe this was done in error.
+                                      </p>
+                                      <p
+                                        style="font-size:17px;line-height:24px;font-weight:400;margin-top:22px;margin-bottom:0">
+                                        Many thanks,<br /><br />The Team at Datum
+                                      </p>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                        <table
+                          align="center"
+                          width="100%"
+                          border="0"
+                          cellpadding="0"
+                          cellspacing="0"
+                          role="presentation"
+                          class="">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <hr
+                                  style="width:100%;border:none;border-color:rgb(232,231,228);border-top:1px solid #eaeaea;margin-right:0;margin-left:0;margin-bottom:40px;margin-top:0;display:block;border-style:solid;border-width:1px" />
+                                <p
+                                  style="font-size:14px;line-height:20px;font-weight:400;margin:0;margin-top:0;margin-bottom:0;margin-left:0;margin-right:0">
+                                  Learn more about how Datum is connecting
+                                  infrastructure for AI at<!-- -->
+                                  <a
+                                    href="https://datum.net"
+                                    style="color:rgb(191,149,149);text-decoration-line:underline"
+                                    target="_blank"
+                                    >datum.net</a
+                                  >
+                                </p>
+                                <p
+                                  style="font-size:14px;line-height:20px;margin:0;margin-top:24px;margin-bottom:24px;margin-left:0;margin-right:0">
+                                  <a
+                                    href="https://www.datum.net/legal/terms"
+                                    style="color:rgb(191,149,149);text-decoration-line:underline"
+                                    target="_blank"
+                                    >Terms of Service</a
+                                  >   |   <a
+                                    href="https://www.datum.net/legal/privacy"
+                                    style="color:rgb(191,149,149);text-decoration-line:underline"
+                                    target="_blank"
+                                    >Privacy Policy</a
+                                  >   |   <a
+                                    href="https://www.datum.net/legal/aup"
+                                    style="color:rgb(191,149,149);text-decoration-line:underline"
+                                    target="_blank"
+                                    >Acceptable Use Policy</a
+                                  >
+                                </p>
+                                <p
+                                  style="font-size:14px;line-height:20px;margin:0;font-weight:400;margin-top:0;margin-bottom:0;margin-left:0;margin-right:0">
+                                  Datum Technology Inc. <br />120 Broadway, 26th
+                                  Floor <br />New York, NY 10271
+                                </p>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <!--/$-->
+      </body>
+    </html>
+    
+
+  textBody: |
+    ----------------------------------------
+    
+    Hello {{.OrganizationName}},
+    
+    Your project {{.ProjectName}} is currently suspended. Unless the suspension is lifted, this project will be permanently deleted in {{.DaysUntilDeletion}} day(s), on {{.DeletionDate}}.
+    
+    To keep your project, resolve the reason for the suspension and contact support if you believe this was done in error.
+    
+    Many thanks,
+    
+    The Team at Datum
+    
+    ----------------------------------------
+    
+    Learn more about how Datum is connecting infrastructure for AI at datum.net https://datum.net
+    
+    Terms of Service https://www.datum.net/legal/terms   |   Privacy Policy https://www.datum.net/legal/privacy   |   Acceptable Use Policy https://www.datum.net/legal/aup
+    
+    Datum Technology Inc.
+    120 Broadway, 26th Floor
+    New York, NY 10271
+
+  variables:
+  - name: "ProjectName"
+    required: true
+    type: "string"
+  - name: "OrganizationName"
+    required: true
+    type: "string"
+  - name: "DaysUntilDeletion"
+    required: true
+    type: "string"
+  - name: "DeletionDate"
+    required: true
+    type: "string"
