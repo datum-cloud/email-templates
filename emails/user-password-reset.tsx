@@ -45,11 +45,11 @@ export const UserPasswordReset = (props: UserPasswordResetProps) => {
     <MainLayout preview={previewText}>
       <Section className="my-10.5">
         <Text className="mt-0 text-4.5 mb-6 leading-6 font-medium">
-          Hello {props.UserName},
+          Hi {props.UserName},
         </Text>
         <Section className="my-6">
           <Text className="mt-0 text-4.5 mb-6 leading-6 font-normal">
-            We received a request to reset the password for your Datum account.
+            We just received a request to reset the password for your Datum Account.
           </Text>
 
           <CustomButton
@@ -66,7 +66,7 @@ export const UserPasswordReset = (props: UserPasswordResetProps) => {
             body — the generator would then infer `required: false` for it.
           */}
           <Text className="mt-0 mb-6 text-4.5 leading-6 font-normal">
-            Or copy and paste this link into your browser:{' '}
+            Or, copy and paste this link into your browser:{' '}
             <Link
               href={props.ActionUrl}
               className="text-brand-canyon-clay underline break-all"
@@ -76,14 +76,14 @@ export const UserPasswordReset = (props: UserPasswordResetProps) => {
           </Text>
 
           <Text className="mt-0 mb-2 text-4.5 leading-6 font-normal">
-            If you’d rather enter a code, use this one:
+            If you'd rather use a code, just enter:
           </Text>
           <Text className="m-0 mb-6 text-[24px] leading-8 font-semibold tracking-[6px]">
             {props.Code}
           </Text>
 
           <Text className="mt-0 mb-6 text-4.5 leading-6 font-normal">
-            This link and code expire in {props.ExpiryMinutes} minutes.
+            The link and code will expire in {props.ExpiryMinutes} minutes.
           </Text>
 
           {/*
@@ -94,35 +94,14 @@ export const UserPasswordReset = (props: UserPasswordResetProps) => {
             user-email-verification.tsx.
           */}
           <Text className="mt-0 text-4.5 leading-6 font-normal">
-            If you didn’t request this reset, your password still works — but
-            someone may be trying to get into your account.{' '}
-            <Link
+            If you didn't request this reset, please {' '}<Link
               href="https://cloud.datum.net/"
               className="text-brand-canyon-clay underline"
             >
-              Review your account
-            </Link>{' '}
-            and secure it now.
+              log into your account
+            </Link>{' '}and secure it now.
           </Text>
         </Section>
-
-        <Row>
-          <Hr className="mx-0 my-10.5 block border border-brand-light-gray border-solid" />
-          <Text className="m-0 text-[21px] leading-7 font-semibold">
-            We’re here to help
-          </Text>
-          <Text className="m-0 my-[12px] text-4.5 leading-6 font-normal">
-            Please do not reply to this message. If you need help, send us a
-            note at
-          </Text>
-
-          <Link
-            href="mailto:support@datum.net"
-            className="text-brand-canyon-clay underline m-0 text-4.5 font-semibold"
-          >
-            support@datum.net
-          </Link>
-        </Row>
       </Section>
     </MainLayout>
   );

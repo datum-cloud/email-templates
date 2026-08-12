@@ -77,7 +77,7 @@ export const UserPasskeyRemoved = (props: UserPasskeyRemovedProps) => {
     <MainLayout preview={previewText}>
       <Section className="my-10.5">
         <Text className="mt-0 text-4.5 mb-6 leading-6 font-medium">
-          Hello {props.UserName},
+          Hey {props.UserName},
         </Text>
         <Section className="my-6">
           {/*
@@ -88,7 +88,7 @@ export const UserPasskeyRemoved = (props: UserPasskeyRemovedProps) => {
             look degraded rather than merely shorter.
           */}
           <Text className="mt-0 text-4.5 mb-6 leading-6 font-normal">
-            A passkey was removed from your account.
+            A passkey was recently removed from your account.
           </Text>
 
           {/*
@@ -108,11 +108,11 @@ export const UserPasskeyRemoved = (props: UserPasskeyRemovedProps) => {
           </Text>
 
           <Text className="mt-6 mb-6 text-4.5 leading-6 font-normal">
-            If you removed this passkey, you don’t need to do anything.
+            If you removed this passkey, great! You don't need to do anything.
           </Text>
 
           <Text className="mt-0 text-4.5 leading-6 font-normal">
-            If this wasn’t you,{' '}
+            If this wasn't you, review your account{' '}
             <Link
               href="https://cloud.datum.net/"
               className="text-brand-canyon-clay underline"

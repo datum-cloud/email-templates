@@ -44,18 +44,18 @@ export const UserEmailVerification = (props: UserEmailVerificationProps) => {
     <MainLayout preview={previewText}>
       <Section className="my-10.5">
         <Text className="mt-0 text-4.5 mb-6 leading-6 font-medium">
-          Hello {props.UserName},
+          Welcome to Datum, {props.UserName},
         </Text>
         <Section className="my-6">
           <Text className="mt-0 text-4.5 mb-6 leading-6 font-normal">
-            Confirm this email address to finish setting up your Datum account.
+            To finish setting up your Datum account, click the button below to verify this email address.
           </Text>
 
           <CustomButton
             href={props.ActionUrl}
             className="mt-9 mb-8 block text-[16px] font-semibold leading-5"
           >
-            Verify email address
+            Verify email
           </CustomButton>
 
           {/*
@@ -67,7 +67,7 @@ export const UserEmailVerification = (props: UserEmailVerificationProps) => {
             anyway, for clients that strip or mangle buttons.
           */}
           <Text className="mt-0 mb-6 text-4.5 leading-6 font-normal">
-            Or copy and paste this link into your browser:{' '}
+            Or, copy and paste this link into your browser:{' '}
             <Link
               href={props.ActionUrl}
               className="text-brand-canyon-clay underline break-all"
@@ -77,14 +77,14 @@ export const UserEmailVerification = (props: UserEmailVerificationProps) => {
           </Text>
 
           <Text className="mt-0 mb-2 text-4.5 leading-6 font-normal">
-            If you’d rather enter a code, use this one:
+            If you'd rather use a code, just enter:
           </Text>
           <Text className="m-0 mb-6 text-[24px] leading-8 font-semibold tracking-[6px]">
             {props.Code}
           </Text>
 
           <Text className="mt-0 mb-6 text-4.5 leading-6 font-normal">
-            This link and code expire in {props.ExpiryMinutes} minutes.
+            The link and code will expire in {props.ExpiryMinutes} minutes.
           </Text>
 
           <Text className="mt-0 text-4.5 leading-6 font-normal">
