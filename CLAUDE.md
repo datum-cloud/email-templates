@@ -46,6 +46,4 @@ The two-step, placeholder-then-replace design exists so arbitrary prop content (
 
 **Versioning**: `.github/workflows/release.yml` is a manual `workflow_dispatch` that tags `vMAJOR.MINOR.PATCH` off `main` based on a selected patch/minor/major bump — there's no automatic semver inference from commits.
 
-**RELEASING.md**: README and CONTRIBUTING.md both link to `RELEASING.md` for the release process, but it doesn't exist on `main` yet — it currently lives only on the unmerged `docs/releasing` branch. Don't treat its absence as a broken link to fix; it's pending merge.
-
 **Ownership**: `.github/CODEOWNERS` routes all paths to `@datum-cloud/gtm` — that team is the default reviewer for any PR in this repo.

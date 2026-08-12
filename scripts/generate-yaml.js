@@ -42,7 +42,7 @@ function listTopLevelEmailTsx() {
         e.name.endsWith('.tsx') &&
         e.name !== 'index.ts' &&
         // skip folders like components/, layouts/, config/
-        true
+        true,
     )
     .map((e) => path.join(EMAILS_DIR, e.name));
 }
@@ -70,6 +70,25 @@ function extractExplicitSubject(tsxContent) {
   const re = /\.[Ss]ubject\s*=\s*(["'])([\s\S]*?)\1\s*;/m;
   const m = tsxContent.match(re);
   return m ? m[2].trim() : null;
+}
+
+function extractOptionalVariables(tsxContent) {
+  // Matches: Component.OptionalVariables = ['PasskeyName'];
+  //
+  // Escape hatch for a variable that IS rendered but MAY be absent at send time.
+  // Without it, `required` below is inferred purely from whether the variable is
+  // referenced in both bodies — and milo rejects an Email CR that omits a
+  // required variable at admission (pkg/email/templating/emailvalidator.go,
+  // ValidateEmailVariables), so an inferred-required optional field turns every
+  // degraded send into no send at all. Pair this with a Go `{{if .Name}}` guard
+  // around the markup, or an absent value renders as blank/`<no value>`.
+  const re = /\.OptionalVariables\s*=\s*\[([\s\S]*?)\]\s*;/m;
+  const m = tsxContent.match(re);
+  if (!m) return new Set();
+  const names = [...m[1].matchAll(/(["'])([A-Za-z][A-Za-z0-9_]*)\1/g)].map(
+    (x) => x[2],
+  );
+  return new Set(names);
 }
 
 function escapeForRegex(literal) {
@@ -108,7 +127,10 @@ function extractSubjectFromHtml(html) {
 }
 
 function stripHtml(s) {
-  return s.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+  return s
+    .replace(/<[^>]+>/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
 }
 
 function toMetadataName(baseName) {
@@ -137,7 +159,7 @@ function generateYaml({ baseName, subject, html, text, variables = [] }) {
   parts.push(`  subject: "${subject.replace(/"/g, '\\"')}"`);
   parts.push(wrapYamlBlock('htmlBody', html));
   parts.push(wrapYamlBlock('textBody', text));
-  
+
   if (variables.length > 0) {
     parts.push('  variables:');
     for (const variable of variables) {
@@ -146,7 +168,7 @@ function generateYaml({ baseName, subject, html, text, variables = [] }) {
       parts.push(`    type: "${variable.type}"`);
     }
   }
-  
+
   return `${parts.join('\n')}\n`;
 }
 
@@ -162,7 +184,11 @@ function writeKustomization(fileNames) {
     ...fileNames.sort().map((name) => `  - ${name}`),
     '',
   ];
-  fs.writeFileSync(path.join(BUNDLE_DIR, 'kustomization.yaml'), lines.join('\n'), 'utf8');
+  fs.writeFileSync(
+    path.join(BUNDLE_DIR, 'kustomization.yaml'),
+    lines.join('\n'),
+    'utf8',
+  );
 }
 
 function main() {
@@ -184,7 +210,9 @@ function main() {
     const text = readFileSafe(textPath);
 
     if (!tsx || !html || !text) {
-      console.warn(`Skipping ${baseName}: missing exported html/text or source.`);
+      console.warn(
+        `Skipping ${baseName}: missing exported html/text or source.`,
+      );
       continue;
     }
 
@@ -201,16 +229,29 @@ function main() {
     // strands Flux on the previous bundle. Variables a template declares but
     // never renders (declared so producers may still send them) must
     // therefore be emitted as optional.
+    const optionalVars = extractOptionalVariables(tsx);
     const variables = Object.keys(previewProps).map((key) => {
       const ref = `{{.${key}}}`;
       return {
         name: key,
-        required: htmlRepl.includes(ref) && textRepl.includes(ref),
-        type: 'string'
+        // Optional by explicit declaration, else inferred: required exactly when
+        // the variable is referenced in BOTH bodies (milo's html/text validators
+        // reject a required variable that either body fails to reference).
+        required:
+          !optionalVars.has(key) &&
+          htmlRepl.includes(ref) &&
+          textRepl.includes(ref),
+        type: 'string',
       };
     });
 
-    const yaml = generateYaml({ baseName, subject, html: htmlRepl, text: textRepl, variables });
+    const yaml = generateYaml({
+      baseName,
+      subject,
+      html: htmlRepl,
+      text: textRepl,
+      variables,
+    });
     const fileName = `${baseName.replace(/-/g, '')}-emailtemplate.yaml`;
     const outPath = path.join(OUT_YAML_DIR, fileName);
     fs.writeFileSync(outPath, yaml, 'utf8');
@@ -221,13 +262,15 @@ function main() {
   }
 
   if (generated === 0) {
-    console.warn('No YAML files generated. Ensure you have run `pnpm export:all`.');
+    console.warn(
+      'No YAML files generated. Ensure you have run `pnpm export:all`.',
+    );
   } else {
     writeKustomization(bundleFileNames);
-    console.log(`Generated ${path.relative(ROOT, path.join(BUNDLE_DIR, 'kustomization.yaml'))}`);
+    console.log(
+      `Generated ${path.relative(ROOT, path.join(BUNDLE_DIR, 'kustomization.yaml'))}`,
+    );
   }
 }
 
 main();
-
-

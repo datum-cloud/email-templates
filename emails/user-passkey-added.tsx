@@ -69,9 +69,9 @@ const formatAddedTime = (value: string): string => {
 const detailRows = (
   props: UserPasskeyAddedProps,
 ): ReadonlyArray<{ label: string; value: string }> => [
-  { label: 'Passkey name', value: props.PasskeyName },
-  { label: 'Time', value: formatAddedTime(props.AddedTime) },
-];
+    { label: 'Passkey name', value: props.PasskeyName },
+    { label: 'Time', value: formatAddedTime(props.AddedTime) },
+  ];
 
 export const UserPasskeyAdded = (props: UserPasskeyAddedProps) => {
   const previewText = 'A new passkey was added to your Datum account';
@@ -81,11 +81,11 @@ export const UserPasskeyAdded = (props: UserPasskeyAddedProps) => {
     <MainLayout preview={previewText}>
       <Section className="my-10.5">
         <Text className="mt-0 text-4.5 mb-6 leading-6 font-medium">
-          Hello {props.UserName},
+          Hey {props.UserName},
         </Text>
         <Section className="my-6">
           <Text className="mt-0 text-4.5 mb-6 leading-6 font-normal">
-            A new passkey was added to your Datum account:
+            A new passkey was added to your account:
           </Text>
 
           {detailRowsData.map((row) => (
@@ -95,18 +95,18 @@ export const UserPasskeyAdded = (props: UserPasskeyAddedProps) => {
           ))}
 
           <Text className="mt-6 mb-6 text-4.5 leading-6 font-normal">
-            If you added this passkey, you don’t need to do anything.
+            If you added this passkey, great! You don't need to do anything.
           </Text>
 
           <Text className="mt-0 text-4.5 leading-6 font-normal">
-            If you didn’t add this passkey,{' '}
+            If this wasn't you, review your account{' '}
             <Link
               href="https://cloud.datum.net/"
               className="text-brand-canyon-clay underline"
             >
               review your account
             </Link>{' '}
-            and remove it now.
+            and secure it now.
           </Text>
         </Section>
 

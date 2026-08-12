@@ -1,16 +1,16 @@
 apiVersion: notification.miloapis.com/v1alpha1
 kind: EmailTemplate
 metadata:
-  name: emailtemplates.notification.miloapis.com-userpasskeyaddedemailtemplate
+  name: emailtemplates.notification.miloapis.com-userpasskeyremovedemailtemplate
 spec:
-  subject: "New passkey added to your Datum account"
+  subject: "A passkey was removed from your Datum account"
   htmlBody: |
     <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
     <html dir="ltr" lang="en">
       <head>
         <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
         <meta name="x-apple-disable-message-reformatting" />
-        <title>A new passkey was added to your Datum account</title>
+        <title>A passkey was removed from your Datum account</title>
       </head>
       <body
         dir="ltr"
@@ -20,7 +20,7 @@ spec:
         <div
           style="display:none;overflow:hidden;line-height:1px;opacity:0;max-height:0;max-width:0"
           data-skip-in-text="true">
-          A new passkey was added to your Datum account
+          A passkey was removed from your Datum account
           <div>
              ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿
           </div>
@@ -102,21 +102,22 @@ spec:
                                       <td>
                                         <p
                                           style="font-size:17px;line-height:24px;margin-top:0;margin-bottom:24px;font-weight:400">
-                                          A new passkey was added to your account:
+                                          A passkey was recently removed from your
+                                          account.
                                         </p>
                                         <p
                                           style="font-size:17px;line-height:24px;margin:0;margin-bottom:2px;font-weight:400;margin-top:0;margin-left:0;margin-right:0">
-                                          <strong>Passkey name<!-- -->:</strong>
+                                          <strong>Passkey name:</strong>
                                           <!-- -->{{.PasskeyName}}
                                         </p>
                                         <p
                                           style="font-size:17px;line-height:24px;margin:0;margin-bottom:2px;font-weight:400;margin-top:0;margin-left:0;margin-right:0">
-                                          <strong>Time<!-- -->:</strong>
-                                          <!-- -->{{.AddedTime}}
+                                          <strong>Time:</strong>
+                                          <!-- -->{{.RemovedTime}}
                                         </p>
                                         <p
                                           style="font-size:17px;line-height:24px;margin-top:24px;margin-bottom:24px;font-weight:400">
-                                          If you added this passkey, great! You
+                                          If you removed this passkey, great! You
                                           don&#x27;t need to do anything.
                                         </p>
                                         <p
@@ -137,8 +138,8 @@ spec:
                                 </table>
                                 <p
                                   style="font-size:14px;line-height:20px;font-weight:400;margin:0;margin-top:0;margin-bottom:0;margin-left:0;margin-right:0">
-                                  This alert triggers whenever a passkey is
-                                  registered for sign-in on your account.
+                                  This alert triggers whenever a passkey is removed
+                                  from your account.
                                 </p>
                                 <table
                                   align="center"
@@ -243,17 +244,17 @@ spec:
     
     Hey {{.UserName}},
     
-    A new passkey was added to your account:
+    A passkey was recently removed from your account.
     
     Passkey name: {{.PasskeyName}}
     
-    Time: {{.AddedTime}}
+    Time: {{.RemovedTime}}
     
-    If you added this passkey, great! You don't need to do anything.
+    If you removed this passkey, great! You don't need to do anything.
     
     If this wasn't you, review your account review your account https://cloud.datum.net/ and secure it now.
     
-    This alert triggers whenever a passkey is registered for sign-in on your account.
+    This alert triggers whenever a passkey is removed from your account.
     
     ----------------------------------------
     
@@ -278,14 +279,8 @@ spec:
     required: true
     type: "string"
   - name: "PasskeyName"
-    required: true
-    type: "string"
-  - name: "AddedTime"
-    required: true
-    type: "string"
-  - name: "Browser"
     required: false
     type: "string"
-  - name: "Device"
-    required: false
+  - name: "RemovedTime"
+    required: true
     type: "string"

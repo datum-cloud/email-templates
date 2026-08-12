@@ -50,6 +50,26 @@ Screenshots below are committed alongside each template change, so what you see 
 </details>
 
 <details>
+<summary><strong>Passkey Added</strong> — a heads-up that a new passkey can now sign in to an account <em>(click to preview)</em></summary>
+<img src="./screenshots/user-passkey-added.png" width="480" />
+</details>
+
+<details>
+<summary><strong>Passkey Removed</strong> — a security tripwire for when a passkey is taken off an account, since that is how someone gets locked out <em>(click to preview)</em></summary>
+<img src="./screenshots/user-passkey-removed.png" width="480" />
+</details>
+
+<details>
+<summary><strong>Email Verification</strong> — the prove-you-own-this-inbox step that every new email signup starts with <em>(click to preview)</em></summary>
+<img src="./screenshots/user-email-verification.png" width="480" />
+</details>
+
+<details>
+<summary><strong>Password Reset</strong> — the recovery path for password accounts, with a security nudge when the request wasn't yours <em>(click to preview)</em></summary>
+<img src="./screenshots/user-password-reset.png" width="480" />
+</details>
+
+<details>
 <summary><strong>Project Suspension Deletion Warning</strong> — a heads-up that a suspended project is on the clock before it's deleted for good <em>(click to preview)</em></summary>
 <img src="./screenshots/project-suspension-deletion-warning.png" width="480" />
 </details>
