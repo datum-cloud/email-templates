@@ -32,6 +32,7 @@ body:
       description: Used as a structural reference — layout, tone, and components will follow this one.
       options:
         - Platform Invitation
+        - Project Suspension Deletion Warning
         - User Invitation
         - User Approved
         - User Rejected
