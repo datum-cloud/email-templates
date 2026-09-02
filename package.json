@@ -24,7 +24,7 @@
   "dependencies": {
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
-    "react-email": "6.9.1",
+    "react-email": "6.9.3",
     "web-streams-polyfill": "^4.3.0"
   },
   "devDependencies": {
