@@ -1,7 +1,7 @@
 {
   "name": "email-templates",
   "version": "1.0.0",
-  "packageManager": "pnpm@11.20.0",
+  "packageManager": "pnpm@12.3.4+sha512.961aa41fb077da3a04a441d9f8e15ebc0c96da8ef710b2eb67bf9ee7cb0610eabd48f1fd85f51cffe73846785fa0f87c56a3a872a1d893f8446741b5cce45457",
   "scripts": {
     "build": "email build",
     "dev": "email dev",
@@ -24,15 +24,15 @@
   "dependencies": {
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
-    "react-email": "6.9.1",
+    "react-email": "6.9.5",
     "web-streams-polyfill": "^4.3.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.5.7",
-    "@react-email/ui": "^6.9.1",
+    "@biomejs/biome": "^2.5.12",
+    "@react-email/ui": "^6.9.5",
     "@types/react": "^19.2.18",
-    "@types/react-dom": "^19.2.4",
-    "playwright": "^1.62.1",
-    "tsx": "^4.23.8"
+    "@types/react-dom": "^19.2.7",
+    "playwright": "^1.63.0",
+    "tsx": "^4.23.13"
   }
 }
