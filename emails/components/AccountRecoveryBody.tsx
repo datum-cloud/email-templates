@@ -11,9 +11,21 @@ import { CustomButton } from './CustomButton';
  * branch on a runtime value (see user-passkey-removed.tsx). Two template
  * files, one body, is how the copy differs without a Go conditional.
  *
- * The four PascalCase props map 1:1 to Go template variables (`{{.Prop}}`).
- * Each is rendered as VISIBLE text at least once so it appears in both the
- * HTML and the text body and is inferred `required: true` by generate-yaml.js.
+ * The variants share every line except the typed-code paragraph and the
+ * closing "didn't request this" line. Only the self-serve mail offers a code
+ * to type: that path reads userId/codeId from the sealed ticket POST /recover
+ * sets on the requesting device, and a support-created link never sets one, so
+ * a code in the support mail would work through the link and nowhere else.
+ *
+ * The PascalCase props map 1:1 to Go template variables (`{{.Prop}}`).
+ * UserName, ActionUrl and ExpiryMinutes are rendered as VISIBLE text by both
+ * variants, so generate-yaml.js infers `required: true` for all three in both
+ * CRs. `Code` is rendered by the self-serve variant only, and that asymmetry
+ * is the point: the support template keeps Code in its PreviewProps so the CR
+ * still DECLARES it — with `required: false`, since neither of its bodies
+ * references it — which is what lets milo's Email admission webhook accept the
+ * Code that zitadel-provider always sends, without the support body having to
+ * print it.
  */
 export interface AccountRecoveryBodyProps {
   variant: 'self' | 'support';
@@ -33,15 +45,13 @@ export const AccountRecoveryBody = (props: AccountRecoveryBodyProps) => {
   return (
     <Section className="my-10.5">
       <Text className="mt-0 text-4.5 mb-6 leading-6 font-medium">
-        Hey {props.UserName},
+        Hi {props.UserName},
       </Text>
       <Section className="my-6">
         <Text className="mt-0 text-4.5 mb-6 leading-6 font-normal">
-          {support
-            ? 'Datum Support sent you this link at your request, so you can set up a new passkey for your Datum account.'
-            : 'You asked to set up a new passkey for your Datum account.'}{' '}
-          Open the link below on the device you want to sign in with, then
-          follow the prompts to create the passkey.
+          As requested, here's your link to set up a new passkey for your Datum
+          account. Just open the link below on the device you'd like to sign in
+          with, then follow the prompts to create it.
         </Text>
 
         <CustomButton
@@ -58,7 +68,7 @@ export const AccountRecoveryBody = (props: AccountRecoveryBodyProps) => {
           then infer `required: false` for it.
         */}
         <Text className="mt-0 mb-6 text-4.5 leading-6 font-normal">
-          Or, copy and paste this link into your browser:{' '}
+          Or copy and paste this link into your browser:{' '}
           <Link
             href={props.ActionUrl}
             className="text-brand-canyon-clay underline break-all"
@@ -67,26 +77,36 @@ export const AccountRecoveryBody = (props: AccountRecoveryBodyProps) => {
           </Link>
         </Text>
 
-        <Text className="mt-0 mb-2 text-4.5 leading-6 font-normal">
-          If you started this on another device, enter this code there instead:
-        </Text>
-        <Text className="m-0 mb-6 text-[24px] leading-8 font-semibold tracking-[6px]">
-          {props.Code}
+        {/*
+          Self-serve only — see the note on AccountRecoveryBodyProps. Dropping
+          these two lines is what leaves `Code` unreferenced in the support
+          bodies, and so declared `required: false` in that CR.
+        */}
+        {!support && (
+          <>
+            <Text className="mt-0 mb-2 text-4.5 leading-6 font-normal">
+              Started this on another device? Enter this code there instead:
+            </Text>
+            <Text className="m-0 mb-6 text-[24px] leading-8 font-semibold tracking-[6px]">
+              {props.Code}
+            </Text>
+          </>
+        )}
+
+        <Text className="mt-0 mb-6 text-4.5 leading-6 font-normal">
+          {support ? 'The link expires' : 'The link and code expire'} in{' '}
+          {props.ExpiryMinutes} minutes and can only be used once.
         </Text>
 
         <Text className="mt-0 mb-6 text-4.5 leading-6 font-normal">
-          The link and code expire in {props.ExpiryMinutes} minutes and can be
-          used once.
-        </Text>
-
-        <Text className="mt-0 mb-6 text-4.5 leading-6 font-normal">
-          Your existing passkeys keep working; this only adds a new one.
+          Good news — your existing passkeys keep working, this just adds a new
+          one.
         </Text>
 
         <Text className="mt-0 text-4.5 leading-6 font-normal">
           {support
-            ? "If you didn't contact Datum Support, ignore this email — nothing about your account changes — and let us know at support@datum.net."
-            : "If you didn't ask for this, you can safely ignore this email — nothing about your account changes."}
+            ? "Didn't contact Datum Support? You can safely ignore this email — nothing about your account will change — but please let us know at support@datum.net."
+            : "Didn't request this? No worries, you can safely ignore this email. Nothing about your account will change."}
         </Text>
       </Section>
 

@@ -86,7 +86,7 @@ spec:
                               <td>
                                 <p
                                   style="font-size:17px;line-height:24px;margin-top:0;margin-bottom:24px;font-weight:500">
-                                  Hey
+                                  Hi
                                   <!-- -->{{.UserName}}<!-- -->,
                                 </p>
                                 <table
@@ -102,11 +102,11 @@ spec:
                                       <td>
                                         <p
                                           style="font-size:17px;line-height:24px;margin-top:0;margin-bottom:24px;font-weight:400">
-                                          You asked to set up a new passkey for your
-                                          Datum account.<!-- -->
-                                          <!-- -->Open the link below on the device
-                                          you want to sign in with, then follow the
-                                          prompts to create the passkey.
+                                          As requested, here&#x27;s your link to set
+                                          up a new passkey for your Datum account.
+                                          Just open the link below on the device
+                                          you&#x27;d like to sign in with, then
+                                          follow the prompts to create it.
                                         </p>
                                         <a
                                           href="{{.ActionUrl}}"
@@ -123,7 +123,7 @@ spec:
                                         >
                                         <p
                                           style="font-size:17px;line-height:24px;margin-top:0;margin-bottom:24px;font-weight:400">
-                                          Or, copy and paste this link into your
+                                          Or copy and paste this link into your
                                           browser:<!-- -->
                                           <a
                                             href="{{.ActionUrl}}"
@@ -134,8 +134,8 @@ spec:
                                         </p>
                                         <p
                                           style="font-size:17px;line-height:24px;margin-top:0;margin-bottom:8px;font-weight:400">
-                                          If you started this on another device,
-                                          enter this code there instead:
+                                          Started this on another device? Enter this
+                                          code there instead:
                                         </p>
                                         <p
                                           style="font-size:24px;line-height:32px;margin:0;margin-bottom:24px;font-weight:600;letter-spacing:6px;margin-top:0;margin-left:0;margin-right:0">
@@ -143,20 +143,21 @@ spec:
                                         </p>
                                         <p
                                           style="font-size:17px;line-height:24px;margin-top:0;margin-bottom:24px;font-weight:400">
-                                          The link and code expire in
+                                          The link and code expire<!-- -->
+                                          in<!-- -->
                                           <!-- -->{{.ExpiryMinutes}}<!-- -->
-                                          minutes and can be used once.
+                                          minutes and can only be used once.
                                         </p>
                                         <p
                                           style="font-size:17px;line-height:24px;margin-top:0;margin-bottom:24px;font-weight:400">
-                                          Your existing passkeys keep working; this
-                                          only adds a new one.
+                                          Good news — your existing passkeys keep
+                                          working, this just adds a new one.
                                         </p>
                                         <p
                                           style="font-size:17px;line-height:24px;margin-top:0;font-weight:400;margin-bottom:16px">
-                                          If you didn&#x27;t ask for this, you can
-                                          safely ignore this email — nothing about
-                                          your account changes.
+                                          Didn&#x27;t request this? No worries, you
+                                          can safely ignore this email. Nothing
+                                          about your account will change.
                                         </p>
                                       </td>
                                     </tr>
@@ -263,23 +264,23 @@ spec:
   textBody: |
     ----------------------------------------
     
-    Hey {{.UserName}},
+    Hi {{.UserName}},
     
-    You asked to set up a new passkey for your Datum account. Open the link below on the device you want to sign in with, then follow the prompts to create the passkey.
+    As requested, here's your link to set up a new passkey for your Datum account. Just open the link below on the device you'd like to sign in with, then follow the prompts to create it.
     
     Set up a new passkey {{.ActionUrl}}
     
-    Or, copy and paste this link into your browser: {{.ActionUrl}}
+    Or copy and paste this link into your browser: {{.ActionUrl}}
     
-    If you started this on another device, enter this code there instead:
+    Started this on another device? Enter this code there instead:
     
     {{.Code}}
     
-    The link and code expire in {{.ExpiryMinutes}} minutes and can be used once.
+    The link and code expire in {{.ExpiryMinutes}} minutes and can only be used once.
     
-    Your existing passkeys keep working; this only adds a new one.
+    Good news — your existing passkeys keep working, this just adds a new one.
     
-    If you didn't ask for this, you can safely ignore this email — nothing about your account changes.
+    Didn't request this? No worries, you can safely ignore this email. Nothing about your account will change.
     
     ----------------------------------------
     

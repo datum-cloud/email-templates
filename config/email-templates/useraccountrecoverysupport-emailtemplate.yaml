@@ -86,7 +86,7 @@ spec:
                               <td>
                                 <p
                                   style="font-size:17px;line-height:24px;margin-top:0;margin-bottom:24px;font-weight:500">
-                                  Hey
+                                  Hi
                                   <!-- -->{{.UserName}}<!-- -->,
                                 </p>
                                 <table
@@ -102,12 +102,11 @@ spec:
                                       <td>
                                         <p
                                           style="font-size:17px;line-height:24px;margin-top:0;margin-bottom:24px;font-weight:400">
-                                          Datum Support sent you this link at your
-                                          request, so you can set up a new passkey
-                                          for your Datum account.<!-- -->
-                                          <!-- -->Open the link below on the device
-                                          you want to sign in with, then follow the
-                                          prompts to create the passkey.
+                                          As requested, here&#x27;s your link to set
+                                          up a new passkey for your Datum account.
+                                          Just open the link below on the device
+                                          you&#x27;d like to sign in with, then
+                                          follow the prompts to create it.
                                         </p>
                                         <a
                                           href="{{.ActionUrl}}"
@@ -124,7 +123,7 @@ spec:
                                         >
                                         <p
                                           style="font-size:17px;line-height:24px;margin-top:0;margin-bottom:24px;font-weight:400">
-                                          Or, copy and paste this link into your
+                                          Or copy and paste this link into your
                                           browser:<!-- -->
                                           <a
                                             href="{{.ActionUrl}}"
@@ -134,31 +133,23 @@ spec:
                                           >
                                         </p>
                                         <p
-                                          style="font-size:17px;line-height:24px;margin-top:0;margin-bottom:8px;font-weight:400">
-                                          If you started this on another device,
-                                          enter this code there instead:
-                                        </p>
-                                        <p
-                                          style="font-size:24px;line-height:32px;margin:0;margin-bottom:24px;font-weight:600;letter-spacing:6px;margin-top:0;margin-left:0;margin-right:0">
-                                          {{.Code}}
-                                        </p>
-                                        <p
                                           style="font-size:17px;line-height:24px;margin-top:0;margin-bottom:24px;font-weight:400">
-                                          The link and code expire in
+                                          The link expires<!-- -->
+                                          in<!-- -->
                                           <!-- -->{{.ExpiryMinutes}}<!-- -->
-                                          minutes and can be used once.
+                                          minutes and can only be used once.
                                         </p>
                                         <p
                                           style="font-size:17px;line-height:24px;margin-top:0;margin-bottom:24px;font-weight:400">
-                                          Your existing passkeys keep working; this
-                                          only adds a new one.
+                                          Good news — your existing passkeys keep
+                                          working, this just adds a new one.
                                         </p>
                                         <p
                                           style="font-size:17px;line-height:24px;margin-top:0;font-weight:400;margin-bottom:16px">
-                                          If you didn&#x27;t contact Datum Support,
-                                          ignore this email — nothing about your
-                                          account changes — and let us know at
-                                          support@datum.net.
+                                          Didn&#x27;t contact Datum Support? You can
+                                          safely ignore this email — nothing about
+                                          your account will change — but please let
+                                          us know at support@datum.net.
                                         </p>
                                       </td>
                                     </tr>
@@ -265,23 +256,19 @@ spec:
   textBody: |
     ----------------------------------------
     
-    Hey {{.UserName}},
+    Hi {{.UserName}},
     
-    Datum Support sent you this link at your request, so you can set up a new passkey for your Datum account. Open the link below on the device you want to sign in with, then follow the prompts to create the passkey.
+    As requested, here's your link to set up a new passkey for your Datum account. Just open the link below on the device you'd like to sign in with, then follow the prompts to create it.
     
     Set up a new passkey {{.ActionUrl}}
     
-    Or, copy and paste this link into your browser: {{.ActionUrl}}
+    Or copy and paste this link into your browser: {{.ActionUrl}}
     
-    If you started this on another device, enter this code there instead:
+    The link expires in {{.ExpiryMinutes}} minutes and can only be used once.
     
-    {{.Code}}
+    Good news — your existing passkeys keep working, this just adds a new one.
     
-    The link and code expire in {{.ExpiryMinutes}} minutes and can be used once.
-    
-    Your existing passkeys keep working; this only adds a new one.
-    
-    If you didn't contact Datum Support, ignore this email — nothing about your account changes — and let us know at support@datum.net.
+    Didn't contact Datum Support? You can safely ignore this email — nothing about your account will change — but please let us know at support@datum.net.
     
     ----------------------------------------
     
@@ -306,7 +293,7 @@ spec:
     required: true
     type: "string"
   - name: "Code"
-    required: true
+    required: false
     type: "string"
   - name: "ActionUrl"
     required: true

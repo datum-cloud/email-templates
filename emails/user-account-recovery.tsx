@@ -9,7 +9,8 @@ import { MainLayout } from './layouts';
 /**
  * Self-serve account recovery: the user asked for a new passkey at /recover.
  * All copy lives in AccountRecoveryBody; this file fixes the variant, the
- * subject and the preview props. The support-initiated sibling is
+ * subject and the preview props. This is the only one of the two mails that
+ * offers a typed Code — the link-only, support-initiated sibling is
  * user-account-recovery-support.tsx.
  */
 type UserAccountRecoveryProps = Omit<AccountRecoveryBodyProps, 'variant'>;
