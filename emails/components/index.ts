@@ -12,12 +12,13 @@
  * ```
  */
 
+export type { AccountRecoveryBodyProps } from './AccountRecoveryBody';
+export { AccountRecoveryBody } from './AccountRecoveryBody';
 export type {
   CustomButtonProps,
   CustomButtonSize,
   CustomButtonVariant,
 } from './CustomButton';
-
 // Interactive Components
 export { CustomButton } from './CustomButton';
 export type { EmailSignoffProps } from './EmailSignoff';
