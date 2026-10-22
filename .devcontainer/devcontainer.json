@@ -1,6 +1,11 @@
 {
   "name": "email-templates",
-  "image": "mcr.microsoft.com/devcontainers/javascript-node:4-20-bookworm",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:4-22-trixie",
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils": {
+      "upgradePackages": true
+    }
+  },
   "postCreateCommand": "sudo corepack enable && corepack prepare --activate && CI=true pnpm install",
   "forwardPorts": [3000],
   "portsAttributes": {
