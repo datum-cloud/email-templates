@@ -74,6 +74,26 @@ Screenshots below are committed alongside each template change, so what you see 
 <img src="./screenshots/project-suspension-deletion-warning.png" width="480" />
 </details>
 
+<details>
+<summary><strong>Payment Terms Application Received</strong> — confirming we've got someone's application to pay by invoice, and what happens next <em>(click to preview)</em></summary>
+<img src="./screenshots/payment-terms-application-received.png" width="480" />
+</details>
+
+<details>
+<summary><strong>Payment Terms Application Submitted</strong> — the support inbox's heads-up that an application is waiting for review <em>(click to preview)</em></summary>
+<img src="./screenshots/payment-terms-application-submitted.png" width="480" />
+</details>
+
+<details>
+<summary><strong>Payment Terms Application Approved</strong> — the good news that an organization can now pay by invoice, and on what terms <em>(click to preview)</em></summary>
+<img src="./screenshots/payment-terms-application-approved.png" width="480" />
+</details>
+
+<details>
+<summary><strong>Payment Terms Application Declined</strong> — the reviewer's note when an application wasn't approved, and how to carry on with a card <em>(click to preview)</em></summary>
+<img src="./screenshots/payment-terms-application-declined.png" width="480" />
+</details>
+
 ## Requesting a change
 
 Need wording changed on an existing email, or a brand-new template entirely? You don't need to write any code — open an issue:
