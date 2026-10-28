@@ -22,6 +22,8 @@ build/
 *.log
 
 # Environment variables
+.env
+.env.local
 .env.development.local
 .env.test.local
 .env.production.local
@@ -66,4 +68,3 @@ Thumbs.db
 .claude/
 !.claude/settings.json
 
-config.bat
