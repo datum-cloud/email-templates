@@ -63,6 +63,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
+
+      - name: Keep PR drafts out of commits
+        run: echo pr-draft/ >> .git/info/exclude
 
       - name: Mint GitHub App installation token for git/PR operations
         id: app-token
@@ -96,7 +101,7 @@ jobs:
           branch_prefix: 'content-request/'
           show_full_output: true
           claude_args: |
-            --allowedTools "Read,Edit,Bash(pnpm generate:all:*),Bash(pnpm check:*),Bash(git:*),Bash(gh pr create:*),Bash(gh issue comment:*)"
+            --allowedTools "Read,Write,Edit,Bash(pnpm generate:all:*),Bash(pnpm check:*),Bash(git:*),Bash(gh issue comment:*)" --disallowedTools "Bash(git push:*)"
           prompt: |
             You're handling GitHub issue #${{ github.event.issue.number }} in this repo, a
             "Content / Wording Change Request" filed via
@@ -130,8 +135,12 @@ jobs:
             4. Run `pnpm generate:all` to regenerate config/email-templates/ from your
                change, and `pnpm check` to confirm Biome is still clean. Include the
                regenerated config/email-templates/ output in your commit.
-            5. Open a PR against main (not a draft) with a clear title. The reviewer is
-               GTM, not an engineer, so write the body in plain language, not repo/tooling
+            5. Create and switch to a new branch `content-request/issue-${{ github.event.issue.number }}`, commit your
+               change on it (commit only; never run `git push`, and do not open the PR
+               yourself, a later workflow step pushes the branch and opens the PR), then
+               write the PR title (one line, nothing else) to `pr-draft/title.txt` and the
+               PR body to `pr-draft/body.md`. Never commit anything under `pr-draft/`.
+               The reviewer is GTM, not an engineer, so write the body in plain language, not repo/tooling
                jargon:
                  - Lead with "Closes #${{ github.event.issue.number }}", then a
                    before/after quote of the wording — that's the part they actually need
@@ -143,15 +152,17 @@ jobs:
                    that for engineers, put it inside a collapsed
                    `<details><summary>Technical details</summary>...</details>` block at
                    the end, not in the main text.
-               Request review from the `datum-cloud/gtm` team (e.g. `gh pr create
-               --reviewer datum-cloud/gtm ...`) — they own email content and can merge this
-               without needing an engineering approval.
-            6. Comment on issue #${{ github.event.issue.number }} (via `gh issue comment`)
-               linking the PR you just opened and @-mentioning
-               ${{ github.event.issue.user.login }}. Keep it short and non-technical: it's
-               ready for the GTM team to review, here's the link, that's it.
+               The workflow requests review from the `datum-cloud/gtm` team and comments on
+               issue #${{ github.event.issue.number }} with the PR link; you do neither.
 
             If the request is ambiguous, spans multiple unrelated strings, or isn't a
             simple wording swap (e.g. asks for new sections, new templates, or layout
             changes), don't guess — comment on the issue explaining what you need
-            clarified instead of opening a PR.
+            clarified (via `gh issue comment`) instead of committing anything.
+
+      - name: Push signed commits and open the PR
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          ISSUE_AUTHOR: ${{ github.event.issue.user.login }}
+        run: scripts/publish-claude-pr "$ISSUE_NUMBER" "$ISSUE_AUTHOR" pr-draft/title.txt pr-draft/body.md

@@ -89,12 +89,10 @@ jobs:
 
       - name: Commit screenshots to the PR branch
         if: steps.changed.outputs.any == 'true'
-        uses: stefanzweifel/git-auto-commit-action@4a55954c782fc1ea30b9056cd3e7a2b40ca8887d # v7.2.0
-        with:
-          commit_message: "chore: update template screenshots"
-          file_pattern: 'screenshots/*.png'
-          commit_user_name: datum-email-designer[bot]
-          commit_user_email: 306493438+datum-email-designer[bot]@users.noreply.github.com
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+        run: 'scripts/commit-signed-changes "$HEAD_REF" "chore: update template screenshots" "screenshots/*.png"'
 
       - name: Build comment body
         if: steps.changed.outputs.any == 'true'

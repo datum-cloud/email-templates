@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [ "$#" -lt 3 ]; then
+  echo "usage: $0 <branch> <message> <pathspec>..." >&2
+  exit 2
+fi
+branch="$1"
+message="$2"
+shift 2
+
+here="$(cd "$(dirname "$0")" && pwd)"
+
+git add -A -- "$@"
+
+EXPECTED_HEAD="$(git rev-parse HEAD)"
+export EXPECTED_HEAD
+
+set +e
+git diff --cached -z --name-only --no-renames | env -u BASE_SHA "${here}/sign-commit" -z "$branch" "$message"
+rc=("${PIPESTATUS[@]}")
+set -e
+
+if [ "${rc[0]}" -ne 0 ]; then
+  exit "${rc[0]}"
+fi
+case "${rc[1]}" in
+  0) ;;
+  1)
+    echo "nothing to commit"
+    ;;
+  3)
+    echo "::warning::${branch} moved while this job ran; the next run regenerates against the new head."
+    ;;
+  *)
+    exit "${rc[1]}"
+    ;;
+esac
