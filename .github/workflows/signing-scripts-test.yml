@@ -5,6 +5,9 @@ on:
     paths:
       - 'scripts/push-signed-commits'
       - 'scripts/push-signed-commits.test'
+      - 'scripts/publish-claude-feedback'
+      - 'scripts/publish-claude-pr'
+      - 'scripts/publish-claude.test'
       - '.github/workflows/signing-scripts-test.yml'
 
 permissions:
@@ -17,3 +20,4 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       - run: scripts/push-signed-commits.test
+      - run: scripts/publish-claude.test
