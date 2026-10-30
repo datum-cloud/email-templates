@@ -12,7 +12,7 @@
  */
 import fs from 'node:fs';
 import path from 'node:path';
-import { pretty, render } from 'react-email';
+import { render } from 'react-email';
 
 const ROOT = path.resolve(__dirname, '..');
 const EMAILS_DIR = path.join(ROOT, 'emails');
@@ -53,7 +53,10 @@ async function main() {
     }
 
     const previewProps = component.PreviewProps ?? {};
-    const html = await pretty(await render(component(previewProps)));
+    // Unformatted, like the HTML that's sent: formatting adds line breaks
+    // inside text, which shows up wherever a template keeps the text's own
+    // line breaks (white-space: pre-line).
+    const html = await render(component(previewProps));
     fs.writeFileSync(path.join(OUT_DIR, `${baseName}.html`), html, 'utf8');
     console.log(`Rendered ${baseName}.html`);
   }
