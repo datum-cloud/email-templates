@@ -35,6 +35,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
+
+      - name: Keep PR drafts out of commits
+        run: echo pr-draft/ >> .git/info/exclude
 
       - name: Mint GitHub App installation token for git/PR operations
         id: app-token
@@ -68,7 +73,7 @@ jobs:
           branch_prefix: 'new-template/'
           show_full_output: true
           claude_args: |
-            --allowedTools "Read,Write,Edit,Bash(pnpm generate:all:*),Bash(pnpm check:*),Bash(git:*),Bash(gh pr create:*),Bash(gh issue comment:*)"
+            --allowedTools "Read,Write,Edit,Bash(pnpm generate:all:*),Bash(pnpm check:*),Bash(git:*),Bash(gh issue comment:*)" --disallowedTools "Bash(git push:*)"
           prompt: |
             You're handling GitHub issue #${{ github.event.issue.number }} in this repo, a
             "New Email Template Request" filed via
@@ -128,8 +133,12 @@ jobs:
             7. Run `pnpm generate:all` to regenerate config/email-templates/ and confirm it
                picks up the new template, and `pnpm check` to confirm Biome is clean. Include
                the regenerated config/email-templates/ output in your commit.
-            8. Open a PR against main (not a draft) with a clear title. The reviewer is
-               GTM, not an engineer, so write the body in plain language, not repo/tooling
+            8. Create and switch to a new branch `new-template/issue-${{ github.event.issue.number }}`, commit your
+               work on it (commit only; never run `git push`, and do not open the PR
+               yourself, a later workflow step pushes the branch and opens the PR), then
+               write the PR title (one line, nothing else) to `pr-draft/title.txt` and the
+               PR body to `pr-draft/body.md`. Never commit anything under `pr-draft/`.
+               The reviewer is GTM, not an engineer, so write the body in plain language, not repo/tooling
                jargon:
                  - Lead with "Closes #${{ github.event.issue.number }}", then a short,
                    plain description of the new email — what it says, when it's sent —
@@ -143,16 +152,18 @@ jobs:
                    to record that for engineers, put it inside a collapsed
                    `<details><summary>Technical details</summary>...</details>` block at
                    the end, not in the main text.
-               Request review from the `datum-cloud/gtm` team (e.g. `gh pr create --reviewer
-               datum-cloud/gtm ...`) — they own email content and can merge this without
-               needing an engineering approval.
-            9. Comment on issue #${{ github.event.issue.number }} (via `gh issue comment`)
-               linking the PR you just opened and @-mentioning
-               ${{ github.event.issue.user.login }}. Keep it short and non-technical: it's
-               ready for the GTM team to review, here's the link, that's it.
+               The workflow requests review from the `datum-cloud/gtm` team and comments on
+               issue #${{ github.event.issue.number }} with the PR link; you do neither.
 
             This is a more open-ended task than a wording tweak: you're making layout and
             structure choices, not just swapping a string. If the request is too vague to
             draft confidently (unclear trigger, no reference template, missing key copy),
-            don't guess — comment on the issue asking for what's missing instead of opening
-            a PR.
+            don't guess — comment on the issue asking for what's missing instead of committing
+            anything (via `gh issue comment`).
+
+      - name: Push signed commits and open the PR
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          ISSUE_AUTHOR: ${{ github.event.issue.user.login }}
+        run: scripts/publish-claude-pr "$ISSUE_NUMBER" "$ISSUE_AUTHOR" pr-draft/title.txt pr-draft/body.md
