@@ -79,7 +79,7 @@ export const PaymentTermsApplicationSubmitted = ({
             {copy.situationLabel}
           </Text>
           <Text className="mt-0 mb-0 text-4.5 leading-6 font-normal border-0 border-l-4 border-solid border-brand-canyon-clay pl-4">
-            {Situation}
+            <span className="whitespace-pre-line">{Situation}</span>
           </Text>
           <CustomButton
             href={ReviewUrl}
@@ -110,7 +110,7 @@ PaymentTermsApplicationSubmitted.PreviewProps = {
   PaymentOption: 'Pay by invoice',
   EstimatedMonthlySpend: '$2,500–$10,000',
   Situation:
-    "Our company pays software vendors by purchase order on net-30 terms, so we can't use a corporate card.",
+    "Our company pays software vendors by purchase order on net-30 terms, so we can't use a corporate card.\n\nOur AP team needs the PO number on every invoice.",
   ReviewUrl:
     'https://staff.datum.net/customers/billing-accounts/applications/acme-corp/apply-acme-billing-x7k2p',
 } as PaymentTermsApplicationSubmittedProps;

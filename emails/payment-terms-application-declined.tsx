@@ -11,7 +11,6 @@ const copy = {
   greetingSuffix: ',',
   paragraph1Before: "We've reviewed your application for payment terms for ",
   paragraph1After: ", and we aren't able to approve it right now.",
-  messageLabel: 'A note from our team:',
   paragraph2:
     'You can keep using Datum Cloud by adding a card, and you can apply again later from billing settings.',
   buttonLabel: 'Add a card',
@@ -37,7 +36,8 @@ interface PaymentTermsApplicationDeclinedProps {
   OrganizationName: string;
   /**
    * The reviewer's message to the applicant (the application's
-   * status.declineMessage). Staff write it, and it may run over several lines.
+   * status.declineMessage). Staff write it to the applicant, and it reads as
+   * a paragraph of this email, keeping any line breaks.
    */
   DeclineMessage: string;
   /** Where the applicant adds a card in the cloud portal */
@@ -64,11 +64,8 @@ export const PaymentTermsApplicationDeclined = ({
             <strong>{OrganizationName}</strong>
             {copy.paragraph1After}
           </Text>
-          <Text className="mt-0 mb-2 text-4.5 leading-6 font-medium">
-            {copy.messageLabel}
-          </Text>
-          <Text className="mt-0 mb-5.5 text-4.5 leading-6 font-normal border-0 border-l-4 border-solid border-brand-canyon-clay pl-4">
-            {DeclineMessage}
+          <Text className="mt-0 mb-5.5 text-4.5 leading-6 font-normal">
+            <span className="whitespace-pre-line">{DeclineMessage}</span>
           </Text>
           <Text className="m-0 text-4.5 leading-6 font-normal">
             {copy.paragraph2}

@@ -108,12 +108,10 @@ spec:
                                         right now.
                                       </p>
                                       <p
-                                        style="font-size:17px;line-height:24px;margin-top:0;margin-bottom:8px;font-weight:500">
-                                        A note from our team:
-                                      </p>
-                                      <p
-                                        style="font-size:17px;line-height:24px;margin-top:0;margin-bottom:22px;font-weight:400;border-style:solid;border-width:0px;border-left-style:solid;border-left-width:4px;border-color:rgb(191,149,149);padding-left:16px">
-                                        {{.DeclineMessage}}
+                                        style="font-size:17px;line-height:24px;margin-top:0;margin-bottom:22px;font-weight:400">
+                                        <span style="white-space:pre-line"
+                                          >{{.DeclineMessage}}</span
+                                        >
                                       </p>
                                       <p
                                         style="font-size:17px;line-height:24px;margin:0;font-weight:400;margin-top:0;margin-bottom:0;margin-left:0;margin-right:0">
@@ -228,8 +226,6 @@ spec:
     Hi {{.UserName}},
     
     We've reviewed your application for payment terms for {{.OrganizationName}}, and we aren't able to approve it right now.
-    
-    A note from our team:
     
     {{.DeclineMessage}}
     

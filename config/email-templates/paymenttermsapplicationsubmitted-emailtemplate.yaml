@@ -130,7 +130,9 @@ spec:
                                       </p>
                                       <p
                                         style="font-size:17px;line-height:24px;margin-top:0;margin-bottom:0;font-weight:400;border-style:solid;border-width:0px;border-left-style:solid;border-left-width:4px;border-color:rgb(191,149,149);padding-left:16px">
-                                        {{.Situation}}
+                                        <span style="white-space:pre-line"
+                                          >{{.Situation}}</span
+                                        >
                                       </p>
                                       <a
                                         href="{{.ReviewUrl}}"
