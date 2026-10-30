@@ -110,7 +110,7 @@ PaymentTermsApplicationSubmitted.PreviewProps = {
   PaymentOption: 'Pay by invoice',
   EstimatedMonthlySpend: '$2,500–$10,000',
   Situation:
-    "Our company pays software vendors by purchase order on net-30 terms, so we can't use a corporate card.\n\nOur AP team needs the PO number on every invoice.",
+    "Our company pays software vendors by purchase order on net-30 terms, so we can't use a corporate card.",
   ReviewUrl:
     'https://staff.datum.net/customers/billing-accounts/applications/acme-corp/apply-acme-billing-x7k2p',
 } as PaymentTermsApplicationSubmittedProps;
