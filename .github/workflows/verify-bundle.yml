@@ -51,14 +51,12 @@ jobs:
         run: pnpm generate:all
 
       - name: Commit regenerated bundle to the PR branch
-        uses: stefanzweifel/git-auto-commit-action@4a55954c782fc1ea30b9056cd3e7a2b40ca8887d # v7.2.0
-        with:
-          commit_message: "chore: regenerate email template bundle"
-          file_pattern: 'config/email-templates/**'
-          commit_user_name: datum-email-designer[bot]
-          commit_user_email: 306493438+datum-email-designer[bot]@users.noreply.github.com
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+        run: 'scripts/commit-signed-changes "$HEAD_REF" "chore: regenerate email template bundle" config/email-templates'
 
   validate-kustomize:
     permissions:
       contents: read
-    uses: datum-cloud/actions/.github/workflows/validate-kustomize.yaml@2dbca23d057e20ff1aab144b94a06d09ea75e5f6 # v1.21.0
+    uses: datum-cloud/actions/.github/workflows/validate-kustomize.yaml@6a889cf57ffcd56af2c5a2c65455ba01ab0fff15 # v1.24.0

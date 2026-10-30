@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [ "$#" -ne 4 ]; then
+  echo "usage: $0 <issue-number> <issue-author> <title-file> <body-file>" >&2
+  exit 2
+fi
+issue="$1"
+author="$2"
+title_file="$3"
+body_file="$4"
+
+here="$(cd "$(dirname "$0")" && pwd)"
+branch="$(git rev-parse --abbrev-ref HEAD)"
+
+if [ "$branch" = HEAD ] || [ "$branch" = main ]; then
+  echo "no branch was created for issue ${issue}; nothing to publish"
+  exit 0
+fi
+
+if [ -z "$(git rev-list "origin/main..HEAD")" ]; then
+  echo "no commits for issue ${issue}; nothing to publish"
+  exit 0
+fi
+
+if [ ! -s "$title_file" ] || [ ! -s "$body_file" ]; then
+  echo "error: ${title_file} and ${body_file} must both exist and be non-empty" >&2
+  exit 1
+fi
+
+"${here}/push-signed-commits" "$GITHUB_REPOSITORY" "$branch" origin/main
+
+url="$(gh pr create --head "$branch" --base main --title "$(head -n 1 "$title_file")" --body-file "$body_file" --reviewer datum-cloud/gtm)"
+
+gh issue comment "$issue" --body "@${author} this is ready for the GTM team to review: ${url}"

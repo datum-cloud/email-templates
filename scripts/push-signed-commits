@@ -1,0 +1,110 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [ "$#" -ne 3 ]; then
+  echo "usage: $0 <owner/repo> <branch> <base-ref>" >&2
+  exit 2
+fi
+repo="$1"
+branch="$2"
+base_ref="$3"
+
+work="$(mktemp -d)"
+trap 'rm -rf "$work"' EXIT
+
+base_sha="$(git rev-parse --verify "${base_ref}^{commit}")"
+
+if [ -n "$(git rev-list --merges "${base_sha}..HEAD")" ]; then
+  echo "error: merge commits in ${base_ref}..HEAD cannot be replayed" >&2
+  exit 1
+fi
+
+commits="$(git rev-list --reverse "${base_sha}..HEAD")"
+if [ -z "$commits" ]; then
+  echo "error: no commits in ${base_ref}..HEAD" >&2
+  exit 1
+fi
+
+if ref_out="$(gh api "repos/${repo}/git/ref/heads/${branch}" --jq .object.sha 2>&1)"; then
+  remote_head="$ref_out"
+  if [ "$remote_head" != "$base_sha" ]; then
+    echo "error: ${branch} is at ${remote_head}, expected ${base_sha}" >&2
+    exit 1
+  fi
+elif printf '%s' "$ref_out" | grep -q 'HTTP 404'; then
+  gh api "repos/${repo}/git/refs" -f "ref=refs/heads/${branch}" -f "sha=${base_sha}" > /dev/null
+  remote_head="$base_sha"
+else
+  echo "error: cannot read ${branch}: ${ref_out}" >&2
+  exit 1
+fi
+
+replay_commit() {
+  local sha="$1" head_oid="$2"
+  : > "$work/additions"
+  : > "$work/deletions"
+  local changes=0 meta file oldmode newmode status
+  while IFS= read -r -d '' meta && IFS= read -r -d '' file; do
+    meta="${meta#:}"
+    read -r oldmode newmode _ _ status <<< "$meta"
+    changes=$((changes + 1))
+    case "$status" in
+      D)
+        jq -n --arg path "$file" '{path: $path}' >> "$work/deletions"
+        continue
+        ;;
+      A | M | T) ;;
+      *)
+        echo "error: unsupported change ${status} on ${file} in ${sha}" >&2
+        exit 1
+        ;;
+    esac
+    if [ "$newmode" != 100644 ] && [ "$newmode" != 100755 ]; then
+      echo "error: ${file} has mode ${newmode}, which the API cannot write" >&2
+      exit 1
+    fi
+    if [ "$status" = A ] && [ "$newmode" != 100644 ]; then
+      echo "error: new file ${file} is mode ${newmode}; the API writes 100644" >&2
+      exit 1
+    fi
+    if [ "$status" != A ] && [ "$oldmode" != "$newmode" ]; then
+      echo "error: mode change on ${file} cannot be replayed" >&2
+      exit 1
+    fi
+    git cat-file blob "${sha}:${file}" | base64 | tr -d '\n' > "$work/blob"
+    jq -n --arg path "$file" --rawfile contents "$work/blob" \
+      '{path: $path, contents: $contents}' >> "$work/additions"
+  done < <(git diff-tree -r --no-renames --no-commit-id --raw -z "${sha}^" "$sha")
+
+  if [ "$changes" -eq 0 ]; then
+    echo "error: commit ${sha} changes no files" >&2
+    exit 1
+  fi
+
+  local headline body
+  headline="$(git log -1 --format=%s "$sha")"
+  body="$(git log -1 --format=%b "$sha")"
+
+  jq -n \
+    --arg repo "$repo" --arg branch "$branch" --arg oid "$head_oid" \
+    --arg headline "$headline" --arg body "$body" \
+    --slurpfile additions "$work/additions" \
+    --slurpfile deletions "$work/deletions" \
+    '{
+      query: "mutation($input: CreateCommitOnBranchInput!) { createCommitOnBranch(input: $input) { commit { oid } } }",
+      variables: {input: {
+        branch: {repositoryNameWithOwner: $repo, branchName: $branch},
+        expectedHeadOid: $oid,
+        message: {headline: $headline, body: $body},
+        fileChanges: {additions: $additions, deletions: $deletions}
+      }}
+    }' > "$work/request.json"
+
+  gh api graphql --input "$work/request.json" > "$work/response.json"
+  jq -er '.data.createCommitOnBranch.commit.oid' "$work/response.json"
+}
+
+for sha in $commits; do
+  remote_head="$(replay_commit "$sha" "$remote_head")"
+  echo "replayed ${sha} as ${remote_head}" >&2
+done

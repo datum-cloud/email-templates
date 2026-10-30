@@ -1,0 +1,148 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+here="$(cd "$(dirname "$0")" && pwd)"
+readonly sut="${here}/push-signed-commits"
+tmp="$(mktemp -d)"; trap 'rm -rf "$tmp"' EXIT
+
+export GIT_AUTHOR_NAME=test GIT_AUTHOR_EMAIL=test@example.com
+export GIT_COMMITTER_NAME=test GIT_COMMITTER_EMAIL=test@example.com
+export GIT_CONFIG_GLOBAL=/dev/null GIT_CONFIG_NOSYSTEM=1
+
+failures=0
+cases=0
+
+fail() {
+  echo "FAIL: $1" >&2
+  failures=$((failures + 1))
+}
+
+mkdir -p "${tmp}/fakebin"
+cat > "${tmp}/fakebin/gh" <<'SH'
+#!/usr/bin/env bash
+set -euo pipefail
+echo "$*" >> "${FAKE_GH_LOG}"
+case "$2" in
+  graphql)
+    jq -c . "$4" >> "${FAKE_GH_LOG}.requests"
+    n=$(wc -l < "${FAKE_GH_LOG}.requests" | tr -d ' ')
+    echo "{\"data\":{\"createCommitOnBranch\":{\"commit\":{\"oid\":\"remote${n}\"}}}}"
+    ;;
+  repos/*/git/ref/heads/*)
+    if [ "${FAKE_GH_BRANCH}" = missing ]; then
+      echo "gh: Not Found (HTTP 404)" >&2
+      exit 1
+    fi
+    echo "${FAKE_GH_BRANCH}"
+    ;;
+  repos/*/git/refs)
+    ;;
+esac
+SH
+chmod +x "${tmp}/fakebin/gh"
+export PATH="${tmp}/fakebin:${PATH}"
+
+new_repo() {
+  repo="${tmp}/$1"
+  git init -q -b main "${repo}"
+  cd "${repo}"
+  echo one > keep.txt
+  echo gone > remove.txt
+  git add . && git commit -q -m base
+  base="$(git rev-parse HEAD)"
+  export FAKE_GH_LOG="${tmp}/$1.log"
+  : > "${FAKE_GH_LOG}"
+  : > "${FAKE_GH_LOG}.requests"
+}
+
+run() {
+  set +e
+  out="$("${sut}" "$@" 2>&1)"
+  rc=$?
+  set -e
+}
+
+cases=$((cases + 1))
+new_repo happy
+export FAKE_GH_BRANCH=missing
+echo two > keep.txt
+echo new > added.txt
+git rm -q remove.txt
+git add . && git commit -q -m "fix: first" -m "body line"
+echo three >> keep.txt
+git add . && git commit -q -m "fix: second"
+run owner/repo feature "${base}"
+[ "$rc" -eq 0 ] || fail "happy path exited ${rc}: ${out}"
+grep -q "repos/owner/repo/git/refs" "${FAKE_GH_LOG}" || fail "missing branch was not created"
+[ "$(wc -l < "${FAKE_GH_LOG}.requests" | tr -d ' ')" -eq 2 ] || fail "expected two mutations"
+first="$(sed -n 1p "${FAKE_GH_LOG}.requests")"
+second="$(sed -n 2p "${FAKE_GH_LOG}.requests")"
+[ "$(jq -r .variables.input.expectedHeadOid <<< "${first}")" = "${base}" ] || fail "first commit not based on branch head"
+[ "$(jq -r .variables.input.expectedHeadOid <<< "${second}")" = "remote1" ] || fail "second commit not chained on first"
+[ "$(jq -r .variables.input.message.headline <<< "${first}")" = "fix: first" ] || fail "headline lost"
+[ "$(jq -r .variables.input.message.body <<< "${first}")" = "body line" ] || fail "body lost"
+[ "$(jq -r '.variables.input.fileChanges.deletions[0].path' <<< "${first}")" = "remove.txt" ] || fail "deletion lost"
+[ "$(jq -r '.variables.input.fileChanges.additions | map(.path) | sort | join(",")' <<< "${first}")" = "added.txt,keep.txt" ] || fail "additions wrong"
+[ "$(jq -r '.variables.input.fileChanges.additions[] | select(.path=="keep.txt") | .contents' <<< "${first}" | base64 -d)" = "two" ] || fail "contents not base64 of the file"
+
+cases=$((cases + 1))
+new_repo existing
+export FAKE_GH_BRANCH="${base}"
+echo two > keep.txt
+git add . && git commit -q -m "fix: only"
+run owner/repo feature "${base}"
+[ "$rc" -eq 0 ] || fail "existing branch exited ${rc}: ${out}"
+if grep -q "repos/owner/repo/git/refs" "${FAKE_GH_LOG}"; then fail "existing branch was recreated"; fi
+
+cases=$((cases + 1))
+export FAKE_GH_BRANCH=deadbeef
+run owner/repo feature "${base}"
+[ "$rc" -ne 0 ] || fail "diverged remote head passed"
+grep -q "expected" <<< "${out}" || fail "diverged remote head gave no reason: ${out}"
+
+cases=$((cases + 1))
+new_repo nocommits
+export FAKE_GH_BRANCH=missing
+run owner/repo feature "${base}"
+[ "$rc" -ne 0 ] || fail "zero commits passed vacuously"
+
+cases=$((cases + 1))
+new_repo execbit
+export FAKE_GH_BRANCH=missing
+printf '#!/bin/sh\n' > tool.sh
+chmod +x tool.sh
+git add . && git commit -q -m "feat: tool"
+run owner/repo feature "${base}"
+[ "$rc" -ne 0 ] || fail "new executable file passed"
+grep -q "mode 100755" <<< "${out}" || fail "executable file gave no reason: ${out}"
+
+cases=$((cases + 1))
+new_repo symlink
+export FAKE_GH_BRANCH=missing
+ln -s keep.txt link
+git add . && git commit -q -m "feat: link"
+run owner/repo feature "${base}"
+[ "$rc" -ne 0 ] || fail "symlink passed"
+
+cases=$((cases + 1))
+new_repo merge
+export FAKE_GH_BRANCH=missing
+git checkout -q -b side
+echo side > side.txt
+git add . && git commit -q -m side
+git checkout -q main
+echo main > main.txt
+git add . && git commit -q -m main
+git merge -q --no-ff side -m merge
+run owner/repo feature "${base}"
+[ "$rc" -ne 0 ] || fail "merge commit passed"
+
+cases=$((cases + 1))
+run owner/repo
+[ "$rc" -eq 2 ] || fail "bad usage exited ${rc}"
+
+if [ "${failures}" -ne 0 ]; then
+  echo "${failures} failure(s) in ${cases} cases" >&2
+  exit 1
+fi
+echo "ok: ${cases} cases"

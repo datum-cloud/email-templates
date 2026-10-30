@@ -78,7 +78,7 @@ jobs:
           trigger_phrase: '@claude'
           show_full_output: true
           claude_args: |
-            --allowedTools "Read,Edit,Bash(pnpm generate:all:*),Bash(pnpm check:*),Bash(git:*),Bash(gh pr view:*),Bash(gh pr list:*),Bash(gh pr comment:*),Bash(gh issue comment:*)"
+            --allowedTools "Read,Edit,Bash(pnpm generate:all:*),Bash(pnpm check:*),Bash(git:*),Bash(gh pr view:*),Bash(gh pr list:*),Bash(gh pr comment:*),Bash(gh issue comment:*)" --disallowedTools "Bash(git push:*)"
           prompt: |
             A maintainer left feedback mentioning @claude in a comment thread on this
             repo. Read CLAUDE.md at the repo root first for how the template/bundle
@@ -104,9 +104,9 @@ jobs:
             3. Run `pnpm generate:all` to regenerate config/email-templates/ and `pnpm
                check` to confirm Biome is clean. Include the regenerated output in your
                commit.
-            4. Commit and push the change onto the existing PR branch — do not open a new
-               PR, do not force-push, do not amend or rewrite any commit already on the
-               branch.
+            4. Commit the change onto the existing PR branch, commit only: never run
+               `git push`, a later workflow step pushes it. Do not open a new PR, do not
+               amend or rewrite any commit already on the branch.
             5. Reply in the comment thread confirming what changed, in plain language: no
                file paths, `pnpm`, "regenerated YAML", Biome, or other implementation
                detail.
@@ -114,3 +114,8 @@ jobs:
             If the feedback is ambiguous, asks for something outside an email template
             (workflow/script/CI changes, unrelated files), or you can't confidently map it
             to a specific change, reply asking for clarification instead of guessing.
+
+      - name: Push signed commits to the PR branch
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: scripts/publish-claude-feedback

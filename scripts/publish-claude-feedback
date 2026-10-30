@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+here="$(cd "$(dirname "$0")" && pwd)"
+branch="$(git rev-parse --abbrev-ref HEAD)"
+
+if [ "$branch" = HEAD ] || [ "$branch" = main ]; then
+  echo "not on a PR branch; nothing to publish"
+  exit 0
+fi
+
+git fetch --quiet origin "$branch"
+
+if [ -z "$(git rev-list "origin/${branch}..HEAD")" ]; then
+  echo "no new commits on ${branch}; nothing to publish"
+  exit 0
+fi
+
+"${here}/push-signed-commits" "$GITHUB_REPOSITORY" "$branch" "origin/${branch}"
