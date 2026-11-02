@@ -15,6 +15,6 @@ jobs:
       node-version: "26"
       skip: build
       run: |
-        pnpm export:html
+        pnpm export:custom
         scripts/push-signed-commits.test
         scripts/publish-claude.test
