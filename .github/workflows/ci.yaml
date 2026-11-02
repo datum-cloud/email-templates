@@ -13,4 +13,8 @@ jobs:
     uses: datum-cloud/actions/.github/workflows/ci-basic.yaml@v1.26.0
     with:
       node-version: "26"
-      run: scripts/push-signed-commits.test && scripts/publish-claude.test
+      skip: build
+      run: |
+        pnpm export:html
+        scripts/push-signed-commits.test
+        scripts/publish-claude.test
