@@ -25,6 +25,11 @@ Screenshots below are committed alongside each template change, so what you see 
 </details>
 
 <details>
+<summary><strong>Organization Member Joined</strong> — letting organization owners know someone new joined, and where to review them <em>(click to preview)</em></summary>
+<img src="./screenshots/organization-member-joined.png" width="480" />
+</details>
+
+<details>
 <summary><strong>User Approved</strong> — the good news that someone's access request has been approved <em>(click to preview)</em></summary>
 <img src="./screenshots/user-approved.png" width="480" />
 </details>
