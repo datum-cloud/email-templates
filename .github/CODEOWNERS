@@ -14,8 +14,8 @@
 # new or adjusted shared piece, not just its own file. emails/config/
 # (Tailwind/brand config) stays engineering-only above, since it isn't part
 # of that flow.
-/emails/components/ @datum-cloud/gtm @datum-cloud/engineering
-/emails/layouts/ @datum-cloud/gtm @datum-cloud/engineering
+/emails/components/ @datum-cloud/gtm @datum-cloud/platform
+/emails/layouts/ @datum-cloud/gtm @datum-cloud/platform
 
 # Auto-generated from the templates above (config/email-templates/ by
 # verify-bundle.yml's auto-commit, screenshots/ by screenshot-templates.yml) —
@@ -29,12 +29,12 @@
 # onto those draft PRs). README.md and CONTRIBUTING.md are the shared
 # contributor-facing docs for the whole repo (setup, pipeline, release
 # process), not just template content, so engineering co-owns both.
-/README.md @datum-cloud/gtm @datum-cloud/engineering
-/CONTRIBUTING.md @datum-cloud/gtm @datum-cloud/engineering
+/README.md @datum-cloud/gtm @datum-cloud/platform
+/CONTRIBUTING.md @datum-cloud/gtm @datum-cloud/platform
 
 # GitHub Issue Form YAML, not prose — the new-template-request AI draft flow
 # reads this form's dropdown id/options directly, so malformed YAML here
 # breaks issue submission for everyone. Engineering co-owns alongside GTM,
 # who still needs to keep the "closest existing" dropdown in sync with the
 # template list.
-/.github/ISSUE_TEMPLATE/new-template-request.yml @datum-cloud/gtm @datum-cloud/engineering
+/.github/ISSUE_TEMPLATE/new-template-request.yml @datum-cloud/gtm @datum-cloud/platform
