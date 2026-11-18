@@ -1,6 +1,6 @@
 # Engineering owns everything by default: CI/workflows, scripts, shared
 # config, and anything else outside the top-level email templates.
-* @datum-cloud/engineering
+* @datum-cloud/platform
 
 # The top-level email templates (content/copy) are GTM's domain — this is
 # what the content-change-request and new-template-request issue flows (and
