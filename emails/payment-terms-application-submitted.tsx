@@ -1,8 +1,6 @@
 import 'web-streams-polyfill/polyfill';
 
-import { Link, Row, Section, Text } from 'react-email';
-import { CustomButton } from './components';
-import { MainLayout } from './layouts';
+import { Body, Head, Html, Link, Preview, Text } from 'react-email';
 
 const copy = {
   preview: 'A new application for payment terms is waiting for review',
@@ -13,7 +11,7 @@ const copy = {
   paymentOptionLabel: 'Asked for',
   spendLabel: 'Estimated monthly spend',
   situationLabel: 'Their situation',
-  buttonLabel: 'Review the application',
+  reviewLabel: 'Review the application',
   replyBefore:
     "Replies to this email don't reach the customer. To contact them, email",
   replyAfter: 'directly.',
@@ -24,6 +22,9 @@ const copy = {
  * payment terms. Help Scout turns it into a conversation, which is the
  * ticket staff follow up from; the decision itself is made in the staff
  * portal.
+ *
+ * Only staff read it, so it is plain text with no Datum branding: no
+ * MainLayout, header, footer or button.
  *
  * Each PascalCase key maps 1:1 to a Go template variable in the backend
  * (`{{.PropName}}`) and is emitted into the EmailTemplate `variables:` block
@@ -48,8 +49,8 @@ interface PaymentTermsApplicationSubmittedProps {
 }
 
 const Detail = ({ label, value }: { label: string; value: string }) => (
-  <Text className="mt-0 mb-3 text-4.5 leading-6 font-normal">
-    <strong>{label}:</strong> {value}
+  <Text style={{ margin: 0 }}>
+    {label}: {value}
   </Text>
 );
 
@@ -63,43 +64,31 @@ export const PaymentTermsApplicationSubmitted = ({
   ReviewUrl,
 }: PaymentTermsApplicationSubmittedProps) => {
   return (
-    <MainLayout preview={copy.preview}>
-      <Section className="my-10.5">
-        <Row>
-          <Text className="mt-0 mb-5.5 text-4.5 leading-6 font-normal">
-            {copy.paragraph1Before}
-            <strong>{OrganizationName}</strong>
-            {copy.paragraph1After}
-          </Text>
-          <Detail label={copy.legalNameLabel} value={LegalName} />
-          <Detail label={copy.applicantLabel} value={ApplicantEmail} />
-          <Detail label={copy.paymentOptionLabel} value={PaymentOption} />
-          <Detail label={copy.spendLabel} value={EstimatedMonthlySpend} />
-          <Text className="mt-5.5 mb-2 text-4.5 leading-6 font-medium">
-            {copy.situationLabel}
-          </Text>
-          <Text className="mt-0 mb-0 text-4.5 leading-6 font-normal border-0 border-l-4 border-solid border-brand-canyon-clay pl-4">
-            <span className="whitespace-pre-line">{Situation}</span>
-          </Text>
-          <CustomButton
-            href={ReviewUrl}
-            className="mt-9 mb-8 block text-[16px] font-semibold leading-5"
-          >
-            {copy.buttonLabel}
-          </CustomButton>
-          <Text className="text-sm leading-5 font-normal m-0">
-            {copy.replyBefore}{' '}
-            <Link
-              href={`mailto:${ApplicantEmail}`}
-              className="text-brand-canyon-clay underline"
-            >
-              {ApplicantEmail}
-            </Link>{' '}
-            {copy.replyAfter}
-          </Text>
-        </Row>
-      </Section>
-    </MainLayout>
+    <Html>
+      <Head />
+      <Preview>{copy.preview}</Preview>
+      <Body>
+        <Text>
+          {copy.paragraph1Before}
+          {OrganizationName}
+          {copy.paragraph1After}
+        </Text>
+        <Detail label={copy.legalNameLabel} value={LegalName} />
+        <Detail label={copy.applicantLabel} value={ApplicantEmail} />
+        <Detail label={copy.paymentOptionLabel} value={PaymentOption} />
+        <Detail label={copy.spendLabel} value={EstimatedMonthlySpend} />
+        <Text style={{ marginBottom: 0 }}>{copy.situationLabel}:</Text>
+        <Text style={{ marginTop: 0, whiteSpace: 'pre-line' }}>
+          {Situation}
+        </Text>
+        <Text>
+          {copy.reviewLabel}: <Link href={ReviewUrl}>{ReviewUrl}</Link>
+        </Text>
+        <Text>
+          {copy.replyBefore} {ApplicantEmail} {copy.replyAfter}
+        </Text>
+      </Body>
+    </Html>
   );
 };
 
