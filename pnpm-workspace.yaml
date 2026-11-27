@@ -1,12 +1,24 @@
+# pnpm settings for this repo. It is a single package, not a workspace: there
+# is no `packages:` list.
+
+# Wait a day before installing a newly published version. Most compromised
+# releases are pulled within hours. Our own packages are published and
+# consumed across repos on the same day, so the delay must not hold them back.
+minimumReleaseAge: 1440
+minimumReleaseAgeExclude:
+  - '@datum-cloud/*'
+
+# Reject a version published with weaker provenance than the versions before
+# it, such as a release pushed with a stolen token for a package that normally
+# publishes from CI.
+trustPolicy: no-downgrade
+
+# Only scripts a local install needs: esbuild checks its platform binary (tsx)
+# and sharp fetches libvips for the preview server's image handling.
 allowBuilds:
   esbuild: true
   sharp: true
-minimumReleaseAgeExclude:
-  - '@react-email/ui@6.9.5'
-  - react-email@6.9.5
-onlyBuiltDependencies:
-  - esbuild
-  - sharp
+
 overrides:
   brace-expansion: 5.1.0
   engine.io: 6.6.13
